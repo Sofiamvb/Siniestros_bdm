@@ -19,7 +19,7 @@
                     <div class="profile-row">
                         <img src="/img/DefaultPFP.png" class="profile-preview" id="profilePreview" alt="Foto de perfil">
                         <label for="foto" class="profile-upload-btn">Agregar foto</label>
-                        <input type="file" id="foto" name="foto" accept="image/*" hidden required>
+                        <input type="file" id="foto" name="foto" accept="image/*" hidden>
                     </div>
 
                     <!-- Nombre -->
@@ -80,17 +80,43 @@
                            class="input-field rounded-[20px] p-[14px] shadow-[0_5px_10px_rgba(0,0,0,0.15)]">
 
                     <!-- Contraseñas -->
-                    <input type="password"
-                           name="password"
-                           placeholder="Contraseña"
-                           required
-                           class="input-field rounded-[20px] p-[14px] shadow-[0_5px_10px_rgba(0,0,0,0.15)]">
+                    <div class="relative w-full">
+                        <input type="password"
+                               id="password"
+                               name="password"
+                               placeholder="Contraseña"
+                               required
+                               class="input-field w-full rounded-[20px] p-[14px] pr-[48px] shadow-[0_5px_10px_rgba(0,0,0,0.15)]">
+                        <button type="button"
+                                onclick="togglePassword('password', 'eyeIcon1')"
+                                class="absolute right-[16px] top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                            <svg id="eyeIcon1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </button>
+                    </div>
 
-                    <input type="password"
-                           name="confirmPassword"
-                           placeholder="Confirmar contraseña"
-                           required
-                           class="input-field rounded-[20px] p-[14px] shadow-[0_5px_10px_rgba(0,0,0,0.15)]">
+                    <div class="relative w-full">
+                        <input type="password"
+                               id="confirmPassword"
+                               name="confirmPassword"
+                               placeholder="Confirmar contraseña"
+                               required
+                               class="input-field w-full rounded-[20px] p-[14px] pr-[48px] shadow-[0_5px_10px_rgba(0,0,0,0.15)]">
+                        <button type="button"
+                                onclick="togglePassword('confirmPassword', 'eyeIcon2')"
+                                class="absolute right-[16px] top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                            <svg id="eyeIcon2" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </button>
+                    </div>
 
                     <input type="hidden" name="rol_id" value="1">
 
@@ -109,6 +135,29 @@
     </div>
 
     <script>
+        // Mostrar / ocultar contraseña
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon  = document.getElementById(iconId);
+            const isHidden = input.type === 'password';
+
+            input.type = isHidden ? 'text' : 'password';
+
+            // Ojo abierto → visible | Ojo tachado → oculto
+            icon.innerHTML = isHidden
+                ? `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                         d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7
+                            a9.956 9.956 0 012.293-3.95M6.938 6.938A9.956 9.956 0 0112 5
+                            c4.477 0 8.268 2.943 9.542 7a9.956 9.956 0 01-1.357 2.574
+                            M6.938 6.938L3 3m3.938 3.938L17 17" />
+                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"/>`
+                : `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                         d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                         d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7
+                            -1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />`;
+        }
+
         // Preview de la foto antes de subir
         document.getElementById('foto').addEventListener('change', (e) => {
             const [file] = e.target.files;
