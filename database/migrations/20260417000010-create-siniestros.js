@@ -41,10 +41,9 @@ module.exports = {
         onUpdate: 'NO ACTION'
       },
       numero_reporte: {
-        type:          Sequelize.INTEGER,
-        autoIncrement: true,
-        allowNull:     false,
-        unique:        true
+        type:      Sequelize.INTEGER,
+        allowNull: false,
+        unique:    true
       },
       fecha_hora_siniestro: {
         type:      Sequelize.DATE,
