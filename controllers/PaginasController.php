@@ -65,7 +65,7 @@ class PaginasController
                 $errores = $usuario->verificarPassword($usuario->password);
 
                 if (!$errores) {
-                    $redirectUrl = '/dashboard';
+                    $redirectUrl = Usuario::redirectPorRol((int) $_SESSION['rol_id']);
                 }
             }
         }

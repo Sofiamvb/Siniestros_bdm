@@ -104,6 +104,15 @@ class Usuario extends ActiveRecord
         return $rows[0] ?? null;
     }
 
+    public static function redirectPorRol(int $rol_id): string
+    {
+        return match($rol_id) {
+            2       => '/siniestrosAjustadores',
+            3       => '/siniestrosSupervisores',
+            default => '/siniestrosAsegurados',   // rol_id = 1 y cualquier otro
+        };
+    }
+
     public function verificarPassword(string $passwordIngresado): array
     {
         self::$errores = [];
