@@ -18,13 +18,29 @@ class PaginasController
         $exito   = '';
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            error_log('[register] POST recibido: ' . json_encode(array_keys($_POST)));
+            error_log('[register] FILES recibido: ' . json_encode($_FILES));
+
             $usuario = new Usuario($_POST);
             $usuario->password_confirm = $_POST['confirmPassword'] ?? '';
 
+            // Los archivos vienen en $_FILES, no en $_POST
+            $fotoError = $_FILES['foto']['error'] ?? UPLOAD_ERR_NO_FILE;
+            error_log('[register] foto error code: ' . $fotoError);
+
+            if ($fotoError === UPLOAD_ERR_OK) {
+                $usuario->foto = file_get_contents($_FILES['foto']['tmp_name']);
+                error_log('[register] foto cargada, tamaño bytes: ' . strlen($usuario->foto));
+            } else {
+                error_log('[register] foto NO recibida, código de error: ' . $fotoError);
+            }
+
             $errores = $usuario->validar();
+            error_log('[register] errores de validación: ' . json_encode($errores));
 
             if (!$errores) {
                 $usuario->registrar();
+                error_log('[register] usuario registrado correctamente');
                 $exito = 'Usuario registrado correctamente. Ya puedes iniciar sesión.';
             }
         }
