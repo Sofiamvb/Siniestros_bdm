@@ -13,7 +13,7 @@ module.exports = {
         IN p_password         VARCHAR(255),
         IN p_alias            VARCHAR(255),
         IN p_rol_id           INT,
-        IN p_foto             LONGBLOB NOT NULL
+        IN p_foto             LONGBLOB
       )
       BEGIN
         INSERT INTO usuarios (nombre, apellidos, fecha_nacimiento, genero, email, password, alias, rol_id, foto)
