@@ -28,7 +28,7 @@
         </nav>
 
         <div class="header-user">
-            <button class="ghost-action-btn" onclick="abrirModal()">Ingresar</button>
+            <a href="/login" class="ghost-action-btn">Ingresar</a>
             <img src="/imag/DefaultPFP.png" class="user-avatar" alt="Usuario">
         </div>
     </header>

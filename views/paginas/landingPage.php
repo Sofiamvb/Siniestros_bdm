@@ -82,44 +82,4 @@
         </div>
     </section>
 
-    <div class="modal-overlay" id="modalLogin">
-        <div class="modal-panel relative w-[380px] max-w-none rounded-[30px] bg-[#E8F0F7] px-[35px] py-[40px] text-center shadow-[0_15px_40px_rgba(0,0,0,0.25)]">
-            <span class="absolute right-[25px] top-5 cursor-pointer text-[18px] text-[#16425B] transition duration-300 hover:scale-125" onclick="cerrarModal()">✕</span>
-
-            <h2 class="mb-[10px] text-[22px] font-bold text-[#16425B]">Inicia sesión</h2>
-            <div class="mb-[30px] h-[6px] w-full rounded-[5px] bg-[linear-gradient(to_right,#3A7CA5_0%,#81C3D7_50%,#81C3D7_100%)]"></div>
-
-            <form class="form-shell">
-                <input type="email" placeholder="Correo electrónico" required class="rounded-[15px] border-none bg-[#d5dce2] p-[14px] text-[14px] outline-none shadow-[inset_0_3px_6px_rgba(0,0,0,0.2)]">
-                <input type="password" placeholder="Contraseña" required class="rounded-[15px] border-none bg-[#d5dce2] p-[14px] text-[14px] outline-none shadow-[inset_0_3px_6px_rgba(0,0,0,0.2)]">
-
-                <button type="button" class="secondary-pill-btn bg-[#3A7CA5] p-3" id="loginButton">Login</button>
-
-                <a href="#" class="mt-[-10px] text-[13px] text-[#16425B] no-underline hover:underline">Recuperar contraseña</a>
-
-                <div class="my-[15px] h-[2px] bg-[linear-gradient(to_right,#87b4c2_0%,#7fb5c6_50%,rgb(113,173,191)_100%)]"></div>
-
-                <p class="text-[12px] text-[#16425B]">Si aún no tienes cuenta:</p>
-
-                <a href="register.html" class="secondary-pill-btn">Regístrate</a>
-            </form>
-        </div>
-    </div>
-
-    <script src="../JS/landing.js"></script>
-    <script>
-        document.getElementById('loginButton').addEventListener('click', () => {
-            Swal.fire({
-                title: "Has iniciado sesión!",
-                text: "Bienvenido!",
-                icon: "success",
-                confirmButtonText: "Continuar",
-                confirmButtonColor: "#CE8F3A",
-                timer: 2000,
-                timerProgressBar: true
-            }).then(() => {
-                window.location.href = 'siniestrosAseguradores.html';
-            });
-        });
-    </script>
 </main>
