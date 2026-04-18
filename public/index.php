@@ -30,7 +30,7 @@ $router->get('/login',               [PaginasController::class, 'login']);
 $router->post('/login',              [PaginasController::class, 'login']);
 $router->get('/logout',              [PaginasController::class, 'logout']);
 $router->get('/registrarSiniestros', [PaginasController::class, 'registrarSiniestros']);
-$router->get('/siniestrosAseguradores', [PaginasController::class, 'siniestrosAseguradores']);
+$router->get('/siniestrosAjustadores', [PaginasController::class, 'siniestrosAjustadores']);
 $router->get('/siniestrosAsegurados',   [PaginasController::class, 'siniestrosAsegurados']);
 $router->get('/siniestrosSupervisores', [PaginasController::class, 'siniestrosSupervisores']);
 

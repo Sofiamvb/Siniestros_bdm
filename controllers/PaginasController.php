@@ -99,9 +99,9 @@ class PaginasController
         $router->render('paginas/registrarSiniestros', []);
     }
 
-    public static function siniestrosAseguradores(Router $router): void
+    public static function siniestrosAjustadores(Router $router): void
     {
-        $router->render('paginas/siniestrosAseguradores', []);
+        $router->render('paginas/siniestrosAjustadores', []);
     }
 
     public static function siniestrosAsegurados(Router $router): void
