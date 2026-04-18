@@ -58,24 +58,14 @@ class PaginasController
         $redirectUrl = '';
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email    = trim($_POST['email']    ?? '');
-            $password = $_POST['password']      ?? '';
-
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errores[] = 'El correo electrónico no es válido.';
-            if ($password === '')                            $errores[] = 'La contraseña es obligatoria.';
+            $usuario  = new Usuario($_POST);
+            $errores  = $usuario->validarLogin();
 
             if (!$errores) {
-                $usuario = Usuario::login($email);
+                $errores = $usuario->verificarPassword($usuario->password);
 
-                if ($usuario && password_verify($password, $usuario['password'])) {
-                    $_SESSION['id']     = $usuario['id'];
-                    $_SESSION['nombre'] = $usuario['nombre'];
-                    $_SESSION['rol_id'] = $usuario['rol_id'];
-
-                    $exito       = 'Inicio de sesión correcto.';
+                if (!$errores) {
                     $redirectUrl = '/dashboard';
-                } else {
-                    $errores[] = 'Credenciales inválidas.';
                 }
             }
         }

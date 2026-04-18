@@ -84,9 +84,42 @@ class Usuario extends ActiveRecord
         return true;
     }
 
+    public function validarLogin(): array
+    {
+        self::$errores = [];
+
+        if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+            self::$errores[] = 'El correo electrónico no es válido.';
+        }
+        if (empty($this->password)) {
+            self::$errores[] = 'La contraseña es obligatoria.';
+        }
+
+        return self::$errores;
+    }
+
     public static function login(string $email): ?array
     {
         $rows = self::call_sp('sp_login_usuario', [$email]);
         return $rows[0] ?? null;
+    }
+
+    public function verificarPassword(string $passwordIngresado): array
+    {
+        self::$errores = [];
+
+        $usuario = self::login($this->email);
+
+        if (!$usuario || !password_verify($passwordIngresado, $usuario['password'])) {
+            self::$errores[] = 'Credenciales inválidas.';
+            return self::$errores;
+        }
+
+        // Credenciales correctas — cargar sesión
+        $_SESSION['id']     = $usuario['id'];
+        $_SESSION['nombre'] = $usuario['nombre'];
+        $_SESSION['rol_id'] = $usuario['rol_id'];
+
+        return self::$errores;
     }
 }
