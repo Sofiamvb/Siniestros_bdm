@@ -60,6 +60,7 @@ $router->post('/cotizar',            [CotizarController::class,  'cotizar']);
 $router->get('/api/marcas',          [CotizarController::class,  'apiMarcas']);
 $router->get('/api/modelos',         [CotizarController::class,  'apiModelos']);
 $router->get('/api/anios',           [CotizarController::class,  'apiAnios']);
+$router->get('/api/versiones',       [CotizarController::class,  'apiVersiones']);
 
 // Contratación (2 pasos)
 $router->get('/contratar',           [ContratarController::class, 'elegirSeguro']);

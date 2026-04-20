@@ -27,6 +27,11 @@
                         <option value="" disabled selected>Año</option>
                     </select>
 
+                    <select name="version" id="landingVersion" disabled
+                        class="input-field cursor-pointer rounded-[20px] px-[18px] py-[14px] text-[#666] shadow-[0_4px_8px_rgba(0,0,0,0.15)] focus:shadow-[0_0_0_2px_#D9DCD6] disabled:opacity-50">
+                        <option value="" disabled selected>Versión</option>
+                    </select>
+
                     <button type="submit" class="mt-[10px] cursor-pointer rounded-[25px] border-none bg-[#608fa3] p-[14px] text-[16px] font-bold text-white shadow-[0_4px_8px_rgba(0,0,0,0.2)] transition duration-300 ease-in-out hover:-translate-y-[3px] hover:shadow-[0_6px_12px_rgba(0,0,0,0.25)]">
                         Cotiza ahora
                     </button>
@@ -34,33 +39,34 @@
 
                 <script>
                 (function () {
-                    const marcaEl  = document.getElementById('landingMarca');
-                    const modeloEl = document.getElementById('landingModelo');
-                    const anioEl   = document.getElementById('landingAnio');
+                    const marcaEl   = document.getElementById('landingMarca');
+                    const modeloEl  = document.getElementById('landingModelo');
+                    const anioEl    = document.getElementById('landingAnio');
+                    const versionEl = document.getElementById('landingVersion');
 
-                    // Cargar marcas al iniciar
-                    fetch('/api/marcas')
-                        .then(r => r.json())
-                        .then(marcas => {
-                            marcas.forEach(m => {
-                                const o = document.createElement('option');
-                                o.value = o.textContent = m;
-                                marcaEl.appendChild(o);
-                            });
+                    function resetFrom(el, placeholder) {
+                        el.innerHTML = `<option value="" disabled selected>${placeholder}</option>`;
+                        el.disabled  = true;
+                    }
+
+                    fetch('/api/marcas').then(r => r.json()).then(marcas => {
+                        marcas.forEach(m => {
+                            const o = document.createElement('option');
+                            o.value = o.textContent = m;
+                            marcaEl.appendChild(o);
                         });
+                    });
 
                     marcaEl.addEventListener('change', () => {
-                        modeloEl.innerHTML = '<option value="" disabled selected>Modelo</option>';
-                        anioEl.innerHTML   = '<option value="" disabled selected>Año</option>';
-                        modeloEl.disabled  = true;
-                        anioEl.disabled    = true;
+                        resetFrom(modeloEl, 'Modelo');
+                        resetFrom(anioEl,   'Año');
+                        resetFrom(versionEl,'Versión');
 
                         fetch('/api/modelos?marca=' + encodeURIComponent(marcaEl.value))
-                            .then(r => r.json())
-                            .then(modelos => {
-                                modelos.forEach(m => {
+                            .then(r => r.json()).then(items => {
+                                items.forEach(v => {
                                     const o = document.createElement('option');
-                                    o.value = o.textContent = m;
+                                    o.value = o.textContent = v;
                                     modeloEl.appendChild(o);
                                 });
                                 modeloEl.disabled = false;
@@ -68,19 +74,34 @@
                     });
 
                     modeloEl.addEventListener('change', () => {
-                        anioEl.innerHTML = '<option value="" disabled selected>Año</option>';
-                        anioEl.disabled  = true;
+                        resetFrom(anioEl,   'Año');
+                        resetFrom(versionEl,'Versión');
 
                         fetch('/api/anios?marca=' + encodeURIComponent(marcaEl.value) +
                               '&modelo=' + encodeURIComponent(modeloEl.value))
-                            .then(r => r.json())
-                            .then(anios => {
-                                anios.forEach(a => {
+                            .then(r => r.json()).then(items => {
+                                items.forEach(v => {
                                     const o = document.createElement('option');
-                                    o.value = o.textContent = a;
+                                    o.value = o.textContent = v;
                                     anioEl.appendChild(o);
                                 });
                                 anioEl.disabled = false;
+                            });
+                    });
+
+                    anioEl.addEventListener('change', () => {
+                        resetFrom(versionEl, 'Versión');
+
+                        fetch('/api/versiones?marca='  + encodeURIComponent(marcaEl.value) +
+                              '&modelo=' + encodeURIComponent(modeloEl.value) +
+                              '&anio='   + encodeURIComponent(anioEl.value))
+                            .then(r => r.json()).then(items => {
+                                items.forEach(v => {
+                                    const o = document.createElement('option');
+                                    o.value = o.textContent = v;
+                                    versionEl.appendChild(o);
+                                });
+                                versionEl.disabled = false;
                             });
                     });
                 })();

@@ -18,9 +18,10 @@ class Vehiculo extends ActiveRecord
 
     public function __construct(array $args = [])
     {
-        $this->marca  = trim($args['marca']  ?? '');
-        $this->modelo = trim($args['modelo'] ?? '');
-        $this->anio   = (int) ($args['anio'] ?? 0);
+        $this->marca   = trim($args['marca']   ?? '');
+        $this->modelo  = trim($args['modelo']  ?? '');
+        $this->anio    = (int) ($args['anio']  ?? 0);
+        $this->version = trim($args['version'] ?? '');
     }
 
     // ── Validación ──────────────────────────────────────────────────────────
@@ -29,8 +30,9 @@ class Vehiculo extends ActiveRecord
     {
         self::$errores = [];
 
-        if (!$this->marca)  self::$errores[] = 'La marca es obligatoria.';
-        if (!$this->modelo) self::$errores[] = 'El modelo es obligatorio.';
+        if (!$this->marca)   self::$errores[] = 'La marca es obligatoria.';
+        if (!$this->modelo)  self::$errores[] = 'El modelo es obligatorio.';
+        if (!$this->version) self::$errores[] = 'La versión es obligatoria.';
         if ($this->anio < 1900 || $this->anio > (int) date('Y') + 1) {
             self::$errores[] = 'El año no es válido.';
         }
@@ -76,6 +78,13 @@ class Vehiculo extends ActiveRecord
         return array_column($filas, 'anio');
     }
 
+    /** Devuelve lista plana de versiones para marca + modelo + año */
+    public static function get_versiones_by_anio(string $marca, string $modelo, int $anio): array
+    {
+        $filas = self::call_sp('sp_get_versiones_by_anio', [$marca, $modelo, $anio]);
+        return array_column($filas, 'version');
+    }
+
     // ── Cotización ──────────────────────────────────────────────────────────
 
     /**
@@ -87,6 +96,7 @@ class Vehiculo extends ActiveRecord
             $this->marca,
             $this->modelo,
             $this->anio,
+            $this->version,
         ]);
 
         if (empty($filas)) return null;

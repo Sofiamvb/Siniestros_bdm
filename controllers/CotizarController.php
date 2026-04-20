@@ -48,6 +48,24 @@ class CotizarController
     }
 
     /**
+     * Endpoint JSON — devuelve versiones para marca + modelo + año.
+     * GET /api/versiones?marca=Nissan&modelo=Versa&anio=2023
+     */
+    public static function apiVersiones(Router $router): void
+    {
+        $marca  = trim($_GET['marca']  ?? '');
+        $modelo = trim($_GET['modelo'] ?? '');
+        $anio   = (int) ($_GET['anio'] ?? 0);
+        $versiones = ($marca && $modelo && $anio)
+            ? Vehiculo::get_versiones_by_anio($marca, $modelo, $anio)
+            : [];
+
+        header('Content-Type: application/json');
+        echo json_encode($versiones);
+        exit;
+    }
+
+    /**
      * Página de cotización.
      * - GET con marca+modelo+anio en query params → cotiza automáticamente (viene del landing).
      * - GET sin params → muestra el formulario vacío.
@@ -60,7 +78,8 @@ class CotizarController
         $marcas   = Vehiculo::get_marcas_vehiculos();
 
         $params = $_SERVER['REQUEST_METHOD'] === 'POST' ? $_POST : $_GET;
-        $tiene_params = !empty($params['marca']) && !empty($params['modelo']) && !empty($params['anio']);
+        $tiene_params = !empty($params['marca']) && !empty($params['modelo'])
+                     && !empty($params['anio'])  && !empty($params['version']);
 
         if ($tiene_params) {
             $v       = new Vehiculo($params);

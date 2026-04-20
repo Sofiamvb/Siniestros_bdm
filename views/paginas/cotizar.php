@@ -52,6 +52,14 @@
                     </select>
                 </div>
 
+                <div class="flex flex-col gap-[6px]">
+                    <label class="text-[14px] font-medium text-[#555]">Versión</label>
+                    <select name="version" id="cotizarVersion" required
+                        class="rounded-[14px] border border-[#ccc] px-[16px] py-[12px] text-[#333] focus:border-[#3A7CA5] focus:outline-none disabled:opacity-50">
+                        <option value="" disabled selected>Selecciona una versión</option>
+                    </select>
+                </div>
+
                 <button type="submit"
                     class="mt-[8px] rounded-[25px] bg-[#3A7CA5] px-[30px] py-[14px] text-[16px] font-bold text-white shadow-[0_4px_12px_rgba(58,124,165,0.4)] transition duration-300 hover:-translate-y-[2px] hover:shadow-[0_6px_16px_rgba(58,124,165,0.5)]">
                     Ver precio
@@ -125,57 +133,75 @@
 
 <script>
 (function () {
-    const marcaEl  = document.getElementById('cotizarMarca');
-    const modeloEl = document.getElementById('cotizarModelo');
-    const anioEl   = document.getElementById('cotizarAnio');
+    const marcaEl   = document.getElementById('cotizarMarca');
+    const modeloEl  = document.getElementById('cotizarModelo');
+    const anioEl    = document.getElementById('cotizarAnio');
+    const versionEl = document.getElementById('cotizarVersion');
 
     if (!marcaEl) return;
 
-    function loadModelos(marca, preselModelo) {
-        modeloEl.innerHTML = '<option value="" disabled selected>Selecciona un modelo</option>';
-        anioEl.innerHTML   = '<option value="" disabled selected>Selecciona un año</option>';
-        modeloEl.disabled  = true;
-        anioEl.disabled    = true;
+    // Valores preseleccionados al volver con errores
+    const presel = {
+        modelo:  <?= json_encode($post['modelo']  ?? '') ?>,
+        anio:    <?= json_encode($post['anio']    ?? '') ?>,
+        version: <?= json_encode($post['version'] ?? '') ?>,
+    };
 
+    function reset(el, label) {
+        el.innerHTML = `<option value="" disabled selected>${label}</option>`;
+        el.disabled  = true;
+    }
+
+    function populate(el, items, preselVal) {
+        items.forEach(v => {
+            const o = document.createElement('option');
+            o.value = o.textContent = v;
+            if (String(v) === String(preselVal)) o.selected = true;
+            el.appendChild(o);
+        });
+        el.disabled = false;
+    }
+
+    function loadModelos(marca, chain) {
+        reset(modeloEl, 'Selecciona un modelo');
+        reset(anioEl,   'Selecciona un año');
+        reset(versionEl,'Selecciona una versión');
         if (!marca) return;
 
         fetch('/api/modelos?marca=' + encodeURIComponent(marca))
-            .then(r => r.json())
-            .then(modelos => {
-                modelos.forEach(m => {
-                    const o = document.createElement('option');
-                    o.value = o.textContent = m;
-                    if (m === preselModelo) o.selected = true;
-                    modeloEl.appendChild(o);
-                });
-                modeloEl.disabled = false;
-                if (preselModelo) loadAnios(marca, preselModelo, <?= json_encode($post['anio'] ?? '') ?>);
+            .then(r => r.json()).then(items => {
+                populate(modeloEl, items, chain ? presel.modelo : null);
+                if (chain && modeloEl.value) loadAnios(marca, modeloEl.value, true);
             });
     }
 
-    function loadAnios(marca, modelo, preselAnio) {
-        anioEl.innerHTML = '<option value="" disabled selected>Selecciona un año</option>';
-        anioEl.disabled  = true;
+    function loadAnios(marca, modelo, chain) {
+        reset(anioEl,    'Selecciona un año');
+        reset(versionEl, 'Selecciona una versión');
 
         fetch('/api/anios?marca=' + encodeURIComponent(marca) + '&modelo=' + encodeURIComponent(modelo))
-            .then(r => r.json())
-            .then(anios => {
-                anios.forEach(a => {
-                    const o = document.createElement('option');
-                    o.value = o.textContent = a;
-                    if (String(a) === String(preselAnio)) o.selected = true;
-                    anioEl.appendChild(o);
-                });
-                anioEl.disabled = false;
+            .then(r => r.json()).then(items => {
+                populate(anioEl, items, chain ? presel.anio : null);
+                if (chain && anioEl.value) loadVersiones(marca, modelo, anioEl.value, true);
             });
     }
 
-    // Si venimos de un POST con errores, repoblar los selects
-    const preselMarca  = marcaEl.value;
-    const preselModelo = <?= json_encode($post['modelo'] ?? '') ?>;
-    if (preselMarca) loadModelos(preselMarca, preselModelo);
+    function loadVersiones(marca, modelo, anio, chain) {
+        reset(versionEl, 'Selecciona una versión');
 
-    marcaEl.addEventListener('change', () => loadModelos(marcaEl.value, null));
-    modeloEl.addEventListener('change', () => loadAnios(marcaEl.value, modeloEl.value, null));
+        fetch('/api/versiones?marca=' + encodeURIComponent(marca) +
+              '&modelo=' + encodeURIComponent(modelo) +
+              '&anio='   + encodeURIComponent(anio))
+            .then(r => r.json()).then(items => {
+                populate(versionEl, items, chain ? presel.version : null);
+            });
+    }
+
+    // Repoblar en cascada si venimos de POST con errores
+    if (marcaEl.value) loadModelos(marcaEl.value, true);
+
+    marcaEl.addEventListener('change',  () => loadModelos(marcaEl.value, false));
+    modeloEl.addEventListener('change', () => loadAnios(marcaEl.value, modeloEl.value, false));
+    anioEl.addEventListener('change',   () => loadVersiones(marcaEl.value, modeloEl.value, anioEl.value, false));
 })();
 </script>
