@@ -85,8 +85,65 @@
                            readonly disabled
                            title="El correo no puede modificarse">
 
+                    <input type="hidden" name="accion" value="perfil">
+
                     <button type="submit" class="primary-pill-btn flex w-[40%] self-center justify-center">
                         Guardar cambios
+                    </button>
+
+                </form>
+
+                <!-- ── Cambiar contraseña ── -->
+                <form class="form-shell w-[80%] mt-[30px] border-t border-[#ddd] pt-[24px]"
+                      action="/perfil"
+                      method="POST"
+                      id="formPassword">
+
+                    <p class="text-[16px] font-semibold text-[#16425B] mb-[4px]">Cambiar contraseña</p>
+
+                    <div class="relative w-full">
+                        <input type="password" name="password_actual" id="pwActual"
+                               placeholder="Contraseña actual" required
+                               class="input-field w-full rounded-[20px] p-[14px] pr-[48px] shadow-[0_5px_10px_rgba(0,0,0,0.15)]">
+                        <button type="button" onclick="togglePassword('pwActual','eye1')"
+                                class="absolute right-[16px] top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                            <svg id="eye1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="relative w-full">
+                        <input type="password" name="password_nueva" id="pwNueva"
+                               placeholder="Nueva contraseña" required
+                               class="input-field w-full rounded-[20px] p-[14px] pr-[48px] shadow-[0_5px_10px_rgba(0,0,0,0.15)]">
+                        <button type="button" onclick="togglePassword('pwNueva','eye2')"
+                                class="absolute right-[16px] top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                            <svg id="eye2" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="relative w-full">
+                        <input type="password" name="password_confirmar" id="pwConfirmar"
+                               placeholder="Confirmar nueva contraseña" required
+                               class="input-field w-full rounded-[20px] p-[14px] pr-[48px] shadow-[0_5px_10px_rgba(0,0,0,0.15)]">
+                        <button type="button" onclick="togglePassword('pwConfirmar','eye3')"
+                                class="absolute right-[16px] top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                            <svg id="eye3" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <input type="hidden" name="accion" value="password">
+
+                    <button type="submit" class="primary-pill-btn flex w-[40%] self-center justify-center">
+                        Cambiar contraseña
                     </button>
 
                 </form>
@@ -124,6 +181,15 @@
         Swal.fire({
             title: '¡Perfil actualizado!',
             text: '<?= htmlspecialchars($exito) ?>',
+            icon: 'success',
+            confirmButtonColor: '#16425B'
+        });
+        <?php endif; ?>
+
+        <?php if (!empty($exitoPassword)): ?>
+        Swal.fire({
+            title: '¡Contraseña actualizada!',
+            text: '<?= htmlspecialchars($exitoPassword) ?>',
             icon: 'success',
             confirmButtonColor: '#16425B'
         });

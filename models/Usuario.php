@@ -112,6 +112,34 @@ class Usuario extends ActiveRecord
         return $rows[0] ?? null;
     }
 
+    public function cambiarPassword(string $passwordActual, string $nuevaPassword, string $confirmar): array
+    {
+        self::$errores = [];
+
+        // Verificar contraseña actual
+        $usuario = self::login($this->email);
+        if (!$usuario || !password_verify($passwordActual, $usuario['password'])) {
+            self::$errores[] = 'La contraseña actual es incorrecta.';
+            return self::$errores;
+        }
+
+        if (strlen($nuevaPassword) < 6) {
+            self::$errores[] = 'La nueva contraseña debe tener al menos 6 caracteres.';
+        }
+        if ($nuevaPassword !== $confirmar) {
+            self::$errores[] = 'Las contraseñas no coinciden.';
+        }
+
+        if (!self::$errores) {
+            self::call_sp('sp_cambiar_password', [
+                $this->id,
+                password_hash($nuevaPassword, PASSWORD_BCRYPT),
+            ]);
+        }
+
+        return self::$errores;
+    }
+
     public function actualizarPerfil(): bool
     {
         $foto = !empty($this->foto) ? $this->foto : null;
