@@ -4,6 +4,8 @@ namespace Model;
 
 class Vehiculo extends ActiveRecord
 {
+    protected static array $errores = [];
+
     public int    $id               = 0;
     public string $marca            = '';
     public string $modelo           = '';
@@ -13,8 +15,6 @@ class Vehiculo extends ActiveRecord
     public int    $numero_pasajeros = 0;
     public int    $cilindros        = 0;
     public float  $precio_seguro    = 0.0;
-
-    public static array $errores = [];
 
     public function __construct(array $args = [])
     {

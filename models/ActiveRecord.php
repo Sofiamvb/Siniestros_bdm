@@ -8,7 +8,7 @@ class ActiveRecord
 {
     protected static ?mysqli $db = null;
     
-    protected static $errores = [];
+    protected static array $errores = [];
 
     public static function setDB(mysqli $database): void
     {

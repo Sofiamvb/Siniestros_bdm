@@ -5,6 +5,7 @@ namespace Model;
 class Usuario extends ActiveRecord
 {
     protected static $tabla = 'usuarios';
+    protected static array $errores = [];
 
     public $id;
     public $nombre;
