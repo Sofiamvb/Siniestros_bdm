@@ -38,13 +38,6 @@
                                class="input-field" autocomplete="off">
                     </div>
 
-                    <div class="field-group">
-                        <label class="field-label">Aseguradora</label>
-                        <input id="inputCompania" type="text"
-                               class="input-field bg-gray-100 cursor-not-allowed"
-                               readonly placeholder="Se carga al validar la póliza">
-                    </div>
-
                     <div class="field-group col-span-full">
                         <label class="field-label">Nombre del ajustador</label>
                         <input type="text"
@@ -63,6 +56,12 @@
                     <div class="field-group">
                         <label class="field-label">Nombre del dueño</label>
                         <input id="autoDuenio" type="text" class="input-field bg-gray-100 cursor-not-allowed"
+                               readonly placeholder="Se carga al validar la póliza">
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">Aseguradora</label>
+                        <input id="inputCompania" type="text" class="input-field bg-gray-100 cursor-not-allowed"
                                readonly placeholder="Se carga al validar la póliza">
                     </div>
 
