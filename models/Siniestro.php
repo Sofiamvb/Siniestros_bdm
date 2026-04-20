@@ -14,7 +14,6 @@ class Siniestro extends ActiveRecord
     public string $ubicacion    = '';
     public string $conductor    = '';
     public string $descripcion  = '';
-    public int $dictamen_id     = 0;
     public float $presupuesto   = 0.0;
 
     // Metadata de la póliza (del SP validar-poliza)
@@ -28,7 +27,6 @@ class Siniestro extends ActiveRecord
         $this->ubicacion      =          $args['ubicacion']    ?? '';
         $this->conductor      =          $args['conductor']    ?? '';
         $this->descripcion    =          $args['descripcion']  ?? '';
-        $this->dictamen_id    = (int)   ($args['dictamen_id']  ?? 0);
         $this->presupuesto    = (float) ($args['presupuesto']  ?? 0);
         $this->suma_asegurada = (float) ($args['suma_asegurada'] ?? 0);
     }
@@ -42,7 +40,6 @@ class Siniestro extends ActiveRecord
         if (empty($this->fecha_hora))  self::$errores[] = 'La fecha y hora son obligatorias.';
         if (empty($this->conductor))   self::$errores[] = 'El conductor es obligatorio.';
         if (empty($this->descripcion)) self::$errores[] = 'La descripción es obligatoria.';
-        if (!$this->dictamen_id)       self::$errores[] = 'El dictamen es obligatorio.';
 
         if ($this->presupuesto < 0) {
             self::$errores[] = 'El presupuesto no puede ser negativo.';
@@ -63,7 +60,6 @@ class Siniestro extends ActiveRecord
             $this->ubicacion,
             $this->conductor,
             $this->descripcion,
-            $this->dictamen_id,
             $this->presupuesto,
         ]);
 

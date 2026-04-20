@@ -105,6 +105,7 @@
                     <div class="field-group col-span-full">
                         <label class="field-label">Fecha y hora del siniestro</label>
                         <input name="fecha_hora" id="detFechaHora" type="datetime-local"
+                               max="<?= date('Y-m-d\TH:i') ?>"
                                class="input-field">
                     </div>
 
@@ -133,20 +134,7 @@
                                   placeholder="Describe lo ocurrido en el siniestro"></textarea>
                     </div>
 
-                    <div class="field-group">
-                        <label class="field-label">Dictamen</label>
-                        <select name="dictamen_id" id="detDictamen" class="input-field">
-                            <option value="" disabled selected>Selecciona un dictamen</option>
-                            <?php foreach ($estatus as $e): ?>
-                            <option value="<?= (int) $e['id'] ?>"
-                                    style="color:<?= htmlspecialchars($e['color_ui']) ?>">
-                                <?= htmlspecialchars($e['descripcion_interna']) ?>
-                            </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div class="field-group">
+                    <div class="field-group col-span-full">
                         <label class="field-label">Presupuesto de reparación (MXN)</label>
                         <input name="presupuesto" id="detPresupuesto" type="number"
                                min="0" step="0.01" placeholder="0.00" class="input-field">

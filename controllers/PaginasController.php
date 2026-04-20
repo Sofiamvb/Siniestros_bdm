@@ -108,8 +108,6 @@ class PaginasController
         $errores = [];
         $exito   = '';
 
-        $estatus = Siniestro::obtenerEstatusDisponibles();
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $siniestro = new Siniestro([
                 'poliza_id'     => (int) ($_POST['poliza_id']   ?? 0),
@@ -118,7 +116,6 @@ class PaginasController
                 'ubicacion'     => $_POST['ubicacion']           ?? '',
                 'conductor'     => $_POST['conductor']           ?? '',
                 'descripcion'   => $_POST['descripcion']         ?? '',
-                'dictamen_id'   => (int) ($_POST['dictamen_id']  ?? 0),
                 'presupuesto'   => (float) ($_POST['presupuesto'] ?? 0),
                 'suma_asegurada'=> (float) ($_POST['suma_asegurada'] ?? 0),
             ]);
@@ -158,7 +155,6 @@ class PaginasController
         $router->render('paginas/registrarSiniestros', [
             'errores' => $errores,
             'exito'   => $exito,
-            'estatus' => $estatus,
         ]);
     }
 
