@@ -30,12 +30,76 @@ function showSection(sectionName) {
     updateContinueButton();
 }
 
-function goToNextSection() {
+async function goToNextSection() {
     const currentIndex = sectionsOrder.indexOf(currentSection);
-    const nextIndex = currentIndex + 1;
 
+    if (currentSection === 'aseguradora') {
+        await validarPolizaYAvanzar();
+        return;
+    }
+
+    if (currentSection === 'auto') {
+        const conductor = document.getElementById('autoConductor');
+        if (conductor && !conductor.value.trim()) {
+            Swal.fire({ icon: 'warning', title: 'Campo requerido', text: 'Ingresa el nombre del conductor.' });
+            return;
+        }
+
+        // Default fecha/hora a ahora al entrar a detalles
+        const dtInput = document.getElementById('detFechaHora');
+        if (dtInput && !dtInput.value) {
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            dtInput.value = now.toISOString().slice(0, 16);
+        }
+    }
+
+    const nextIndex = currentIndex + 1;
     if (nextIndex < sectionsOrder.length) {
         showSection(sectionsOrder[nextIndex]);
+    }
+}
+
+async function validarPolizaYAvanzar() {
+    const numero = document.getElementById('inputNumPoliza');
+    if (!numero || !numero.value.trim()) {
+        Swal.fire({ icon: 'warning', title: 'Campo requerido', text: 'Ingresa el número de póliza.' });
+        return;
+    }
+
+    try {
+        const res  = await fetch('/api/validar-poliza?numero=' + encodeURIComponent(numero.value.trim()));
+        const data = await res.json();
+
+        if (data.error) {
+            Swal.fire({ icon: 'warning', title: 'Póliza no encontrada', text: data.error });
+            return;
+        }
+
+        // Llenar hidden inputs
+        const hPolizaId      = document.getElementById('hPolizaId');
+        const hSumaAsegurada = document.getElementById('hSumaAsegurada');
+        if (hPolizaId)      hPolizaId.value      = data.poliza_id;
+        if (hSumaAsegurada) hSumaAsegurada.value = data.suma_asegurada;
+
+        // Llenar campos readonly del auto
+        const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+        set('autoDuenio', data.nombre_duenio);
+        set('autoMarca',  data.marca);
+        set('autoModelo', data.modelo);
+        set('autoAnio',   data.anio);
+        set('autoPlaca',  data.placas);
+
+        // Hint de presupuesto máximo
+        const hint        = document.getElementById('presupuestoHint');
+        const presupuesto = document.getElementById('detPresupuesto');
+        if (hint)        hint.textContent = 'Suma asegurada máx.: $' + parseFloat(data.suma_asegurada).toLocaleString('es-MX', { minimumFractionDigits: 2 });
+        if (presupuesto) presupuesto.max  = data.suma_asegurada;
+
+        showSection('auto');
+
+    } catch (e) {
+        Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo conectar con el servidor.' });
     }
 }
 
@@ -46,16 +110,12 @@ function updateContinueButton() {
     continueBtn.style.visibility = 'visible';
 
     if (currentSection === 'detalles') {
-        continueBtn.textContent = 'Registrar';
-        continueBtn.onclick = handleRegistro;
+        continueBtn.textContent = 'Registrar siniestro';
+        continueBtn.onclick = () => document.getElementById('formSiniestro').submit();
     } else {
         continueBtn.textContent = 'Continuar →';
         continueBtn.onclick = goToNextSection;
     }
-}
-
-function handleRegistro() {
-    showSuccessMessage('Siniestro registrado');
 }
 
 function showSuccessMessage(message) {

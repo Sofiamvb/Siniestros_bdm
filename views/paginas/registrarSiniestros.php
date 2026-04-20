@@ -161,7 +161,7 @@
 
                     <div class="field-group col-span-full">
                         <label class="field-label">Imágenes / Videos de evidencia</label>
-                        <input name="evidencias[]" id="detMedia" type="file"
+                        <input name="evidencias[]" id="detalles-media" type="file"
                                accept="image/*,video/*" multiple class="file-input-field">
                     </div>
 
@@ -247,113 +247,14 @@
 </main>
 
 <script>
+/* ── Terceros involucrados ── */
 (function () {
-    /* ── Secciones / tabs ── */
-    const sections = ['aseguradora', 'auto', 'detalles'];
-    let currentSection = 0;
-    let polizaData = null;
-    let terceros   = [];
-
-    function showSection(idx) {
-        sections.forEach((s, i) => {
-            const sec = document.getElementById(s + '-section');
-            const tab = document.getElementById('tab-' + s);
-            sec.classList.toggle('hidden', i !== idx);
-            tab.classList.toggle('tab-btn-active', i === idx);
-        });
-        currentSection = idx;
-        document.getElementById('continueBtn').textContent =
-            idx === sections.length - 1 ? 'Registrar siniestro' : 'Continuar →';
-    }
-
-    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
-        btn.addEventListener('click', () => {
-            if (i <= currentSection) showSection(i); // solo navegar hacia atrás libremente
-        });
-    });
-
-    /* ── Botón continuar ── */
-    document.getElementById('continueBtn').addEventListener('click', async () => {
-        if (currentSection === 0) {
-            await validarPoliza();
-        } else if (currentSection === 1) {
-            validarAuto();
-        } else {
-            document.getElementById('formSiniestro').submit();
-        }
-    });
-
-    /* ── Validar póliza (sección 1 → 2) ── */
-    async function validarPoliza() {
-        const numero = document.getElementById('inputNumPoliza').value.trim();
-        if (!numero) {
-            Swal.fire({ icon: 'warning', title: 'Campo requerido', text: 'Ingresa el número de póliza.' });
-            return;
-        }
-
-        try {
-            const res  = await fetch('/api/validar-poliza?numero=' + encodeURIComponent(numero));
-            const data = await res.json();
-
-            if (data.error) {
-                Swal.fire({ icon: 'warning', title: 'Póliza no encontrada', text: data.error });
-                return;
-            }
-
-            polizaData = data;
-
-            // Llenar hidden inputs
-            document.getElementById('hPolizaId').value      = data.poliza_id;
-            document.getElementById('hSumaAsegurada').value = data.suma_asegurada;
-
-            // Llenar campos de auto (readonly)
-            document.getElementById('autoDuenio').value = data.nombre_duenio;
-            document.getElementById('autoMarca').value  = data.marca;
-            document.getElementById('autoModelo').value = data.modelo;
-            document.getElementById('autoAnio').value   = data.anio;
-            document.getElementById('autoPlaca').value  = data.placas;
-
-            // Mostrar hint de presupuesto máximo
-            const hint = document.getElementById('presupuestoHint');
-            hint.textContent = 'Suma asegurada máx.: $' + parseFloat(data.suma_asegurada).toLocaleString('es-MX', {minimumFractionDigits: 2});
-            document.getElementById('detPresupuesto').max = data.suma_asegurada;
-
-            showSection(1);
-
-        } catch (e) {
-            Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo conectar con el servidor.' });
-        }
-    }
-
-    /* ── Validar auto (sección 2 → 3) ── */
-    function validarAuto() {
-        const conductor = document.getElementById('autoConductor').value.trim();
-        if (!conductor) {
-            Swal.fire({ icon: 'warning', title: 'Campo requerido', text: 'Ingresa el nombre del conductor.' });
-            return;
-        }
-        showSection(2);
-
-        // Default fecha/hora a ahora
-        const dtInput = document.getElementById('detFechaHora');
-        if (!dtInput.value) {
-            const now = new Date();
-            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-            dtInput.value = now.toISOString().slice(0, 16);
-        }
-    }
-
-    /* ── Modal terceros ── */
-    const modal = document.getElementById('vehiculoModal');
-    document.getElementById('openVehiculoModal').addEventListener('click', () => {
-        modal.classList.add('active');
-        modal.setAttribute('aria-hidden', 'false');
-    });
-    document.getElementById('closeVehiculoModal').addEventListener('click', cerrarModal);
-    modal.addEventListener('click', e => { if (e.target === modal) cerrarModal(); });
+    const terceros = [];
 
     function cerrarModal() {
-        modal.classList.remove('active');
+        const modal = document.getElementById('vehiculoModal');
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
         modal.setAttribute('aria-hidden', 'true');
         ['conductor','correo','marca','modelo','anio','placas','aseguradora','descripcion']
             .forEach(f => { document.getElementById('mv-' + f).value = ''; });
@@ -383,10 +284,9 @@
     });
 
     function renderTerceros() {
-        const lista  = document.getElementById('tercerosLista');
-        const vacio  = document.getElementById('tercerosVacio');
+        const lista = document.getElementById('tercerosLista');
         if (terceros.length === 0) {
-            lista.innerHTML = '<p class="text-[#aaa] italic" id="tercerosVacio">Sin terceros registrados</p>';
+            lista.innerHTML = '<p class="text-[#aaa] italic">Sin terceros registrados</p>';
             return;
         }
         lista.innerHTML = terceros.map((t, i) => `
@@ -403,66 +303,5 @@
         document.getElementById('hTercerosJson').value = JSON.stringify(terceros);
         renderTerceros();
     };
-
-    /* ── Carousel de evidencias ── */
-    let mediaFiles = [];
-    let mediaIndex = 0;
-
-    document.getElementById('detMedia').addEventListener('change', function () {
-        mediaFiles = Array.from(this.files);
-        mediaIndex = 0;
-        renderCarousel();
-    });
-
-    document.getElementById('carouselPrev').addEventListener('click', () => {
-        if (mediaFiles.length === 0) return;
-        mediaIndex = (mediaIndex - 1 + mediaFiles.length) % mediaFiles.length;
-        renderCarousel();
-    });
-
-    document.getElementById('carouselNext').addEventListener('click', () => {
-        if (mediaFiles.length === 0) return;
-        mediaIndex = (mediaIndex + 1) % mediaFiles.length;
-        renderCarousel();
-    });
-
-    document.getElementById('deleteMediaBtn').addEventListener('click', () => {
-        if (mediaFiles.length === 0) return;
-        mediaFiles.splice(mediaIndex, 1);
-        mediaIndex = Math.max(0, mediaIndex - 1);
-        renderCarousel();
-    });
-
-    function renderCarousel() {
-        const view    = document.getElementById('carouselView');
-        const empty   = document.getElementById('carouselEmpty');
-        const counter = document.getElementById('carouselCounter');
-
-        view.innerHTML = '';
-        counter.textContent = mediaFiles.length === 0 ? '0 / 0' : `${mediaIndex + 1} / ${mediaFiles.length}`;
-
-        if (mediaFiles.length === 0) {
-            view.appendChild(Object.assign(document.createElement('p'), {
-                className: 'carousel-empty-text',
-                textContent: 'No hay archivos cargados'
-            }));
-            return;
-        }
-
-        const file = mediaFiles[mediaIndex];
-        const url  = URL.createObjectURL(file);
-
-        if (file.type.startsWith('video/')) {
-            const v = document.createElement('video');
-            v.src = url; v.controls = true;
-            v.className = 'max-h-[200px] max-w-full rounded-[8px]';
-            view.appendChild(v);
-        } else {
-            const img = document.createElement('img');
-            img.src = url;
-            img.className = 'max-h-[200px] max-w-full rounded-[8px] object-contain';
-            view.appendChild(img);
-        }
-    }
 })();
 </script>
