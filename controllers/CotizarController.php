@@ -48,7 +48,10 @@ class CotizarController
     }
 
     /**
-     * Página de cotización — GET carga el form, POST busca el vehículo.
+     * Página de cotización.
+     * - GET con marca+modelo+anio en query params → cotiza automáticamente (viene del landing).
+     * - GET sin params → muestra el formulario vacío.
+     * - POST → cotiza desde el formulario interno.
      */
     public static function cotizar(Router $router): void
     {
@@ -56,8 +59,11 @@ class CotizarController
         $vehiculo = null;
         $marcas   = Vehiculo::get_marcas_vehiculos();
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $v       = new Vehiculo($_POST);
+        $params = $_SERVER['REQUEST_METHOD'] === 'POST' ? $_POST : $_GET;
+        $tiene_params = !empty($params['marca']) && !empty($params['modelo']) && !empty($params['anio']);
+
+        if ($tiene_params) {
+            $v       = new Vehiculo($params);
             $errores = $v->validarCotizacion();
 
             if (!$errores) {
@@ -72,7 +78,7 @@ class CotizarController
             'marcas'   => $marcas,
             'errores'  => $errores,
             'vehiculo' => $vehiculo,
-            'post'     => $_POST,
+            'post'     => $params,
         ]);
     }
 }
