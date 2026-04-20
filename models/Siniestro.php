@@ -11,10 +11,12 @@ class Siniestro extends ActiveRecord
     public int $poliza_id       = 0;
     public int $ajustador_id    = 0;
     public string $fecha_hora   = '';
-    public string $ubicacion    = '';
+    public string $latitud      = '';
+    public string $longitud     = '';
     public string $conductor    = '';
     public string $descripcion  = '';
-    public float $presupuesto   = 0.0;
+    public float $presupuesto    = 0.0;
+    public bool  $perdida_total  = false;
 
     // Metadata de la póliza (del SP validar-poliza)
     public float $suma_asegurada = 0.0;
@@ -24,10 +26,12 @@ class Siniestro extends ActiveRecord
         $this->poliza_id      = (int)   ($args['poliza_id']    ?? 0);
         $this->ajustador_id   = (int)   ($args['ajustador_id'] ?? 0);
         $this->fecha_hora     =          $args['fecha_hora']   ?? '';
-        $this->ubicacion      =          $args['ubicacion']    ?? '';
+        $this->latitud        =          $args['latitud']      ?? '';
+        $this->longitud       =          $args['longitud']     ?? '';
         $this->conductor      =          $args['conductor']    ?? '';
         $this->descripcion    =          $args['descripcion']  ?? '';
-        $this->presupuesto    = (float) ($args['presupuesto']  ?? 0);
+        $this->perdida_total  = (bool)  ($args['perdida_total']  ?? false);
+        $this->presupuesto    = (float) ($args['presupuesto']    ?? 0);
         $this->suma_asegurada = (float) ($args['suma_asegurada'] ?? 0);
     }
 
@@ -38,14 +42,17 @@ class Siniestro extends ActiveRecord
         if (!$this->poliza_id)    self::$errores[] = 'La póliza es obligatoria.';
         if (!$this->ajustador_id) self::$errores[] = 'El ajustador es obligatorio.';
         if (empty($this->fecha_hora))  self::$errores[] = 'La fecha y hora son obligatorias.';
+        if (empty($this->latitud))     self::$errores[] = 'La latitud es obligatoria.';
+        if (empty($this->longitud))    self::$errores[] = 'La longitud es obligatoria.';
         if (empty($this->conductor))   self::$errores[] = 'El conductor es obligatorio.';
         if (empty($this->descripcion)) self::$errores[] = 'La descripción es obligatoria.';
 
-        if ($this->presupuesto < 0) {
-            self::$errores[] = 'El presupuesto no puede ser negativo.';
-        }
-        if ($this->suma_asegurada > 0 && $this->presupuesto > $this->suma_asegurada) {
-            self::$errores[] = 'El presupuesto excede la suma asegurada ($' . number_format($this->suma_asegurada, 2) . ').';
+        if (!$this->perdida_total) {
+            if ($this->presupuesto <= 0) {
+                self::$errores[] = 'El presupuesto es obligatorio cuando no es pérdida total.';
+            } elseif ($this->suma_asegurada > 0 && $this->presupuesto > $this->suma_asegurada) {
+                self::$errores[] = 'El presupuesto excede la suma asegurada ($' . number_format($this->suma_asegurada, 2) . ').';
+            }
         }
 
         return self::$errores;
@@ -57,10 +64,12 @@ class Siniestro extends ActiveRecord
             $this->poliza_id,
             $this->ajustador_id,
             $this->fecha_hora,
-            $this->ubicacion,
+            $this->latitud,
+            $this->longitud,
             $this->conductor,
             $this->descripcion,
             $this->presupuesto,
+            (int) $this->perdida_total,
         ]);
 
         $this->id = (int) ($resultado[0]['id'] ?? 0);

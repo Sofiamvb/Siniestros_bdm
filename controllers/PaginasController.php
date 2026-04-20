@@ -112,12 +112,14 @@ class PaginasController
             $siniestro = new Siniestro([
                 'poliza_id'     => (int) ($_POST['poliza_id']   ?? 0),
                 'ajustador_id'  => (int) $_SESSION['id'],
-                'fecha_hora'    => $_POST['fecha_hora']          ?? '',
-                'ubicacion'     => $_POST['ubicacion']           ?? '',
-                'conductor'     => $_POST['conductor']           ?? '',
+                'fecha_hora'    => $_POST['fecha_hora']  ?? '',
+                'latitud'       => $_POST['latitud']    ?? '',
+                'longitud'      => $_POST['longitud']   ?? '',
+                'conductor'     => $_POST['conductor']  ?? '',
                 'descripcion'   => $_POST['descripcion']         ?? '',
-                'presupuesto'   => (float) ($_POST['presupuesto'] ?? 0),
-                'suma_asegurada'=> (float) ($_POST['suma_asegurada'] ?? 0),
+                'perdida_total'  => isset($_POST['perdida_total']),
+                'presupuesto'    => (float) ($_POST['presupuesto']    ?? 0),
+                'suma_asegurada' => (float) ($_POST['suma_asegurada'] ?? 0),
             ]);
 
             $errores = $siniestro->validar();

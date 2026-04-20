@@ -5,15 +5,13 @@ module.exports = {
   async up(queryInterface) {
     const q = (sql) => queryInterface.sequelize.query(sql);
 
-    // Nuevo estatus inicial que asigna el sistema al crear el siniestro
     await q(`
-      INSERT INTO catalogo_estatus_siniestros
-        (id, clave, descripcion_interna, color_ui, es_terminal, orden_flujo)
-      VALUES
-        (7, 'PENDIENTE_DICTAMEN', 'Pendiente de dictamen', '#F59E0B', 0, 0)
+      ALTER TABLE siniestros
+        ADD COLUMN perdida_total TINYINT(1) NOT NULL DEFAULT 0
+        AFTER presupuesto_reparacion
     `);
 
-    // Recrear SP sin el parámetro de dictamen — usa estatus 7 por defecto
+    // Recrear SP con el nuevo parámetro
     await q(`DROP PROCEDURE IF EXISTS sp_registrar_siniestro`);
     await q(`
       CREATE PROCEDURE sp_registrar_siniestro(
@@ -24,7 +22,8 @@ module.exports = {
         IN p_longitud              VARCHAR(255),
         IN p_conductor_momento     VARCHAR(150),
         IN p_descripcion_hechos    TEXT,
-        IN p_presupuesto           DECIMAL(12,2)
+        IN p_presupuesto           DECIMAL(12,2),
+        IN p_perdida_total         TINYINT(1)
       )
       BEGIN
         DECLARE v_num_reporte VARCHAR(30);
@@ -34,12 +33,15 @@ module.exports = {
           poliza_id, ajustador_id, numero_reporte,
           fecha_hora_siniestro, latitud, longitud,
           conductor_momento, descripcion_hechos,
-          dictamen_ajustador, presupuesto_reparacion, estatus_id
+          dictamen_ajustador, presupuesto_reparacion, perdida_total, estatus_id
         ) VALUES (
           p_poliza_id, p_ajustador_id, v_num_reporte,
           p_fecha_hora_siniestro, p_latitud, p_longitud,
           p_conductor_momento, p_descripcion_hechos,
-          NULL, p_presupuesto, 7
+          NULL,
+          IF(p_perdida_total = 1, NULL, p_presupuesto),
+          p_perdida_total,
+          7
         );
 
         SELECT LAST_INSERT_ID() AS id, v_num_reporte AS numero_reporte;
@@ -50,7 +52,7 @@ module.exports = {
   async down(queryInterface) {
     const q = (sql) => queryInterface.sequelize.query(sql);
 
-    await q(`DELETE FROM catalogo_estatus_siniestros WHERE id = 7`);
     await q(`DROP PROCEDURE IF EXISTS sp_registrar_siniestro`);
+    await q(`ALTER TABLE siniestros DROP COLUMN perdida_total`);
   }
 };

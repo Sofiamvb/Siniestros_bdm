@@ -109,10 +109,16 @@
                                class="input-field">
                     </div>
 
-                    <div class="field-group col-span-full">
-                        <label class="field-label">Ubicación</label>
-                        <input name="ubicacion" id="detUbicacion" type="text"
-                               placeholder="Ej. Av. Constitución 450, Monterrey" class="input-field">
+                    <div class="field-group">
+                        <label class="field-label">Latitud</label>
+                        <input name="latitud" id="detLatitud" type="text"
+                               placeholder="Ej. 25.6866" class="input-field">
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">Longitud</label>
+                        <input name="longitud" id="detLongitud" type="text"
+                               placeholder="Ej. -100.3161" class="input-field">
                     </div>
 
                     <div class="field-group col-span-full">
@@ -135,6 +141,14 @@
                     </div>
 
                     <div class="field-group col-span-full">
+                        <label class="flex items-center gap-[10px] cursor-pointer select-none">
+                            <input type="checkbox" name="perdida_total" id="chkPerdidaTotal" value="1"
+                                   class="w-[18px] h-[18px] accent-[#16425B]">
+                            <span class="field-label mb-0">Pérdida total (sin presupuesto de reparación)</span>
+                        </label>
+                    </div>
+
+                    <div class="field-group col-span-full" id="presupuestoGroup">
                         <label class="field-label">Presupuesto de reparación (MXN)</label>
                         <input name="presupuesto" id="detPresupuesto" type="number"
                                min="0" step="0.01" placeholder="0.00" class="input-field">
@@ -229,6 +243,18 @@
 </main>
 
 <script>
+/* ── Toggle pérdida total ── */
+document.getElementById('chkPerdidaTotal').addEventListener('change', function () {
+    const group = document.getElementById('presupuestoGroup');
+    const input = document.getElementById('detPresupuesto');
+    if (this.checked) {
+        group.classList.add('hidden');
+        input.value = '';
+    } else {
+        group.classList.remove('hidden');
+    }
+});
+
 /* ── Terceros involucrados ── */
 (function () {
     const terceros = [];
