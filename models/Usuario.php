@@ -66,11 +66,11 @@ class Usuario extends ActiveRecord
         return self::$errores;
     }
 
-    public function registrar(): bool
+    public function registrar(): int
     {
         $this->password = password_hash($this->password, PASSWORD_BCRYPT);
 
-        self::call_sp('sp_registrar_usuario', [
+        $resultado = self::call_sp('sp_registrar_usuario', [
             $this->nombre,
             $this->apellidos,
             $this->fecha_nacimiento,
@@ -79,10 +79,11 @@ class Usuario extends ActiveRecord
             $this->password,
             $this->alias,
             (int) $this->rol_id,
-            $this->foto  // LONGBLOB: contenido binario del archivo, null si no se subió
+            $this->foto
         ]);
 
-        return true;
+        $this->id = (int) ($resultado[0]['id'] ?? 0);
+        return $this->id;
     }
 
     public function validarLogin(): array

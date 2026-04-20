@@ -37,6 +37,21 @@ class Ajustador extends Usuario
         return self::$errores;
     }
 
+    public function registrar(): int
+    {
+        $usuarioId = parent::registrar();
+
+        if (!$usuarioId) return 0;
+
+        self::call_sp('sp_registrar_perfil_empleado', [
+            $usuarioId,
+            $this->numero_empleado,
+            $this->zona_cobertura,
+        ]);
+
+        return $usuarioId;
+    }
+
     /**
      * Verifica que quien registra el ajustador sea un Supervisor (rol_id = 3).
      * El Router ya protege la ruta, esto es una segunda capa de seguridad.

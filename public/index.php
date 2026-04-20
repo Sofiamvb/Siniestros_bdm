@@ -10,6 +10,7 @@ require_once __DIR__ . '/../models/ActiveRecord.php';
 require_once __DIR__ . '/../models/Usuario.php';
 require_once __DIR__ . '/../models/Supervisor.php';
 require_once __DIR__ . '/../models/Ajustador.php';
+require_once __DIR__ . '/../models/Asegurado.php';
 require_once __DIR__ . '/../models/Vehiculo.php';
 require_once __DIR__ . '/../controllers/PaginasController.php';
 require_once __DIR__ . '/../controllers/SupervisoresController.php';

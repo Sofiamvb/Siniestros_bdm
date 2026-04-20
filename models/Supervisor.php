@@ -42,6 +42,21 @@ class Supervisor extends Usuario
         return self::$errores;
     }
 
+    public function registrar(): int
+    {
+        $usuarioId = parent::registrar();
+
+        if (!$usuarioId) return 0;
+
+        self::call_sp('sp_registrar_perfil_empleado', [
+            $usuarioId,
+            $this->numero_empleado,
+            $this->zona_cobertura,
+        ]);
+
+        return $usuarioId;
+    }
+
     public static function verificarAccesoToken(string $token): array
     {
         self::$errores = [];

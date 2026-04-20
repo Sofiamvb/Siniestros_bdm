@@ -3,6 +3,7 @@
 namespace Controllers;
 
 use Model\Usuario;
+use Model\Asegurado;
 use MVC\Router;
 
 class PaginasController
@@ -21,7 +22,7 @@ class PaginasController
             error_log('[register] POST recibido: ' . json_encode(array_keys($_POST)));
             error_log('[register] FILES recibido: ' . json_encode($_FILES));
 
-            $usuario = new Usuario($_POST);
+            $usuario = new Asegurado($_POST);
             $usuario->password_confirm = $_POST['confirmPassword'] ?? '';
 
             // Los archivos vienen en $_FILES, no en $_POST

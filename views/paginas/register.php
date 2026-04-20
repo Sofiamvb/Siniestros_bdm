@@ -118,6 +118,31 @@
                         </button>
                     </div>
 
+                    <!-- RFC -->
+                    <input type="text"
+                           name="rfc"
+                           placeholder="RFC (ej. ABCD123456XY0)"
+                           maxlength="13"
+                           value="<?= htmlspecialchars($_POST['rfc'] ?? '') ?>"
+                           required
+                           class="input-field rounded-[20px] p-[14px] shadow-[0_5px_10px_rgba(0,0,0,0.15)]">
+
+                    <!-- Licencia de conducir -->
+                    <input type="text"
+                           name="licencia_conducir"
+                           placeholder="Número de licencia de conducir"
+                           value="<?= htmlspecialchars($_POST['licencia_conducir'] ?? '') ?>"
+                           required
+                           class="input-field rounded-[20px] p-[14px] shadow-[0_5px_10px_rgba(0,0,0,0.15)]">
+
+                    <!-- Dirección de facturación -->
+                    <input type="text"
+                           name="direccion_facturacion"
+                           placeholder="Dirección de facturación"
+                           value="<?= htmlspecialchars($_POST['direccion_facturacion'] ?? '') ?>"
+                           required
+                           class="input-field rounded-[20px] p-[14px] shadow-[0_5px_10px_rgba(0,0,0,0.15)]">
+
                     <input type="hidden" name="rol_id" value="1">
 
                     <button type="submit" class="primary-pill-btn flex w-[30%] self-center justify-center">
