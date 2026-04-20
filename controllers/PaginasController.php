@@ -2,8 +2,10 @@
 
 namespace Controllers;
 
+use Model\Companias;
 use Model\Usuario;
 use Model\Asegurado;
+use Model\Siniestro;
 use MVC\Router;
 
 class PaginasController
@@ -97,7 +99,91 @@ class PaginasController
 
     public static function registrarSiniestros(Router $router): void
     {
-        $router->render('paginas/registrarSiniestros', []);
+        // Solo ajustadores (rol_id = 2)
+        if (empty($_SESSION['id']) || ($_SESSION['rol_id'] ?? 0) != 2) {
+            header('Location: /login');
+            exit;
+        }
+
+        $errores = [];
+        $exito   = '';
+
+        // Cargar datos de catálogo necesarios para la vista
+        $estatus   = Siniestro::obtenerEstatusDisponibles();
+        $companias = Companias::obtenerCompanias();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $siniestro = new Siniestro([
+                'poliza_id'     => (int) ($_POST['poliza_id']   ?? 0),
+                'ajustador_id'  => (int) $_SESSION['id'],
+                'fecha_hora'    => $_POST['fecha_hora']          ?? '',
+                'ubicacion'     => $_POST['ubicacion']           ?? '',
+                'conductor'     => $_POST['conductor']           ?? '',
+                'descripcion'   => $_POST['descripcion']         ?? '',
+                'dictamen_id'   => (int) ($_POST['dictamen_id']  ?? 0),
+                'presupuesto'   => (float) ($_POST['presupuesto'] ?? 0),
+                'suma_asegurada'=> (float) ($_POST['suma_asegurada'] ?? 0),
+            ]);
+
+            $errores = $siniestro->validar();
+
+            if (!$errores) {
+                $siniestroId = $siniestro->registrar();
+
+                if ($siniestroId) {
+                    // Guardar terceros (JSON del hidden input)
+                    $tercerosJson = $_POST['terceros_json'] ?? '[]';
+                    $terceros     = json_decode($tercerosJson, true) ?: [];
+                    foreach ($terceros as $t) {
+                        $siniestro->registrarTercero($siniestroId, $t);
+                    }
+
+                    // Guardar evidencias (imágenes/videos)
+                    if (!empty($_FILES['evidencias']['name'][0])) {
+                        foreach ($_FILES['evidencias']['tmp_name'] as $i => $tmpName) {
+                            if ($_FILES['evidencias']['error'][$i] !== UPLOAD_ERR_OK) continue;
+                            $binario = file_get_contents($tmpName);
+                            $nombre  = $_FILES['evidencias']['name'][$i];
+                            $mime    = $_FILES['evidencias']['type'][$i];
+                            $siniestro->registrarEvidencia($siniestroId, $binario, $nombre, $mime);
+                        }
+                    }
+
+                    header('Location: /siniestrosAjustadores?siniestro_nuevo=1');
+                    exit;
+                }
+
+                $errores[] = 'Ocurrió un error al registrar el siniestro.';
+            }
+        }
+
+        $router->render('paginas/registrarSiniestros', [
+            'errores'   => $errores,
+            'exito'     => $exito,
+            'estatus'   => $estatus,
+            'companias' => $companias,
+        ]);
+    }
+
+    public static function apiValidarPoliza(Router $router): void
+    {
+        header('Content-Type: application/json');
+        $numero = trim($_GET['numero'] ?? '');
+
+        if (!$numero) {
+            echo json_encode(['error' => 'Número de póliza requerido']);
+            exit;
+        }
+
+        $poliza = Siniestro::validarPoliza($numero);
+
+        if (!$poliza) {
+            echo json_encode(['error' => 'Póliza no encontrada o no activa']);
+            exit;
+        }
+
+        echo json_encode($poliza);
+        exit;
     }
 
     public static function siniestrosAjustadores(Router $router): void

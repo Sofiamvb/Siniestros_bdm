@@ -1,110 +1,168 @@
 <main>
+    <!-- Tabs bar -->
     <section class="tabs-bar" aria-label="Secciones de registro de siniestro">
-        <button type="button" class="tab-btn tab-btn-active" data-section="aseguradora" onclick="showSection('aseguradora')">Aseguradora</button>
-        <button type="button" class="tab-btn" data-section="auto" onclick="showSection('auto')">Auto</button>
-        <button type="button" class="tab-btn" data-section="detalles" onclick="showSection('detalles')">Detalles</button>
+        <button type="button" class="tab-btn tab-btn-active" data-section="aseguradora" id="tab-aseguradora">Aseguradora</button>
+        <button type="button" class="tab-btn" data-section="auto" id="tab-auto">Auto</button>
+        <button type="button" class="tab-btn" data-section="detalles" id="tab-detalles">Detalles</button>
     </section>
 
     <main class="flex justify-center px-[16px] pb-[28px] pt-[18px]">
-        <section class="register-card flex min-h-[430px] w-[min(860px,94vw)] flex-col rounded-[18px] bg-[#F5F7FA] px-[30px] pb-[20px] pt-[22px] shadow-[0_6px_12px_rgba(0,0,0,0.15)]">
-            <a href="./siniestros.html" class="w-fit text-[22px] font-bold text-[#16425B] no-underline">← Regresar</a>
+        <form method="POST" action="/registrarSiniestros" enctype="multipart/form-data"
+              class="register-card flex min-h-[430px] w-[min(860px,94vw)] flex-col rounded-[18px] bg-[#F5F7FA] px-[30px] pb-[20px] pt-[22px] shadow-[0_6px_12px_rgba(0,0,0,0.15)]"
+              id="formSiniestro">
 
+            <a href="/siniestrosAjustadores" class="w-fit text-[22px] font-bold text-[#16425B] no-underline">← Regresar</a>
+
+            <?php if (!empty($errores)): ?>
+            <div class="mt-[16px] rounded-[12px] bg-red-50 p-[14px] text-red-700 text-[14px]">
+                <ul class="list-disc pl-[18px]">
+                    <?php foreach ($errores as $e): ?>
+                    <li><?= htmlspecialchars($e) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+            <?php endif; ?>
+
+            <!-- Hidden fields populated by JS after validating poliza -->
+            <input type="hidden" name="poliza_id"      id="hPolizaId">
+            <input type="hidden" name="suma_asegurada" id="hSumaAsegurada">
+            <input type="hidden" name="terceros_json"  id="hTercerosJson" value="[]">
+
+            <!-- ══ SECTION 1: Aseguradora ══ -->
             <div class="section-content flex-1" id="aseguradora-section">
                 <div class="mx-auto mt-[44px] grid max-w-[700px] grid-cols-2 gap-x-[22px] gap-y-[16px]">
+
                     <div class="field-group">
-                        <label for="aseguradora-nombre" class="field-label">Aseguradora</label>
-                        <input id="aseguradora-nombre" type="text" placeholder="Nombre de la aseguradora" class="input-field">
+                        <label class="field-label">Aseguradora</label>
+                        <select id="selectCompania" class="input-field">
+                            <option value="" disabled selected>Selecciona una aseguradora</option>
+                            <?php foreach ($companias as $c): ?>
+                            <option value="<?= (int) $c['id'] ?>">
+                                <?= htmlspecialchars($c['nombre_comercial']) ?>
+                            </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
+
                     <div class="field-group">
-                        <label for="aseguradora-poliza" class="field-label">Número de poliza</label>
-                        <input id="aseguradora-poliza" type="text" placeholder="Número de la poliza" class="input-field">
+                        <label class="field-label">Número de póliza</label>
+                        <input id="inputNumPoliza" type="text" placeholder="Ej. POL-2024-000123"
+                               class="input-field" autocomplete="off">
                     </div>
-                    <div class="field-group">
-                        <label for="aseguradora-tipo" class="field-label">Tiempo de seguro</label>
-                        <input id="aseguradora-tipo" type="text" placeholder="Tiempo de seguro" class="input-field">
+
+                    <div class="field-group col-span-full">
+                        <label class="field-label">Nombre del ajustador</label>
+                        <input type="text"
+                               value="<?= htmlspecialchars($_SESSION['nombre'] ?? '') ?>"
+                               class="input-field bg-gray-100 cursor-not-allowed"
+                               readonly disabled>
                     </div>
-                    <div class="field-group">
-                        <label for="aseguradora-ajustador" class="field-label">Nombre del ajustador</label>
-                        <input id="aseguradora-ajustador" type="text" placeholder="Nombre del ajustador" class="input-field">
-                    </div>
+
                 </div>
             </div>
 
+            <!-- ══ SECTION 2: Auto ══ -->
             <div class="section-content hidden flex-1" id="auto-section">
                 <div class="mx-auto mt-[44px] grid max-w-[700px] grid-cols-2 gap-x-[22px] gap-y-[16px]">
+
                     <div class="field-group">
-                        <label for="auto-duenio" class="field-label">Nombre del dueño</label>
-                        <input id="auto-duenio" type="text" placeholder="Nombre del dueño" class="input-field">
+                        <label class="field-label">Nombre del dueño</label>
+                        <input id="autoDuenio" type="text" class="input-field bg-gray-100 cursor-not-allowed"
+                               readonly placeholder="Se carga al validar la póliza">
                     </div>
+
                     <div class="field-group">
-                        <label for="auto-correo" class="field-label">Conductor</label>
-                        <input id="auto-correo" type="text" placeholder="Nombre del conductor" class="input-field">
+                        <label class="field-label">Conductor al momento del siniestro</label>
+                        <input name="conductor" id="autoConductor" type="text"
+                               placeholder="Nombre del conductor" class="input-field">
                     </div>
+
                     <div class="field-group">
-                        <label for="auto-marca" class="field-label">Marca</label>
-                        <input id="auto-marca" type="text" placeholder="Marca del auto" class="input-field">
+                        <label class="field-label">Marca</label>
+                        <input id="autoMarca" type="text" class="input-field bg-gray-100 cursor-not-allowed"
+                               readonly placeholder="Se carga automáticamente">
                     </div>
+
                     <div class="field-group">
-                        <label for="auto-modelo" class="field-label">Modelo</label>
-                        <input id="auto-modelo" type="text" placeholder="Modelo del auto" class="input-field">
+                        <label class="field-label">Modelo</label>
+                        <input id="autoModelo" type="text" class="input-field bg-gray-100 cursor-not-allowed"
+                               readonly placeholder="Se carga automáticamente">
                     </div>
+
                     <div class="field-group">
-                        <label for="auto-anio" class="field-label">Año</label>
-                        <input id="auto-anio" type="text" placeholder="Año del auto" class="input-field">
+                        <label class="field-label">Año</label>
+                        <input id="autoAnio" type="text" class="input-field bg-gray-100 cursor-not-allowed"
+                               readonly placeholder="Se carga automáticamente">
                     </div>
+
                     <div class="field-group">
-                        <label for="auto-placa" class="field-label">Placa</label>
-                        <input id="auto-placa" type="text" placeholder="Placa" class="input-field">
+                        <label class="field-label">Placa</label>
+                        <input id="autoPlaca" type="text" class="input-field bg-gray-100 cursor-not-allowed"
+                               readonly placeholder="Se carga automáticamente">
                     </div>
+
                 </div>
             </div>
 
+            <!-- ══ SECTION 3: Detalles ══ -->
             <div class="section-content hidden flex-1" id="detalles-section">
                 <div class="mx-auto mt-[44px] grid max-w-[700px] grid-cols-2 gap-x-[22px] gap-y-[16px]">
-                    <div class="field-group">
-                        <label for="detalles-fecha" class="field-label">Fecha del siniestro</label>
-                        <input id="detalles-fecha" type="text" placeholder="Fecha del siniestro" class="input-field">
-                    </div>
-                    <div class="field-group">
-                        <label for="detalles-hora" class="field-label">Hora del siniestro</label>
-                        <input id="detalles-hora" type="text" placeholder="00:00:00" class="input-field">
+
+                    <div class="field-group col-span-full">
+                        <label class="field-label">Fecha y hora del siniestro</label>
+                        <input name="fecha_hora" id="detFechaHora" type="datetime-local"
+                               class="input-field">
                     </div>
 
                     <div class="field-group col-span-full">
                         <label class="field-label">Ubicación</label>
-                        <div class="location-grid">
-                            <input id="detalles-calle" type="text" placeholder="Latitud" class="input-field">
-                            <input id="detalles-municipio" type="text" placeholder="Longitud" class="input-field">
-                            <input id="detalles-estado" type="text" placeholder="Avenida" class="input-field">
-                        </div>
+                        <input name="ubicacion" id="detUbicacion" type="text"
+                               placeholder="Ej. Av. Constitución 450, Monterrey" class="input-field">
                     </div>
 
                     <div class="field-group col-span-full">
-                        <label for="detalles-vehiculos" class="field-label">Vehiculos involucrados</label>
+                        <label class="field-label">Vehículos involucrados</label>
                         <div class="relative">
-                            <textarea id="detalles-vehiculos" class="textarea-field min-h-[110px] pr-[52px]" placeholder="Vehiculos involucrados"></textarea>
-                            <button type="button" class="floating-add-btn" id="openVehiculoModal" aria-label="Agregar vehiculo involucrado">+</button>
+                            <div id="tercerosLista" class="min-h-[80px] rounded-[14px] border border-[#ccc] bg-white p-[12px] text-[14px] text-[#555]">
+                                <p class="text-[#aaa] italic" id="tercerosVacio">Sin terceros registrados</p>
+                            </div>
+                            <button type="button"
+                                    class="floating-add-btn" id="openVehiculoModal"
+                                    aria-label="Agregar vehículo involucrado">+</button>
                         </div>
                     </div>
 
                     <div class="field-group col-span-full">
-                        <label for="detalles-descripcion" class="field-label">Descripción del siniestro</label>
-                        <textarea id="detalles-descripcion" class="textarea-field min-h-[110px]" placeholder="Descripción del siniestro"></textarea>
+                        <label class="field-label">Descripción de los hechos</label>
+                        <textarea name="descripcion" id="detDescripcion"
+                                  class="textarea-field min-h-[110px]"
+                                  placeholder="Describe lo ocurrido en el siniestro"></textarea>
                     </div>
 
                     <div class="field-group">
-                        <label for="detalles-dictamen" class="field-label">Dictamen</label>
-                        <input id="detalles-dictamen" type="text" placeholder="Dictamen" class="input-field">
+                        <label class="field-label">Dictamen</label>
+                        <select name="dictamen_id" id="detDictamen" class="input-field">
+                            <option value="" disabled selected>Selecciona un dictamen</option>
+                            <?php foreach ($estatus as $e): ?>
+                            <option value="<?= (int) $e['id'] ?>"
+                                    style="color:<?= htmlspecialchars($e['color_ui']) ?>">
+                                <?= htmlspecialchars($e['descripcion_interna']) ?>
+                            </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
                     <div class="field-group">
-                        <label for="detalles-presupuesto" class="field-label">Presupuesto</label>
-                        <input id="detalles-presupuesto" type="text" placeholder="Presupuesto" class="input-field">
+                        <label class="field-label">Presupuesto de reparación (MXN)</label>
+                        <input name="presupuesto" id="detPresupuesto" type="number"
+                               min="0" step="0.01" placeholder="0.00" class="input-field">
+                        <p id="presupuestoHint" class="mt-[4px] text-[12px] text-[#888]"></p>
                     </div>
 
                     <div class="field-group col-span-full">
-                        <label for="detalles-media" class="field-label">Subir imágenes o videos</label>
-                        <input id="detalles-media" type="file" accept="image/*,video/*" multiple class="file-input-field">
+                        <label class="field-label">Imágenes / Videos de evidencia</label>
+                        <input name="evidencias[]" id="detMedia" type="file"
+                               accept="image/*,video/*" multiple class="file-input-field">
                     </div>
 
                     <div class="field-group col-span-full">
@@ -121,67 +179,290 @@
                             <button type="button" class="delete-media-btn-base" id="deleteMediaBtn">Eliminar actual</button>
                         </div>
                     </div>
+
                 </div>
             </div>
 
             <div class="mt-auto flex justify-end border-t border-t-[rgba(0,0,0,0.1)] pt-[24px]">
-                <button type="button" class="gradient-action-btn bg-[#16425B] px-[22px] py-[8px] text-[18px] shadow-[0_4px_4px_rgba(0,0,0,0.15)] hover:bg-[#16425B]" id="continueBtn">Continuar →</button>
+                <button type="button"
+                        class="gradient-action-btn bg-[#16425B] px-[22px] py-[8px] text-[18px] shadow-[0_4px_4px_rgba(0,0,0,0.15)] hover:bg-[#16425B]"
+                        id="continueBtn">Continuar →</button>
             </div>
-        </section>
+
+        </form>
     </main>
 
+    <!-- ══ Modal: Vehículo involucrado ══ -->
     <div class="supervisor-overlay" id="vehiculoModal" aria-hidden="true">
-        <div class="supervisor-panel max-h-[90vh] max-w-[660px] px-[24px] pb-[24px] pt-[20px]" role="dialog" aria-modal="true" aria-labelledby="vehiculoModalTitle">
+        <div class="supervisor-panel max-h-[90vh] max-w-[660px] px-[24px] pb-[24px] pt-[20px]"
+             role="dialog" aria-modal="true" aria-labelledby="vehiculoModalTitle">
             <button type="button" class="modal-close-round-lg" id="closeVehiculoModal" aria-label="Cerrar modal">x</button>
-            <h2 class="supervisor-title text-[34px]" id="vehiculoModalTitle">Vehiculo involucrado</h2>
+            <h2 class="supervisor-title text-[34px]" id="vehiculoModalTitle">Vehículo involucrado</h2>
             <div class="supervisor-divider"></div>
 
             <div class="mx-auto max-w-[500px]">
                 <div class="supervisor-form-group">
-                    <label for="vehiculo-conductor" class="field-label">Nombre del conductor</label>
-                    <input id="vehiculo-conductor" type="text" placeholder="Nombre del conductor" class="supervisor-input">
+                    <label class="field-label">Nombre del conductor</label>
+                    <input id="mv-conductor" type="text" placeholder="Nombre del conductor" class="supervisor-input">
                 </div>
-
                 <div class="supervisor-form-group">
-                    <label for="vehiculo-correo" class="field-label">Correo electronico</label>
-                    <input id="vehiculo-correo" type="email" placeholder="Ejemplo@correo.com" class="supervisor-input">
+                    <label class="field-label">Correo electrónico</label>
+                    <input id="mv-correo" type="email" placeholder="correo@ejemplo.com" class="supervisor-input">
                 </div>
-
                 <div class="supervisor-form-group">
-                    <label for="vehiculo-marca" class="field-label">Marca</label>
-                    <input id="vehiculo-marca" type="text" placeholder="Marca del vehiculo" class="supervisor-input">
+                    <label class="field-label">Marca</label>
+                    <input id="mv-marca" type="text" placeholder="Marca del vehículo" class="supervisor-input">
                 </div>
-
                 <div class="split-row">
                     <div class="supervisor-form-group flex-1">
-                        <label for="vehiculo-modelo" class="field-label">Modelo</label>
-                        <input id="vehiculo-modelo" type="text" placeholder="Nombre del modelo" class="supervisor-input">
+                        <label class="field-label">Modelo</label>
+                        <input id="mv-modelo" type="text" placeholder="Nombre del modelo" class="supervisor-input">
                     </div>
                     <div class="supervisor-form-group flex-1">
-                        <label for="vehiculo-anio" class="field-label">Año</label>
-                        <input id="vehiculo-anio" type="text" placeholder="Ej. 2015" class="supervisor-input">
+                        <label class="field-label">Año</label>
+                        <input id="mv-anio" type="text" placeholder="Ej. 2018" class="supervisor-input">
                     </div>
                 </div>
-
                 <div class="supervisor-form-group">
-                    <label for="vehiculo-placas" class="field-label">Placas</label>
-                    <input id="vehiculo-placas" type="text" placeholder="Numero de placas" class="supervisor-input">
+                    <label class="field-label">Placas</label>
+                    <input id="mv-placas" type="text" placeholder="Número de placas" class="supervisor-input">
                 </div>
-
                 <div class="supervisor-form-group">
-                    <label for="vehiculo-aseguradora" class="field-label">Aseguradora</label>
-                    <input id="vehiculo-aseguradora" type="text" placeholder="Nombre de la aseguradora" class="supervisor-input">
+                    <label class="field-label">Aseguradora</label>
+                    <input id="mv-aseguradora" type="text" placeholder="Nombre de la aseguradora" class="supervisor-input">
                 </div>
-
                 <div class="supervisor-form-group">
-                    <label for="vehiculo-descripcion" class="field-label">Descripcion</label>
-                    <textarea id="vehiculo-descripcion" placeholder="Descripcion" class="supervisor-input min-h-[90px] resize-y"></textarea>
+                    <label class="field-label">Descripción de daños</label>
+                    <textarea id="mv-descripcion" placeholder="Descripción" class="supervisor-input min-h-[90px] resize-y"></textarea>
                 </div>
-
                 <div class="mt-[8px] flex justify-end">
-                    <button type="button" class="gradient-action-btn bg-[#16425B] px-[20px] py-[9px] text-[15px] shadow-[0_4px_8px_rgba(0,0,0,0.18)] hover:bg-[#16425B]">Done</button>
+                    <button type="button" id="guardarTerceroBtn"
+                            class="gradient-action-btn bg-[#16425B] px-[20px] py-[9px] text-[15px] shadow-[0_4px_8px_rgba(0,0,0,0.18)] hover:bg-[#16425B]">
+                        Agregar
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </main>
+
+<script>
+(function () {
+    /* ── Secciones / tabs ── */
+    const sections = ['aseguradora', 'auto', 'detalles'];
+    let currentSection = 0;
+    let polizaData = null;
+    let terceros   = [];
+
+    function showSection(idx) {
+        sections.forEach((s, i) => {
+            const sec = document.getElementById(s + '-section');
+            const tab = document.getElementById('tab-' + s);
+            sec.classList.toggle('hidden', i !== idx);
+            tab.classList.toggle('tab-btn-active', i === idx);
+        });
+        currentSection = idx;
+        document.getElementById('continueBtn').textContent =
+            idx === sections.length - 1 ? 'Registrar siniestro' : 'Continuar →';
+    }
+
+    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+        btn.addEventListener('click', () => {
+            if (i <= currentSection) showSection(i); // solo navegar hacia atrás libremente
+        });
+    });
+
+    /* ── Botón continuar ── */
+    document.getElementById('continueBtn').addEventListener('click', async () => {
+        if (currentSection === 0) {
+            await validarPoliza();
+        } else if (currentSection === 1) {
+            validarAuto();
+        } else {
+            document.getElementById('formSiniestro').submit();
+        }
+    });
+
+    /* ── Validar póliza (sección 1 → 2) ── */
+    async function validarPoliza() {
+        const numero = document.getElementById('inputNumPoliza').value.trim();
+        if (!numero) {
+            Swal.fire({ icon: 'warning', title: 'Campo requerido', text: 'Ingresa el número de póliza.' });
+            return;
+        }
+
+        try {
+            const res  = await fetch('/api/validar-poliza?numero=' + encodeURIComponent(numero));
+            const data = await res.json();
+
+            if (data.error) {
+                Swal.fire({ icon: 'warning', title: 'Póliza no encontrada', text: data.error });
+                return;
+            }
+
+            polizaData = data;
+
+            // Llenar hidden inputs
+            document.getElementById('hPolizaId').value      = data.poliza_id;
+            document.getElementById('hSumaAsegurada').value = data.suma_asegurada;
+
+            // Llenar campos de auto (readonly)
+            document.getElementById('autoDuenio').value = data.nombre_duenio;
+            document.getElementById('autoMarca').value  = data.marca;
+            document.getElementById('autoModelo').value = data.modelo;
+            document.getElementById('autoAnio').value   = data.anio;
+            document.getElementById('autoPlaca').value  = data.placas;
+
+            // Mostrar hint de presupuesto máximo
+            const hint = document.getElementById('presupuestoHint');
+            hint.textContent = 'Suma asegurada máx.: $' + parseFloat(data.suma_asegurada).toLocaleString('es-MX', {minimumFractionDigits: 2});
+            document.getElementById('detPresupuesto').max = data.suma_asegurada;
+
+            showSection(1);
+
+        } catch (e) {
+            Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo conectar con el servidor.' });
+        }
+    }
+
+    /* ── Validar auto (sección 2 → 3) ── */
+    function validarAuto() {
+        const conductor = document.getElementById('autoConductor').value.trim();
+        if (!conductor) {
+            Swal.fire({ icon: 'warning', title: 'Campo requerido', text: 'Ingresa el nombre del conductor.' });
+            return;
+        }
+        showSection(2);
+
+        // Default fecha/hora a ahora
+        const dtInput = document.getElementById('detFechaHora');
+        if (!dtInput.value) {
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            dtInput.value = now.toISOString().slice(0, 16);
+        }
+    }
+
+    /* ── Modal terceros ── */
+    const modal = document.getElementById('vehiculoModal');
+    document.getElementById('openVehiculoModal').addEventListener('click', () => {
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+    });
+    document.getElementById('closeVehiculoModal').addEventListener('click', cerrarModal);
+    modal.addEventListener('click', e => { if (e.target === modal) cerrarModal(); });
+
+    function cerrarModal() {
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+        ['conductor','correo','marca','modelo','anio','placas','aseguradora','descripcion']
+            .forEach(f => { document.getElementById('mv-' + f).value = ''; });
+    }
+
+    document.getElementById('guardarTerceroBtn').addEventListener('click', () => {
+        const t = {
+            conductor:   document.getElementById('mv-conductor').value.trim(),
+            correo:      document.getElementById('mv-correo').value.trim(),
+            marca:       document.getElementById('mv-marca').value.trim(),
+            modelo:      document.getElementById('mv-modelo').value.trim(),
+            anio:        document.getElementById('mv-anio').value.trim(),
+            placas:      document.getElementById('mv-placas').value.trim(),
+            aseguradora: document.getElementById('mv-aseguradora').value.trim(),
+            descripcion: document.getElementById('mv-descripcion').value.trim(),
+        };
+
+        if (!t.marca || !t.placas) {
+            Swal.fire({ icon: 'warning', title: 'Datos incompletos', text: 'Marca y placas son obligatorias.' });
+            return;
+        }
+
+        terceros.push(t);
+        document.getElementById('hTercerosJson').value = JSON.stringify(terceros);
+        renderTerceros();
+        cerrarModal();
+    });
+
+    function renderTerceros() {
+        const lista  = document.getElementById('tercerosLista');
+        const vacio  = document.getElementById('tercerosVacio');
+        if (terceros.length === 0) {
+            lista.innerHTML = '<p class="text-[#aaa] italic" id="tercerosVacio">Sin terceros registrados</p>';
+            return;
+        }
+        lista.innerHTML = terceros.map((t, i) => `
+            <div class="flex items-center justify-between rounded-[10px] bg-white border border-[#ddd] px-[12px] py-[8px] mb-[8px]">
+                <span class="text-[14px] font-medium text-[#333]">${t.marca} · ${t.placas}</span>
+                <button type="button" onclick="removeTercero(${i})"
+                        class="text-[12px] text-red-500 hover:underline">Eliminar</button>
+            </div>
+        `).join('');
+    }
+
+    window.removeTercero = function(i) {
+        terceros.splice(i, 1);
+        document.getElementById('hTercerosJson').value = JSON.stringify(terceros);
+        renderTerceros();
+    };
+
+    /* ── Carousel de evidencias ── */
+    let mediaFiles = [];
+    let mediaIndex = 0;
+
+    document.getElementById('detMedia').addEventListener('change', function () {
+        mediaFiles = Array.from(this.files);
+        mediaIndex = 0;
+        renderCarousel();
+    });
+
+    document.getElementById('carouselPrev').addEventListener('click', () => {
+        if (mediaFiles.length === 0) return;
+        mediaIndex = (mediaIndex - 1 + mediaFiles.length) % mediaFiles.length;
+        renderCarousel();
+    });
+
+    document.getElementById('carouselNext').addEventListener('click', () => {
+        if (mediaFiles.length === 0) return;
+        mediaIndex = (mediaIndex + 1) % mediaFiles.length;
+        renderCarousel();
+    });
+
+    document.getElementById('deleteMediaBtn').addEventListener('click', () => {
+        if (mediaFiles.length === 0) return;
+        mediaFiles.splice(mediaIndex, 1);
+        mediaIndex = Math.max(0, mediaIndex - 1);
+        renderCarousel();
+    });
+
+    function renderCarousel() {
+        const view    = document.getElementById('carouselView');
+        const empty   = document.getElementById('carouselEmpty');
+        const counter = document.getElementById('carouselCounter');
+
+        view.innerHTML = '';
+        counter.textContent = mediaFiles.length === 0 ? '0 / 0' : `${mediaIndex + 1} / ${mediaFiles.length}`;
+
+        if (mediaFiles.length === 0) {
+            view.appendChild(Object.assign(document.createElement('p'), {
+                className: 'carousel-empty-text',
+                textContent: 'No hay archivos cargados'
+            }));
+            return;
+        }
+
+        const file = mediaFiles[mediaIndex];
+        const url  = URL.createObjectURL(file);
+
+        if (file.type.startsWith('video/')) {
+            const v = document.createElement('video');
+            v.src = url; v.controls = true;
+            v.className = 'max-h-[200px] max-w-full rounded-[8px]';
+            view.appendChild(v);
+        } else {
+            const img = document.createElement('img');
+            img.src = url;
+            img.className = 'max-h-[200px] max-w-full rounded-[8px] object-contain';
+            view.appendChild(img);
+        }
+    }
+})();
+</script>
