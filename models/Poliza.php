@@ -14,7 +14,7 @@ class Poliza extends ActiveRecord
     public string $placas               = '';
     public string $fecha_inicio         = '';
     public string $fecha_fin            = '';
-    public string $estatus_poliza       = '';
+    public bool   $estatus_poliza       = true;
     public string $marca                = '';
     public string $modelo               = '';
     public int    $anio                 = 0;
@@ -73,7 +73,8 @@ class Poliza extends ActiveRecord
         return array_map(function (array $fila) {
             $p = new self();
             foreach ($fila as $campo => $valor) {
-                if (property_exists($p, $campo)) $p->$campo = $valor;
+                if (!property_exists($p, $campo)) continue;
+                $p->$campo = $campo === 'estatus_poliza' ? (bool) $valor : $valor;
             }
             return $p;
         }, $filas);
