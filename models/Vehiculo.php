@@ -38,6 +38,21 @@ class Vehiculo extends ActiveRecord
         return self::$errores;
     }
 
+    // ── Búsqueda por id ──────────────────────────────────────────────────────
+
+    /** Retorna un objeto Vehiculo por su id o null si no existe. */
+    public static function obtenerPorId(int $id): ?self
+    {
+        $filas = self::call_sp('sp_get_vehiculo_by_id', [$id]);
+        if (empty($filas)) return null;
+
+        $v = new self();
+        foreach ($filas[0] as $campo => $valor) {
+            if (property_exists($v, $campo)) $v->$campo = $valor;
+        }
+        return $v;
+    }
+
     // ── Catálogo (cascading selects) ─────────────────────────────────────────
 
     /** Devuelve lista plana de marcas: ['BMW', 'Ford', ...] */

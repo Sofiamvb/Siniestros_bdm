@@ -12,10 +12,13 @@ require_once __DIR__ . '/../models/Supervisor.php';
 require_once __DIR__ . '/../models/Ajustador.php';
 require_once __DIR__ . '/../models/Asegurado.php';
 require_once __DIR__ . '/../models/Vehiculo.php';
+require_once __DIR__ . '/../models/Seguro.php';
+require_once __DIR__ . '/../models/Poliza.php';
 require_once __DIR__ . '/../controllers/PaginasController.php';
 require_once __DIR__ . '/../controllers/SupervisoresController.php';
 require_once __DIR__ . '/../controllers/AjustadoresController.php';
 require_once __DIR__ . '/../controllers/CotizarController.php';
+require_once __DIR__ . '/../controllers/ContratarController.php';
 require __DIR__ . '/../vendor/autoload.php';
 
 use MVC\Router;
@@ -23,6 +26,7 @@ use Controllers\PaginasController;
 use Controllers\SupervisoresController;
 use Controllers\AjustadoresController;
 use Controllers\CotizarController;
+use Controllers\ContratarController;
 use Model\ActiveRecord;
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
@@ -54,6 +58,11 @@ $router->post('/cotizar',            [CotizarController::class,  'cotizar']);
 $router->get('/api/marcas',          [CotizarController::class,  'apiMarcas']);
 $router->get('/api/modelos',         [CotizarController::class,  'apiModelos']);
 $router->get('/api/anios',           [CotizarController::class,  'apiAnios']);
+
+// Contratación (2 pasos)
+$router->get('/contratar',           [ContratarController::class, 'elegirSeguro']);
+$router->get('/pago',                [ContratarController::class, 'pago']);
+$router->post('/pago',               [ContratarController::class, 'pago']);
 
 $router->get('/',                    [PaginasController::class, 'landingPage']);
 $router->get('/login',               [PaginasController::class, 'login']);
