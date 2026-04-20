@@ -108,7 +108,10 @@ class PaginasController
         $errores = [];
         $exito   = '';
 
+        $post = [];
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $post = $_POST;
             $siniestro = new Siniestro([
                 'poliza_id'     => (int) ($_POST['poliza_id']   ?? 0),
                 'ajustador_id'  => (int) $_SESSION['id'],
@@ -157,6 +160,7 @@ class PaginasController
         $router->render('paginas/registrarSiniestros', [
             'errores' => $errores,
             'exito'   => $exito,
+            'post'    => $post,
         ]);
     }
 

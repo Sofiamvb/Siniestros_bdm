@@ -24,9 +24,12 @@
             <?php endif; ?>
 
             <!-- Hidden fields populated by JS after validating poliza -->
-            <input type="hidden" name="poliza_id"      id="hPolizaId">
-            <input type="hidden" name="suma_asegurada" id="hSumaAsegurada">
-            <input type="hidden" name="terceros_json"  id="hTercerosJson" value="[]">
+            <input type="hidden" name="poliza_id"      id="hPolizaId"
+                   value="<?= (int) ($post['poliza_id'] ?? 0) ?>">
+            <input type="hidden" name="suma_asegurada" id="hSumaAsegurada"
+                   value="<?= htmlspecialchars($post['suma_asegurada'] ?? '') ?>">
+            <input type="hidden" name="terceros_json"  id="hTercerosJson"
+                   value="<?= htmlspecialchars($post['terceros_json'] ?? '[]') ?>">
 
             <!-- ══ SECTION 1: Aseguradora ══ -->
             <div class="section-content flex-1" id="aseguradora-section">
@@ -243,6 +246,47 @@
 </main>
 
 <script>
+/* ── Re-poblar al volver con errores de POST ── */
+(function () {
+    const hasErrors     = <?= !empty($errores) ? 'true' : 'false' ?>;
+    const sumaAsegurada = parseFloat(document.getElementById('hSumaAsegurada').value) || 0;
+    const perdidaTotal  = <?= !empty($post['perdida_total']) ? 'true' : 'false' ?>;
+
+    if (!hasErrors) return;
+
+    // Re-poblar campos de detalles con valores del POST
+    const set = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val; };
+    set('detFechaHora',   <?= json_encode($post['fecha_hora']   ?? '') ?>);
+    set('detLatitud',     <?= json_encode($post['latitud']      ?? '') ?>);
+    set('detLongitud',    <?= json_encode($post['longitud']     ?? '') ?>);
+    set('autoConductor',  <?= json_encode($post['conductor']    ?? '') ?>);
+    set('detDescripcion', <?= json_encode($post['descripcion']  ?? '') ?>);
+    set('detPresupuesto', <?= json_encode($post['presupuesto']  ?? '') ?>);
+
+    // Restaurar checkbox pérdida total
+    if (perdidaTotal) {
+        const chk = document.getElementById('chkPerdidaTotal');
+        if (chk) chk.checked = true;
+        const group = document.getElementById('presupuestoGroup');
+        if (group) group.classList.add('hidden');
+    }
+
+    // Mostrar hint de suma asegurada
+    if (sumaAsegurada > 0) {
+        const hint        = document.getElementById('presupuestoHint');
+        const presupuesto = document.getElementById('detPresupuesto');
+        if (hint)        hint.textContent = 'Suma asegurada máx.: $' + sumaAsegurada.toLocaleString('es-MX', { minimumFractionDigits: 2 });
+        if (presupuesto) presupuesto.max  = sumaAsegurada;
+    }
+
+    // Saltar directamente a la sección de detalles
+    if (typeof showSection === 'function') {
+        showSection('detalles');
+    } else {
+        window.addEventListener('DOMContentLoaded', () => showSection('detalles'));
+    }
+})();
+
 /* ── Toggle pérdida total ── */
 document.getElementById('chkPerdidaTotal').addEventListener('change', function () {
     const group = document.getElementById('presupuestoGroup');
