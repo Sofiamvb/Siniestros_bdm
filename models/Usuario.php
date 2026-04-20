@@ -131,6 +131,11 @@ class Usuario extends ActiveRecord
         $_SESSION['nombre'] = $usuario['nombre'];
         $_SESSION['rol_id'] = $usuario['rol_id'];
 
+        // Convertir foto LONGBLOB a data URI para usar en <img src> sin request extra
+        if (!empty($usuario['foto'])) {
+            $_SESSION['foto'] = 'data:image/jpeg;base64,' . base64_encode($usuario['foto']);
+        }
+
         return self::$errores;
     }
 }

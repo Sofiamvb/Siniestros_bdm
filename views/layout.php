@@ -34,7 +34,8 @@
             <?php else: ?>
                 <a href="/login" class="ghost-action-btn">Ingresar</a>
             <?php endif; ?>
-            <img src="/img/DefaultPFP.png" class="user-avatar" alt="Usuario">
+            <img src="<?= !empty($_SESSION['foto']) ? htmlspecialchars($_SESSION['foto']) : '/img/DefaultPFP.png' ?>"
+                 class="user-avatar" alt="Usuario">
         </div>
     </header>
 
