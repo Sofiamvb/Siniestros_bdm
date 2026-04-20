@@ -14,7 +14,9 @@
                 <button type="button" class="filter-btn-base">Filtrar</button>
             </div>
             <h1 class="page-main-title">SINIESTROS</h1>
-            <div class="w-[1px] max-[980px]:hidden" aria-hidden="true"></div>
+            <a href="/register/ajustadores" class="primary-pill-btn">
+                + Registrar Ajustador
+            </a>
         </div>
         <div class="page-title-divider"></div>
     </section>
