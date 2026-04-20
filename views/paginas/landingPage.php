@@ -11,25 +11,80 @@
                 <h2 class="m-0 text-[22px] font-semibold text-white">Auto</h2>
                 <div class="my-[15px] mb-[30px] h-[6px] rounded-[10px] bg-[linear-gradient(to_right,#3A7CA5_0%,#81C3D7_50%,#81C3D7_100%)]"></div>
 
-                <form class="form-shell">
-                    <input type="text" placeholder="Marca" class="input-field rounded-[20px] px-[18px] py-[14px] shadow-[0_4px_8px_rgba(0,0,0,0.15)] focus:shadow-[0_0_0_2px_#D9DCD6]">
-                    <input type="text" placeholder="Modelo" class="input-field rounded-[20px] px-[18px] py-[14px] shadow-[0_4px_8px_rgba(0,0,0,0.15)] focus:shadow-[0_0_0_2px_#D9DCD6]">
+                <form class="form-shell" action="/cotizar" method="GET" id="formCotizarLanding">
+                    <select name="marca" id="landingMarca"
+                        class="input-field cursor-pointer rounded-[20px] px-[18px] py-[14px] text-[#666] shadow-[0_4px_8px_rgba(0,0,0,0.15)] focus:shadow-[0_0_0_2px_#D9DCD6]">
+                        <option value="" disabled selected>Marca</option>
+                    </select>
 
-                    <div class="split-row">
-                        <input type="text" placeholder="Año" class="input-field flex-1 rounded-[20px] px-[18px] py-[14px] shadow-[0_4px_8px_rgba(0,0,0,0.15)] focus:shadow-[0_0_0_2px_#D9DCD6]">
-                        <input type="text" placeholder="Placas" class="input-field flex-1 rounded-[20px] px-[18px] py-[14px] shadow-[0_4px_8px_rgba(0,0,0,0.15)] focus:shadow-[0_0_0_2px_#D9DCD6]">
-                    </div>
+                    <select name="modelo" id="landingModelo" disabled
+                        class="input-field cursor-pointer rounded-[20px] px-[18px] py-[14px] text-[#666] shadow-[0_4px_8px_rgba(0,0,0,0.15)] focus:shadow-[0_0_0_2px_#D9DCD6] disabled:opacity-50">
+                        <option value="" disabled selected>Modelo</option>
+                    </select>
 
-                    <select class="input-field cursor-pointer rounded-[20px] px-[18px] py-[14px] text-[#666] shadow-[0_4px_8px_rgba(0,0,0,0.15)] focus:shadow-[0_0_0_2px_#D9DCD6]">
-                        <option value="" disabled selected>Tiempo de Seguro</option>
-                        <option value="anual">Anual</option>
-                        <option value="mensual">Mensual</option>
+                    <select name="anio" id="landingAnio" disabled
+                        class="input-field cursor-pointer rounded-[20px] px-[18px] py-[14px] text-[#666] shadow-[0_4px_8px_rgba(0,0,0,0.15)] focus:shadow-[0_0_0_2px_#D9DCD6] disabled:opacity-50">
+                        <option value="" disabled selected>Año</option>
                     </select>
 
                     <button type="submit" class="mt-[10px] cursor-pointer rounded-[25px] border-none bg-[#608fa3] p-[14px] text-[16px] font-bold text-white shadow-[0_4px_8px_rgba(0,0,0,0.2)] transition duration-300 ease-in-out hover:-translate-y-[3px] hover:shadow-[0_6px_12px_rgba(0,0,0,0.25)]">
                         Cotiza ahora
                     </button>
                 </form>
+
+                <script>
+                (function () {
+                    const marcaEl  = document.getElementById('landingMarca');
+                    const modeloEl = document.getElementById('landingModelo');
+                    const anioEl   = document.getElementById('landingAnio');
+
+                    // Cargar marcas al iniciar
+                    fetch('/api/marcas')
+                        .then(r => r.json())
+                        .then(marcas => {
+                            marcas.forEach(m => {
+                                const o = document.createElement('option');
+                                o.value = o.textContent = m;
+                                marcaEl.appendChild(o);
+                            });
+                        });
+
+                    marcaEl.addEventListener('change', () => {
+                        modeloEl.innerHTML = '<option value="" disabled selected>Modelo</option>';
+                        anioEl.innerHTML   = '<option value="" disabled selected>Año</option>';
+                        modeloEl.disabled  = true;
+                        anioEl.disabled    = true;
+
+                        fetch('/api/modelos?marca=' + encodeURIComponent(marcaEl.value))
+                            .then(r => r.json())
+                            .then(modelos => {
+                                modelos.forEach(m => {
+                                    const o = document.createElement('option');
+                                    o.value = o.textContent = m;
+                                    modeloEl.appendChild(o);
+                                });
+                                modeloEl.disabled = false;
+                            });
+                    });
+
+                    modeloEl.addEventListener('change', () => {
+                        anioEl.innerHTML = '<option value="" disabled selected>Año</option>';
+                        anioEl.disabled  = true;
+
+                        fetch('/api/anios?marca=' + encodeURIComponent(marcaEl.value) +
+                              '&modelo=' + encodeURIComponent(modeloEl.value))
+                            .then(r => r.json())
+                            .then(anios => {
+                                anios.forEach(a => {
+                                    const o = document.createElement('option');
+                                    o.value = o.textContent = a;
+                                    anioEl.appendChild(o);
+                                });
+                                anioEl.disabled = false;
+                            });
+                    });
+                })();
+                </script>
             </div>
         </div>
     </section>

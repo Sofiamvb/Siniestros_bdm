@@ -10,15 +10,18 @@ require_once __DIR__ . '/../models/ActiveRecord.php';
 require_once __DIR__ . '/../models/Usuario.php';
 require_once __DIR__ . '/../models/Supervisor.php';
 require_once __DIR__ . '/../models/Ajustador.php';
+require_once __DIR__ . '/../models/Vehiculo.php';
 require_once __DIR__ . '/../controllers/PaginasController.php';
 require_once __DIR__ . '/../controllers/SupervisoresController.php';
 require_once __DIR__ . '/../controllers/AjustadoresController.php';
+require_once __DIR__ . '/../controllers/CotizarController.php';
 require __DIR__ . '/../vendor/autoload.php';
 
 use MVC\Router;
 use Controllers\PaginasController;
 use Controllers\SupervisoresController;
 use Controllers\AjustadoresController;
+use Controllers\CotizarController;
 use Model\ActiveRecord;
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
@@ -43,6 +46,13 @@ $router->post('/acceso-supervisores',  [SupervisoresController::class, 'accesoTo
 $router->get('/register/supervisores', [SupervisoresController::class, 'register']);
 $router->post('/register/supervisores',[SupervisoresController::class, 'register']);
 
+
+// Cotizador
+$router->get('/cotizar',             [CotizarController::class,  'cotizar']);
+$router->post('/cotizar',            [CotizarController::class,  'cotizar']);
+$router->get('/api/marcas',          [CotizarController::class,  'apiMarcas']);
+$router->get('/api/modelos',         [CotizarController::class,  'apiModelos']);
+$router->get('/api/anios',           [CotizarController::class,  'apiAnios']);
 
 $router->get('/',                    [PaginasController::class, 'landingPage']);
 $router->get('/login',               [PaginasController::class, 'login']);
