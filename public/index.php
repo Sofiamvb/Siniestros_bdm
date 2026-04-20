@@ -9,13 +9,16 @@ require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../models/ActiveRecord.php';
 require_once __DIR__ . '/../models/Usuario.php';
 require_once __DIR__ . '/../models/Supervisor.php';
+require_once __DIR__ . '/../models/Ajustador.php';
 require_once __DIR__ . '/../controllers/PaginasController.php';
 require_once __DIR__ . '/../controllers/SupervisoresController.php';
+require_once __DIR__ . '/../controllers/AjustadoresController.php';
 require __DIR__ . '/../vendor/autoload.php';
 
 use MVC\Router;
 use Controllers\PaginasController;
 use Controllers\SupervisoresController;
+use Controllers\AjustadoresController;
 use Model\ActiveRecord;
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
@@ -29,6 +32,10 @@ $router = new Router();
 // Registros Aseguradores
 $router->get('/register',            [PaginasController::class, 'register']);
 $router->post('/register',           [PaginasController::class, 'register']);
+
+// Registro de Ajustadores (protegido por rol Supervisor en el Router)
+$router->get('/register/ajustadores',  [AjustadoresController::class, 'register']);
+$router->post('/register/ajustadores', [AjustadoresController::class, 'register']);
 
 // Registro de Supervisores (protegido por token)
 $router->get('/acceso-supervisores',   [SupervisoresController::class, 'accesoToken']);
