@@ -185,6 +185,56 @@ class PaginasController
         exit;
     }
 
+    public static function editarPerfil(Router $router): void
+    {
+        if (empty($_SESSION['id'])) {
+            header('Location: /login');
+            exit;
+        }
+
+        $errores = [];
+        $exito   = '';
+        $usuario = Usuario::obtenerPorId((int) $_SESSION['id']);
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $u           = new Usuario($_POST);
+            $u->id       = (int) $_SESSION['id'];
+
+            $fotoError = $_FILES['foto']['error'] ?? UPLOAD_ERR_NO_FILE;
+            if ($fotoError === UPLOAD_ERR_OK) {
+                $u->foto = file_get_contents($_FILES['foto']['tmp_name']);
+            }
+
+            // Validar solo los campos editables
+            $errores = [];
+            if (empty($u->nombre))           $errores[] = 'El nombre es obligatorio.';
+            if (empty($u->apellidos))        $errores[] = 'Los apellidos son obligatorios.';
+            if (empty($u->genero))           $errores[] = 'El género es obligatorio.';
+            if (empty($u->alias))            $errores[] = 'El alias es obligatorio.';
+            if (empty($u->fecha_nacimiento)) $errores[] = 'La fecha de nacimiento es obligatoria.';
+
+            if (!$errores) {
+                if ($u->actualizarPerfil()) {
+                    // Actualizar sesión
+                    $_SESSION['nombre'] = $u->nombre;
+                    if (!empty($u->foto)) {
+                        $_SESSION['foto'] = 'data:image/jpeg;base64,' . base64_encode($u->foto);
+                    }
+                    $exito = 'Perfil actualizado correctamente.';
+                    $usuario = Usuario::obtenerPorId((int) $_SESSION['id']);
+                } else {
+                    $errores[] = 'No se pudo actualizar el perfil.';
+                }
+            }
+        }
+
+        $router->render('paginas/editarPerfil', [
+            'usuario' => $usuario,
+            'errores' => $errores,
+            'exito'   => $exito,
+        ]);
+    }
+
     public static function siniestrosAjustadores(Router $router): void
     {
         $router->render('paginas/siniestrosAjustadores', []);

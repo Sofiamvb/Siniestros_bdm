@@ -106,6 +106,29 @@ class Usuario extends ActiveRecord
         return $rows[0] ?? null;
     }
 
+    public static function obtenerPorId(int $id): ?array
+    {
+        $rows = self::call_sp('sp_get_usuario_by_id', [$id]);
+        return $rows[0] ?? null;
+    }
+
+    public function actualizarPerfil(): bool
+    {
+        $foto = !empty($this->foto) ? $this->foto : null;
+
+        $resultado = self::call_sp('sp_actualizar_perfil', [
+            $this->id,
+            $this->nombre,
+            $this->apellidos,
+            $this->fecha_nacimiento,
+            $this->genero,
+            $this->alias,
+            $foto,
+        ]);
+
+        return ($resultado[0]['actualizado'] ?? 0) > 0;
+    }
+
     public static function redirectPorRol(int $rol_id): string
     {
         return match($rol_id) {

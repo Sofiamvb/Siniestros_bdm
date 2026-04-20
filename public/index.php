@@ -73,6 +73,8 @@ $router->get('/',                    [PaginasController::class, 'landingPage']);
 $router->get('/login',               [PaginasController::class, 'login']);
 $router->post('/login',              [PaginasController::class, 'login']);
 $router->get('/logout',              [PaginasController::class, 'logout']);
+$router->get('/perfil',              [PaginasController::class, 'editarPerfil']);
+$router->post('/perfil',             [PaginasController::class, 'editarPerfil']);
 $router->get('/registrarSiniestros',  [PaginasController::class, 'registrarSiniestros']);
 $router->post('/registrarSiniestros', [PaginasController::class, 'registrarSiniestros']);
 $router->get('/api/validar-poliza',   [PaginasController::class, 'apiValidarPoliza']);

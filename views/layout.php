@@ -30,7 +30,7 @@
         <div class="header-user">
             <?php if (!empty($_SESSION['id'])): ?>
                 <a href="/logout" class="ghost-action-btn">Cerrar sesión</a>
-                <span class="text-[14px] font-medium text-[#333]"><?= htmlspecialchars($_SESSION['nombre']) ?></span>
+                <a href="/perfil" class="text-[14px] font-medium text-[#333] hover:underline"><?= htmlspecialchars($_SESSION['nombre']) ?></a>
             <?php else: ?>
                 <a href="/login" class="ghost-action-btn">Ingresar</a>
             <?php endif; ?>
