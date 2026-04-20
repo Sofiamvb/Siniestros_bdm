@@ -48,7 +48,9 @@
                     </div>
                     <div class="status-row">
                         <h2 class="status-title-flex">
-                            Estado: <span class="text-black font-semibold"><?= htmlspecialchars($poliza->estatus_poliza) ?></span>
+                            Estado: <span class="font-semibold <?= $poliza->estatus_poliza ? 'text-green-600' : 'text-red-500' ?>">
+                                <?= $poliza->estatus_poliza ? 'Activa' : 'Caducada' ?>
+                            </span>
                         </h2>
                     </div>
                 </div>
