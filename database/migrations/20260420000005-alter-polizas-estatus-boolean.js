@@ -5,14 +5,14 @@ module.exports = {
   async up(queryInterface) {
     const q = (sql) => queryInterface.sequelize.query(sql);
 
-    // Cambiar columna de VARCHAR a BOOLEAN (TINYINT(1))
+    // Primero convertir los strings a 1/0 mientras la columna sigue siendo VARCHAR
+    await q(`UPDATE polizas SET estatus_poliza = '1'`);
+
+    // Ahora sí cambiar el tipo (todos los valores ya son '1' o '0', convertibles)
     await q(`
       ALTER TABLE polizas
         MODIFY COLUMN estatus_poliza TINYINT(1) NOT NULL DEFAULT 1
     `);
-
-    // Actualizar registros existentes: cualquier valor distinto de 0 → 1
-    await q(`UPDATE polizas SET estatus_poliza = 1`);
 
     // Recrear sp_contratar_poliza con TRUE en lugar de 'Vigente'
     await q(`DROP PROCEDURE IF EXISTS sp_contratar_poliza`);
