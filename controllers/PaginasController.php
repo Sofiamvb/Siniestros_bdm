@@ -113,4 +113,11 @@ class PaginasController
     {
         $router->render('paginas/siniestrosSupervisores', []);
     }
+
+    public static function accessRegisterSupervisores(Router $router) : void
+    {
+         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            
+         }
+    }
 }
