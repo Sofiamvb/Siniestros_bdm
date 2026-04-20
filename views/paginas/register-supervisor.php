@@ -72,6 +72,27 @@
                            required
                            class="input-field rounded-[20px] p-[14px] shadow-[0_5px_10px_rgba(0,0,0,0.15)]">
 
+                    <!-- Zona de cobertura -->
+                    <select name="zona_cobertura"
+                            required
+                            class="input-field rounded-[20px] p-[14px] shadow-[0_5px_10px_rgba(0,0,0,0.15)]">
+                        <option value="" disabled <?= empty($_POST['zona_cobertura']) ? 'selected' : '' ?>>Zona de cobertura</option>
+                        <?php
+                        $estados = [
+                            'Aguascalientes','Baja California','Baja California Sur','Campeche',
+                            'Chiapas','Chihuahua','Ciudad de México','Coahuila','Colima','Durango',
+                            'Estado de México','Guanajuato','Guerrero','Hidalgo','Jalisco',
+                            'Michoacán','Morelos','Nayarit','Nuevo León','Oaxaca','Puebla',
+                            'Querétaro','Quintana Roo','San Luis Potosí','Sinaloa','Sonora',
+                            'Tabasco','Tamaulipas','Tlaxcala','Veracruz','Yucatán','Zacatecas'
+                        ];
+                        foreach ($estados as $estado): ?>
+                            <option value="<?= $estado ?>" <?= ($_POST['zona_cobertura'] ?? '') === $estado ? 'selected' : '' ?>>
+                                <?= $estado ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+
                     <!-- Email -->
                     <input type="email"
                            name="email"
