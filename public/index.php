@@ -14,6 +14,7 @@ require_once __DIR__ . '/../models/Asegurado.php';
 require_once __DIR__ . '/../models/Vehiculo.php';
 require_once __DIR__ . '/../models/Seguro.php';
 require_once __DIR__ . '/../models/Poliza.php';
+require_once __DIR__ . '/../models/Companias.php';
 require_once __DIR__ . '/../models/Siniestro.php';
 require_once __DIR__ . '/../controllers/PaginasController.php';
 require_once __DIR__ . '/../controllers/SupervisoresController.php';
