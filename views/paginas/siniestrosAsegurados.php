@@ -20,161 +20,44 @@
     </section>
 
     <main class="page-container">
-        <!-- Card 1 -->
+        <?php if (empty($polizas)): ?>
+        <div class="flex w-full flex-col items-center justify-center py-[60px] text-center text-[#888]">
+            <p class="text-[18px]">No tienes pólizas contratadas aún.</p>
+            <a href="/cotizar" class="mt-[16px] rounded-[20px] bg-[#3A7CA5] px-[24px] py-[10px] text-white hover:opacity-90">Cotizar seguro</a>
+        </div>
+        <?php else: ?>
+        <?php foreach ($polizas as $poliza): ?>
         <div class="siniestro-card-base">
             <div class="card-row-with-actions">
                 <div class="card-left-col">
                     <div class="mini-carousel">
                         <button type="button" class="mini-carousel-btn" disabled>‹</button>
-                        <div class="mini-carousel-view"><img src="../Images/siniestro.jpg" alt="Siniestro" class="mini-carousel-image"></div>
+                        <div class="mini-carousel-view"><img src="/img/siniestro.jpg" alt="Póliza" class="mini-carousel-image"></div>
                         <button type="button" class="mini-carousel-btn" disabled>›</button>
                     </div>
-                    <p class="adjuster-text">Ajustador: Juan Ángel Oropeza</p>
+                    <p class="adjuster-text">Póliza: <?= htmlspecialchars($poliza->numero_poliza) ?></p>
                 </div>
                 <div class="card-right-col">
                     <div>
-                        <p class="info-text"><strong class="info-label-strong">Nombre(s) del dueño:</strong> Carlos Alberto Martínez López</p>
-                        <p class="info-text"><strong class="info-label-strong">Marca:</strong> Nissan</p>
-                        <p class="info-text"><strong class="info-label-strong">Número de placas:</strong> ABC-347-D</p>
-                        <p class="info-text"><strong class="info-label-strong">Nombre de la aseguradora:</strong> GNP Seguros</p>
+                        <p class="info-text"><strong class="info-label-strong">Vehículo:</strong> <?= htmlspecialchars($poliza->marca) ?> <?= htmlspecialchars($poliza->modelo) ?> <?= $poliza->anio ?></p>
+                        <p class="info-text"><strong class="info-label-strong">Versión:</strong> <?= htmlspecialchars($poliza->version) ?></p>
+                        <p class="info-text"><strong class="info-label-strong">Número de placas:</strong> <?= htmlspecialchars($poliza->placas) ?></p>
+                        <p class="info-text"><strong class="info-label-strong">Aseguradora:</strong> <?= htmlspecialchars($poliza->compania) ?></p>
+                        <p class="info-text"><strong class="info-label-strong">Cobertura:</strong> <?= htmlspecialchars($poliza->nivel) ?> — <?= htmlspecialchars($poliza->nombre_seguro) ?></p>
+                        <p class="info-text"><strong class="info-label-strong">Vigencia:</strong> <?= htmlspecialchars($poliza->fecha_inicio) ?> al <?= htmlspecialchars($poliza->fecha_fin) ?></p>
                     </div>
                     <div class="status-row">
                         <h2 class="status-title-flex">
-                            Estado:
-                            <select class="status-dropdown-base" onchange="updateStatus(this)">
-                                <option value="en-revision" selected>En revisión</option>
-                                <option value="rechazado">Rechazado</option>
-                                <option value="aceptado">Aceptado</option>
-                                <option value="aceptado-con-deducible">Aceptado con pago de deducible</option>
-                                <option value="aceptado-sin-deducible">Aceptado sin pago de deducible</option>
-                                <option value="pago-reparacion">Aplica pago para reparación de la unidad</option>
-                                <option value="perdida-total">Pérdida total, aplica pago completo de la unidad</option>
-                            </select>
+                            Estado: <span class="text-black font-semibold"><?= htmlspecialchars($poliza->estatus_poliza) ?></span>
                         </h2>
                     </div>
                 </div>
             </div>
-            <button class="icon-btn-supervisor-top" onclick="openSupervisorModal()"><img src="/img/adjuntar.png" alt="Supervisor" class="icon-btn-image-dim"></button>
             <button class="icon-btn-see-top" onclick="openDetailsModal()"><img src="/img/seeall.png" alt="Ver todo" class="icon-btn-image"></button>
             <button class="icon-btn-chat-top" onclick="openModal('/img/siniestro.jpg')"><img src="/img/comments.png" alt="Chat" class="icon-btn-image"></button>
         </div>
-
-        <!-- Card 2 -->
-        <div class="siniestro-card-base">
-            <div class="card-row-with-actions">
-                <div class="card-left-col">
-                    <div class="mini-carousel">
-                        <button type="button" class="mini-carousel-btn" disabled>‹</button>
-                        <div class="mini-carousel-view"><img src="/img/siniestro1.jpg" alt="Siniestro" class="mini-carousel-image"></div>
-                        <button type="button" class="mini-carousel-btn" disabled>›</button>
-                    </div>
-                    <p class="adjuster-text">Ajustador: Juan Ángel Oropeza</p>
-                </div>
-                <div class="card-right-col">
-                    <div>
-                        <p class="info-text"><strong class="info-label-strong">Nombre(s) del dueño:</strong> Mariana Fernanda Ruiz Torres</p>
-                        <p class="info-text"><strong class="info-label-strong">Marca:</strong> Toyota</p>
-                        <p class="info-text"><strong class="info-label-strong">Número de placas:</strong> LMX-582-A</p>
-                        <p class="info-text"><strong class="info-label-strong">Nombre de la aseguradora:</strong> Quálitas Seguros</p>
-                    </div>
-                    <div class="status-row">
-                        <h2 class="status-title-flex">
-                            Estado:
-                            <select class="status-dropdown-base" onchange="updateStatus(this)">
-                                <option value="en-revision">En revisión</option>
-                                <option value="rechazado">Rechazado</option>
-                                <option value="aceptado" selected>Aceptado</option>
-                                <option value="aceptado-con-deducible">Aceptado con pago de deducible</option>
-                                <option value="aceptado-sin-deducible">Aceptado sin pago de deducible</option>
-                                <option value="pago-reparacion">Aplica pago para reparación de la unidad</option>
-                                <option value="perdida-total">Pérdida total, aplica pago completo de la unidad</option>
-                            </select>
-                        </h2>
-                    </div>
-                </div>
-            </div>
-            <button class="icon-btn-supervisor-top" onclick="openSupervisorModal()"><img src="/img/adjuntar.png" alt="Supervisor" class="icon-btn-image-dim"></button>
-            <button class="icon-btn-see-top" onclick="openDetailsModal()"><img src="/img/seeall.png" alt="Ver todo" class="icon-btn-image"></button>
-            <button class="icon-btn-chat-top" onclick="openModal('/img/siniestro1.jpg')"><img src="/img/comments.png" alt="Chat" class="icon-btn-image"></button>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="siniestro-card-base">
-            <div class="card-row-with-actions">
-                <div class="card-left-col">
-                    <div class="mini-carousel">
-                        <button type="button" class="mini-carousel-btn" disabled>‹</button>
-                        <div class="mini-carousel-view"><img src="/img/siniestro2.jpg" alt="Siniestro" class="mini-carousel-image"></div>
-                        <button type="button" class="mini-carousel-btn" disabled>›</button>
-                    </div>
-                    <p class="adjuster-text">Ajustador: Sofia Villegas Blanco</p>
-                </div>
-                <div class="card-right-col">
-                    <div>
-                        <p class="info-text"><strong class="info-label-strong">Nombre(s) del dueño:</strong> Santiago Carrizales Becerra</p>
-                        <p class="info-text"><strong class="info-label-strong">Marca:</strong> Toyota</p>
-                        <p class="info-text"><strong class="info-label-strong">Número de placas:</strong> OML-679-D</p>
-                        <p class="info-text"><strong class="info-label-strong">Nombre de la aseguradora:</strong> AXA Seguros</p>
-                    </div>
-                    <div class="status-row">
-                        <h2 class="status-title-flex">
-                            Estado:
-                            <select class="status-dropdown-base" onchange="updateStatus(this)">
-                                <option value="en-revision">En revisión</option>
-                                <option value="rechazado" selected>Rechazado</option>
-                                <option value="aceptado">Aceptado</option>
-                                <option value="aceptado-con-deducible">Aceptado con pago de deducible</option>
-                                <option value="aceptado-sin-deducible">Aceptado sin pago de deducible</option>
-                                <option value="pago-reparacion">Aplica pago para reparación de la unidad</option>
-                                <option value="perdida-total">Pérdida total, aplica pago completo de la unidad</option>
-                            </select>
-                        </h2>
-                    </div>
-                </div>
-            </div>
-            <button class="icon-btn-supervisor-top" onclick="openSupervisorModal()"><img src="/img/adjuntar.png" alt="Supervisor" class="icon-btn-image-dim"></button>
-            <button class="icon-btn-see-top" onclick="openDetailsModal()"><img src="/img/seeall.png" alt="Ver todo" class="icon-btn-image"></button>
-            <button class="icon-btn-chat-top" onclick="openModal('/img/siniestro2.jpg')"><img src="/img/comments.png" alt="Chat" class="icon-btn-image"></button>
-        </div>
-
-        <!-- Card 4 -->
-        <div class="siniestro-card-base">
-            <div class="card-row-with-actions">
-                <div class="card-left-col">
-                    <div class="mini-carousel">
-                        <button type="button" class="mini-carousel-btn" disabled>‹</button>
-                        <div class="mini-carousel-view"><img src="/img/siniestro3.jpg" alt="Siniestro" class="mini-carousel-image"></div>
-                        <button type="button" class="mini-carousel-btn" disabled>›</button>
-                    </div>
-                    <p class="adjuster-text">Ajustador: Alejandro Acosta Beltrán</p>
-                </div>
-                <div class="card-right-col">
-                    <div>
-                        <p class="info-text"><strong class="info-label-strong">Nombre(s) del dueño:</strong> Andrea García Núñez</p>
-                        <p class="info-text"><strong class="info-label-strong">Marca:</strong> Honda</p>
-                        <p class="info-text"><strong class="info-label-strong">Número de placas:</strong> IOS-821-O</p>
-                        <p class="info-text"><strong class="info-label-strong">Nombre de la aseguradora:</strong> BBVA Seguros</p>
-                    </div>
-                    <div class="status-row">
-                        <h2 class="status-title-flex">
-                            Estado:
-                            <select class="status-dropdown-base" onchange="updateStatus(this)">
-                                <option value="en-revision">En revisión</option>
-                                <option value="rechazado" selected>Rechazado</option>
-                                <option value="aceptado">Aceptado</option>
-                                <option value="aceptado-con-deducible">Aceptado con pago de deducible</option>
-                                <option value="aceptado-sin-deducible">Aceptado sin pago de deducible</option>
-                                <option value="pago-reparacion">Aplica pago para reparación de la unidad</option>
-                                <option value="perdida-total">Pérdida total, aplica pago completo de la unidad</option>
-                            </select>
-                        </h2>
-                    </div>
-                </div>
-            </div>
-            <button class="icon-btn-supervisor-top" onclick="openSupervisorModal()"><img src="/img/adjuntar.png" alt="Supervisor" class="icon-btn-image-dim"></button>
-            <button class="icon-btn-see-top" onclick="openDetailsModal()"><img src="/img/seeall.png" alt="Ver todo" class="icon-btn-image"></button>
-            <button class="icon-btn-chat-top" onclick="openModal('/img/siniestro3.jpg')"><img src="/img/comments.png" alt="Chat" class="icon-btn-image"></button>
-        </div>
+        <?php endforeach; ?>
+        <?php endif; ?>
     </main>
 
     <div id="commentsModal" class="modal-overlay">
@@ -319,4 +202,16 @@
             </div>
         </div>
     </div>
+
+    <?php if (!empty($_GET['poliza_nueva'])): ?>
+    <script>
+        Swal.fire({
+            title: '¡Póliza contratada!',
+            text: 'Tu seguro ha sido activado exitosamente. Ya puedes verlo en tus pólizas.',
+            icon: 'success',
+            confirmButtonText: 'Entendido',
+            confirmButtonColor: '#3A7CA5'
+        });
+    </script>
+    <?php endif; ?>
 </main>

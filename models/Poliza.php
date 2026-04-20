@@ -8,13 +8,24 @@ class Poliza extends ActiveRecord
 
     public int    $id                   = 0;
     public int    $usuario_id           = 0;
-    public int    $seguro_id            = 0;
-    public int    $catalogo_vehiculo_id = 0;
+
+    // Campos del JOIN (sp_get_polizas_by_usuario)
     public string $numero_poliza        = '';
     public string $placas               = '';
     public string $fecha_inicio         = '';
     public string $fecha_fin            = '';
-    public string $estatus_poliza       = 'Vigente';
+    public string $estatus_poliza       = '';
+    public string $marca                = '';
+    public string $modelo               = '';
+    public int    $anio                 = 0;
+    public string $version              = '';
+    public string $tipo_vehiculo        = '';
+    public string $nombre_seguro        = '';
+    public string $nivel                = '';
+    public string $deducible_porcentaje = '';
+    public string $compania             = '';
+    public int    $seguro_id            = 0;
+    public int    $catalogo_vehiculo_id = 0;
 
     public function __construct(array $args = [])
     {
@@ -49,6 +60,23 @@ class Poliza extends ActiveRecord
         }
 
         return self::$errores;
+    }
+
+    /**
+     * Retorna todas las pólizas de un usuario con datos del vehículo y seguro.
+     * @return self[]
+     */
+    public static function obtenerPorUsuario(int $usuarioId): array
+    {
+        $filas = self::call_sp('sp_get_polizas_by_usuario', [$usuarioId]);
+
+        return array_map(function (array $fila) {
+            $p = new self();
+            foreach ($fila as $campo => $valor) {
+                if (property_exists($p, $campo)) $p->$campo = $valor;
+            }
+            return $p;
+        }, $filas);
     }
 
     /** Llama sp_contratar_poliza y retorna el id de la nueva póliza. */

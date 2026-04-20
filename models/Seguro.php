@@ -4,19 +4,13 @@ namespace Model;
 
 class Seguro extends ActiveRecord
 {
-    // Factores para calcular la prima anual según nivel
-    private const FACTORES = [
-        'Básico'   => 0.03,
-        'Estándar' => 0.05,
-        'Premium'  => 0.08,
-    ];
-
     public int    $id                    = 0;
     public int    $compania_id           = 0;
     public string $nombre_seguro         = '';
     public string $nivel                 = '';
     public string $suma_asegurada        = '';
     public string $deducible_porcentaje  = '';
+    public float  $factor_prima          = 0.05; // Viene de la BD
     public string $descripcion_cobertura = '';
     public string $compania              = ''; // JOIN con companias_seguros
 
@@ -50,12 +44,9 @@ class Seguro extends ActiveRecord
         return $s;
     }
 
-    /**
-     * Calcula la prima anual: valor_vehiculo * factor del nivel.
-     */
+    /** Calcula la prima anual: valor_vehiculo * factor_prima de la BD. */
     public function calcularPrima(float $valorVehiculo): float
     {
-        $factor = self::FACTORES[$this->nivel] ?? 0.05;
-        return round($valorVehiculo * $factor, 2);
+        return round($valorVehiculo * $this->factor_prima, 2);
     }
 }

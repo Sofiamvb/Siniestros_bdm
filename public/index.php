@@ -19,6 +19,7 @@ require_once __DIR__ . '/../controllers/SupervisoresController.php';
 require_once __DIR__ . '/../controllers/AjustadoresController.php';
 require_once __DIR__ . '/../controllers/CotizarController.php';
 require_once __DIR__ . '/../controllers/ContratarController.php';
+require_once __DIR__ . '/../controllers/AseguradosController.php';
 require __DIR__ . '/../vendor/autoload.php';
 
 use MVC\Router;
@@ -27,6 +28,7 @@ use Controllers\SupervisoresController;
 use Controllers\AjustadoresController;
 use Controllers\CotizarController;
 use Controllers\ContratarController;
+use Controllers\AseguradosController;
 use Model\ActiveRecord;
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
@@ -70,7 +72,7 @@ $router->post('/login',              [PaginasController::class, 'login']);
 $router->get('/logout',              [PaginasController::class, 'logout']);
 $router->get('/registrarSiniestros', [PaginasController::class, 'registrarSiniestros']);
 $router->get('/siniestrosAjustadores', [PaginasController::class, 'siniestrosAjustadores']);
-$router->get('/siniestrosAsegurados',   [PaginasController::class, 'siniestrosAsegurados']);
+$router->get('/siniestrosAsegurados',   [AseguradosController::class, 'siniestros']);
 $router->get('/siniestrosSupervisores', [PaginasController::class, 'siniestrosSupervisores']);
 
 $router->comprobarRutas();

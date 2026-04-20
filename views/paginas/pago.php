@@ -74,13 +74,6 @@
                            class="rounded-[14px] border border-[#ccc] px-[16px] py-[12px] text-[#333] uppercase focus:border-[#3A7CA5] focus:outline-none">
                 </div>
 
-                <!-- Mock pago -->
-                <div class="mb-[20px] rounded-[14px] border border-dashed border-[#3A7CA5] bg-[#f0f7fc] p-[16px]">
-                    <p class="mb-[4px] text-[13px] font-semibold text-[#3A7CA5]">Simulación de pago</p>
-                    <p class="text-[12px] text-[#777]">En un entorno real aquí aparecería la pasarela de pago. Para fines de demostración, confirma el pago con el botón de abajo.</p>
-                    <p class="mt-[8px] text-[18px] font-bold text-[#16425B]">Total a pagar: $<?= number_format($prima, 2) ?> MXN</p>
-                </div>
-
                 <button type="submit"
                     class="w-full rounded-[25px] bg-[#3A7CA5] py-[14px] text-[16px] font-bold text-white shadow-[0_4px_12px_rgba(58,124,165,0.4)] transition hover:-translate-y-[2px]">
                     Confirmar pago y contratar
