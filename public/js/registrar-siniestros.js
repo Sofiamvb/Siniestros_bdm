@@ -84,6 +84,9 @@ async function validarPolizaYAvanzar() {
 
         // Llenar campos readonly del auto
         const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+        const companiaEl = document.getElementById('inputCompania');
+        if (companiaEl) companiaEl.value = data.compania;
+
         set('autoDuenio', data.nombre_duenio);
         set('autoMarca',  data.marca);
         set('autoModelo', data.modelo);

@@ -108,9 +108,7 @@ class PaginasController
         $errores = [];
         $exito   = '';
 
-        // Cargar datos de catálogo necesarios para la vista
-        $estatus   = Siniestro::obtenerEstatusDisponibles();
-        $companias = Companias::obtenerCompanias();
+        $estatus = Siniestro::obtenerEstatusDisponibles();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $siniestro = new Siniestro([
@@ -158,10 +156,9 @@ class PaginasController
         }
 
         $router->render('paginas/registrarSiniestros', [
-            'errores'   => $errores,
-            'exito'     => $exito,
-            'estatus'   => $estatus,
-            'companias' => $companias,
+            'errores' => $errores,
+            'exito'   => $exito,
+            'estatus' => $estatus,
         ]);
     }
 
@@ -178,7 +175,7 @@ class PaginasController
         $poliza = Siniestro::validarPoliza($numero);
 
         if (!$poliza) {
-            echo json_encode(['error' => 'Póliza no encontrada o no activa']);
+            echo json_encode(['error' => 'Póliza no encontrada, no activa o no pertenece a la aseguradora seleccionada']);
             exit;
         }
 

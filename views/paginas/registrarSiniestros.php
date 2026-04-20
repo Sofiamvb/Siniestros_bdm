@@ -33,21 +33,16 @@
                 <div class="mx-auto mt-[44px] grid max-w-[700px] grid-cols-2 gap-x-[22px] gap-y-[16px]">
 
                     <div class="field-group">
-                        <label class="field-label">Aseguradora</label>
-                        <select id="selectCompania" class="input-field">
-                            <option value="" disabled selected>Selecciona una aseguradora</option>
-                            <?php foreach ($companias as $c): ?>
-                            <option value="<?= (int) $c['id'] ?>">
-                                <?= htmlspecialchars($c['nombre_comercial']) ?>
-                            </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div class="field-group">
                         <label class="field-label">Número de póliza</label>
                         <input id="inputNumPoliza" type="text" placeholder="Ej. POL-2024-000123"
                                class="input-field" autocomplete="off">
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">Aseguradora</label>
+                        <input id="inputCompania" type="text"
+                               class="input-field bg-gray-100 cursor-not-allowed"
+                               readonly placeholder="Se carga al validar la póliza">
                     </div>
 
                     <div class="field-group col-span-full">
