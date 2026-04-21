@@ -251,7 +251,17 @@ class PaginasController
 
     public static function siniestrosAjustadores(Router $router): void
     {
-        $router->render('paginas/siniestrosAjustadores', []);
+        if (empty($_SESSION['id']) || ($_SESSION['rol_id'] ?? 0) != 2) {
+            header('Location: /login');
+            exit;
+        }
+
+        $siniestros = Siniestro::obtenerPorAjustador((int) $_SESSION['id']);
+
+        $router->render('paginas/siniestrosAjustadores', [
+            'siniestros'     => $siniestros,
+            'siniestroNuevo' => !empty($_GET['siniestro_nuevo']),
+        ]);
     }
 
     public static function siniestrosAsegurados(Router $router): void

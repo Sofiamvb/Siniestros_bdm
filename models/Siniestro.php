@@ -109,7 +109,11 @@ class Siniestro extends ActiveRecord
 
     public static function obtenerEstatusDisponibles(): array
     {
-        $rows = self::call_sp('sp_get_catalogo_estatus_siniestros');
-        return $rows;
+        return self::call_sp('sp_get_catalogo_estatus_siniestros');
+    }
+
+    public static function obtenerPorAjustador(int $ajustadorId): array
+    {
+        return self::call_sp('sp_get_siniestros_ajustador', [$ajustadorId]);
     }
 }
