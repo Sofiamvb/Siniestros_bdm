@@ -56,7 +56,6 @@
                     <div class="split-row">
                         <input type="date"
                                name="fecha_nacimiento"
-                               
                                value="<?= htmlspecialchars($usuario['fecha_nacimiento'] ?? '') ?>"
                                required
                                class="input-field flex-1 rounded-[20px] p-[14px] shadow-[0_5px_10px_rgba(0,0,0,0.15)]">
