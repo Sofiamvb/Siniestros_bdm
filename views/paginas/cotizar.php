@@ -1,8 +1,8 @@
-<main class="min-h-screen bg-[#E8F0F7] px-[80px] py-[60px]">
+<main class="min-h-screen bg-[#e5e5e2] px-[80px] py-[60px]">
 
     <div class="mx-auto max-w-[900px]">
 
-        <h1 class="mb-[10px] text-[32px] font-bold text-[#16425B]">Cotizador de Seguro</h1>
+        <h1 class="mb-[10px] text-[32px] font-bold text-[#1d2b44]">Cotizador de Seguro</h1>
         <div class="mb-[40px] h-[4px] w-[80px] rounded-full bg-[#3A7CA5]"></div>
 
         <?php if (!$vehiculo): ?>
@@ -61,7 +61,7 @@
                 </div>
 
                 <button type="submit"
-                    class="mt-[8px] rounded-[25px] bg-[#3A7CA5] px-[30px] py-[14px] text-[16px] font-bold text-white shadow-[0_4px_12px_rgba(58,124,165,0.4)] transition duration-300 hover:-translate-y-[2px] hover:shadow-[0_6px_16px_rgba(58,124,165,0.5)]">
+                    class="mt-[8px] rounded-[25px] bg-[#031a33] px-[30px] py-[14px] text-[16px] font-bold text-white shadow-[0_4px_12px_rgba(58,124,165,0.4)] transition duration-300 hover:-translate-y-[2px] hover:shadow-[0_6px_16px_rgba(58,124,165,0.5)]">
                     Ver precio
                 </button>
             </form>

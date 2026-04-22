@@ -1,66 +1,113 @@
-<main>
+<main class="min-h-screen bg-[#e5e5e2]">
 
-    <section class="page-section-title">
-        <div class="page-title-row">
-            <div class="date-filter-wrap" aria-label="Rango de fechas para siniestros">
-                <div class="date-field-wrap">
-                    <label for="fechaInicio" class="date-label">Desde</label>
-                    <input type="date" id="fechaInicio" class="date-input">
-                </div>
-                <div class="date-field-wrap">
-                    <label for="fechaFin" class="date-label">Hasta</label>
-                    <input type="date" id="fechaFin" class="date-input">
-                </div>
-                <button type="button" class="filter-btn-base">Filtrar</button>
-            </div>
-            <h1 class="page-main-title">SINIESTROS</h1>
-            <div class="w-[1px] max-[980px]:hidden" aria-hidden="true"></div>
-        </div>
-        <div class="page-title-divider"></div>
+    <section class="mx-auto max-w-[900px] px-6 pt-8 text-center">
+        <h1 class="text-[32px] md:text-[36px] font-bold leading-none text-[#162338]">
+            ¡Bienvenido, (Usuario)!
+        </h1>
+        <p class="mt-2 text-[14px] md:text-[16px] text-[#243247]">
+            Estas son tus pólizas vigentes.
+        </p>
     </section>
 
-    <main class="page-container">
+    <section class="mx-auto max-w-[980px] min-h-[560px] px-6 pb-24 pt-10">
         <?php if (empty($polizas)): ?>
-        <div class="flex w-full flex-col items-center justify-center py-[60px] text-center text-[#888]">
-            <p class="text-[18px]">No tienes pólizas contratadas aún.</p>
-            <a href="/cotizar" class="mt-[16px] rounded-[20px] bg-[#3A7CA5] px-[24px] py-[10px] text-white hover:opacity-90">Cotizar seguro</a>
-        </div>
-        <?php else: ?>
-        <?php foreach ($polizas as $poliza): ?>
-        <div class="siniestro-card-base">
-            <div class="card-row-with-actions">
-                <div class="card-left-col">
-                    <div class="mini-carousel">
-                        <button type="button" class="mini-carousel-btn" disabled>‹</button>
-                        <div class="mini-carousel-view"><img src="/img/siniestro.jpg" alt="Póliza" class="mini-carousel-image"></div>
-                        <button type="button" class="mini-carousel-btn" disabled>›</button>
-                    </div>
-                    <p class="adjuster-text">Póliza: <?= htmlspecialchars($poliza->numero_poliza) ?></p>
-                </div>
-                <div class="card-right-col">
-                    <div>
-                        <p class="info-text"><strong class="info-label-strong">Vehículo:</strong> <?= htmlspecialchars($poliza->marca) ?> <?= htmlspecialchars($poliza->modelo) ?> <?= $poliza->anio ?></p>
-                        <p class="info-text"><strong class="info-label-strong">Versión:</strong> <?= htmlspecialchars($poliza->version) ?></p>
-                        <p class="info-text"><strong class="info-label-strong">Número de placas:</strong> <?= htmlspecialchars($poliza->placas) ?></p>
-                        <p class="info-text"><strong class="info-label-strong">Aseguradora:</strong> <?= htmlspecialchars($poliza->compania) ?></p>
-                        <p class="info-text"><strong class="info-label-strong">Cobertura:</strong> <?= htmlspecialchars($poliza->nivel) ?> — <?= htmlspecialchars($poliza->nombre_seguro) ?></p>
-                        <p class="info-text"><strong class="info-label-strong">Vigencia:</strong> <?= htmlspecialchars($poliza->fecha_inicio) ?> al <?= htmlspecialchars($poliza->fecha_fin) ?></p>
-                    </div>
-                    <div class="status-row">
-                        <h2 class="status-title-flex">
-                            Estado: <span class="font-semibold <?= $poliza->estatus_poliza ? 'text-green-600' : 'text-red-500' ?>">
-                                <?= $poliza->estatus_poliza ? 'Activa' : 'Caducada' ?>
-                            </span>
-                        </h2>
+            <div class="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-10">
+
+                <!-- TARJETA IZQUIERDA -->
+                <div class="min-h-[300px] rounded-[18px] bg-[#f7f7f7] px-7 py-7 shadow-[0_6px_14px_rgba(0,0,0,0.16)]">
+                    <div class="flex h-full flex-col justify-between">
+                        <div class="flex flex-col items-center gap-4">
+                            <h2 class="text-[18px] md:text-[19px] font-bold text-[#162338]">
+                                ¿Tienes problemas con tu póliza?
+                            </h2>
+
+                            <p class="mt-4 text-[14px] text-[#243247]">
+                                Llama a nuestra línea de telefono.
+                            </p>
+
+                            <div class="mt-8 flex justify-start">
+                                <div class="flex h-[82px] items-center overflow-hidden">
+                                    <img src="/img/logo car azul.png" alt="SISA"
+                                        class="h-[52px] w-auto object-contain">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 flex justify-start">
+                            <a href="tel:8131555540"
+                                class="inline-flex h-[52px] min-w-[185px] items-center justify-center rounded-full bg-[#4f6d98] px-8 text-[13px] font-bold text-white shadow-[0_5px_10px_rgba(0,0,0,0.18)] transition hover:bg-[#466288]">
+                                81-3155-5540
+                            </a>
+                        </div>
                     </div>
                 </div>
+
+                <!-- TARJETA DERECHA -->
+                <div class="min-h-[300px] rounded-[18px] bg-[#f7f7f7] px-7 py-7 text-center shadow-[0_6px_14px_rgba(0,0,0,0.16)]">
+                    <div class="flex h-full flex-col items-center justify-between">
+                        <div class="w-full">
+                            <div class="flex justify-center">
+                                <div class="flex h-[82px] items-center justify-center overflow-hidden">
+                                    <img src="/img/logo car azul.png" alt="SISA"
+                                        class="h-[52px] w-auto object-contain">
+                                </div>
+                            </div>
+
+                            <h2 class="mt-4 text-[18px] md:text-[19px] font-bold text-[#162338]">
+                                Aún no tienes pólizas
+                            </h2>
+
+                            <p class="mx-auto mt-4 max-w-[310px] text-[14px] leading-relaxed text-[#243247]">
+                                Protege tu vehículo ahora y cotiza con nuestras aseguradoras.
+                            </p>
+                        </div>
+
+                        <div class="mt-8 flex justify-center">
+                            <a href="/cotizar"
+                                class="inline-flex h-[52px] min-w-[185px] items-center justify-center rounded-full bg-[#4f6d98] px-8 text-[13px] font-bold text-white shadow-[0_5px_10px_rgba(0,0,0,0.18)] transition hover:bg-[#466288]">
+                                Cotiza ahora
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            <button class="icon-btn-see-top" onclick="openDetailsModal()"><img src="/img/seeall.png" alt="Ver todo" class="icon-btn-image"></button>
-            <button class="icon-btn-chat-top" onclick="openModal('/img/siniestro.jpg')"><img src="/img/comments.png" alt="Chat" class="icon-btn-image"></button>
-        </div>
-        <?php endforeach; ?>
+        <?php else: ?>
+            <?php foreach ($polizas as $poliza): ?>
+                <div class="siniestro-card-base">
+                    <div class="card-row-with-actions">
+                        <div class="card-left-col">
+                            <div class="mini-carousel">
+                                <button type="button" class="mini-carousel-btn" disabled>‹</button>
+                                <div class="mini-carousel-view"><img src="/img/siniestro.jpg" alt="Póliza" class="mini-carousel-image"></div>
+                                <button type="button" class="mini-carousel-btn" disabled>›</button>
+                            </div>
+                            <p class="adjuster-text">Póliza: <?= htmlspecialchars($poliza->numero_poliza) ?></p>
+                        </div>
+                        <div class="card-right-col">
+                            <div>
+                                <p class="info-text"><strong class="info-label-strong">Vehículo:</strong> <?= htmlspecialchars($poliza->marca) ?> <?= htmlspecialchars($poliza->modelo) ?> <?= $poliza->anio ?></p>
+                                <p class="info-text"><strong class="info-label-strong">Versión:</strong> <?= htmlspecialchars($poliza->version) ?></p>
+                                <p class="info-text"><strong class="info-label-strong">Número de placas:</strong> <?= htmlspecialchars($poliza->placas) ?></p>
+                                <p class="info-text"><strong class="info-label-strong">Aseguradora:</strong> <?= htmlspecialchars($poliza->compania) ?></p>
+                                <p class="info-text"><strong class="info-label-strong">Cobertura:</strong> <?= htmlspecialchars($poliza->nivel) ?> — <?= htmlspecialchars($poliza->nombre_seguro) ?></p>
+                                <p class="info-text"><strong class="info-label-strong">Vigencia:</strong> <?= htmlspecialchars($poliza->fecha_inicio) ?> al <?= htmlspecialchars($poliza->fecha_fin) ?></p>
+                            </div>
+                            <div class="status-row">
+                                <h2 class="status-title-flex">
+                                    Estado: <span class="font-semibold <?= $poliza->estatus_poliza ? 'text-green-600' : 'text-red-500' ?>">
+                                        <?= $poliza->estatus_poliza ? 'Activa' : 'Caducada' ?>
+                                    </span>
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="icon-btn-see-top" onclick="openDetailsModal()"><img src="/img/seeall.png" alt="Ver todo" class="icon-btn-image"></button>
+                    <button class="icon-btn-chat-top" onclick="openModal('/img/siniestro.jpg')"><img src="/img/comments.png" alt="Chat" class="icon-btn-image"></button>
+                </div>
+            <?php endforeach; ?>
         <?php endif; ?>
-    </main>
+    </section>
 
     <div id="commentsModal" class="modal-overlay">
         <div class="modal-panel">
@@ -206,14 +253,14 @@
     </div>
 
     <?php if (!empty($_GET['poliza_nueva'])): ?>
-    <script>
-        Swal.fire({
-            title: '¡Póliza contratada!',
-            text: 'Tu seguro ha sido activado exitosamente. Ya puedes verlo en tus pólizas.',
-            icon: 'success',
-            confirmButtonText: 'Entendido',
-            confirmButtonColor: '#3A7CA5'
-        });
-    </script>
+        <script>
+            Swal.fire({
+                title: '¡Póliza contratada!',
+                text: 'Tu seguro ha sido activado exitosamente. Ya puedes verlo en tus pólizas.',
+                icon: 'success',
+                confirmButtonText: 'Entendido',
+                confirmButtonColor: '#3A7CA5'
+            });
+        </script>
     <?php endif; ?>
 </main>
