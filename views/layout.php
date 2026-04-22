@@ -15,37 +15,57 @@
 </head>
 
 <body>
+    <section class="relative bg-[#031a33] overflow-hidden">
+        <div class="max-w-[1400px] mx-auto">
+            <header class="relative z-10 flex items-center justify-between px-10 lg:px-16 py-8">
+                <div class="flex items-center shrink-0">
+                    <img src="/img/logo car.png" alt="SISA" class="w-[115px] lg:w-[130px] object-contain">
+                </div>
 
-    <header id="idHeaderCont" class="app-header">
-        <div class="header-left">
-            <img src="/img/SISA.png" alt="LOGO" id="idLogo" class="app-logo">
+                <nav class="hidden md:flex items-center gap-10 lg:gap-14 text-white text-[13px] font-medium">
+                    <a href="#idHome" class="hover:text-slate-300 transition">Home</a>
+                    <a href="#idSobreNosotros" class="hover:text-slate-300 transition">Sobre Nosotros</a>
+                    <a href="#idContacto" class="hover:text-slate-300 transition">Contacto</a>
+                </nav>
+
+                <div class="flex items-center gap-4 shrink-0">
+                    <?php if (!empty($_SESSION['id'])): ?>
+                        <a href="/logout" class="text-white text-[13px] font-medium hover:text-slate-300 transition">Cerrar sesión</a>
+                        <a href="/perfil" class="hidden md:block text-white text-[13px] font-medium hover:underline"><?= htmlspecialchars($_SESSION['nombre']) ?></a>
+                    <?php else: ?>
+                        <a href="/login" class="text-white text-[13px] font-medium hover:text-slate-300 transition">Ingresar</a>
+                    <?php endif; ?>
+                    <img src="<?= !empty($_SESSION['foto']) ? htmlspecialchars($_SESSION['foto']) : '/img/DefaultPFP.png' ?>"
+                        class="w-5 h-5 rounded-full object-cover" alt="Usuario">
+                </div>
+            </header>
         </div>
 
-        <nav class="header-group gap-[90px]">
-            <a href="#idHome" class="relative text-[18px] text-black transition-all duration-300 ease-in-out hover:text-[#D9DCD6] after:absolute after:bottom-[-5px] after:left-0 after:h-[2px] after:w-0 after:bg-[#D9DCD6] after:transition-all after:duration-300 hover:after:w-full">Home</a>
-            <a href="#idSobreNosotros" class="relative text-[18px] text-black transition-all duration-300 ease-in-out hover:text-[#D9DCD6] after:absolute after:bottom-[-5px] after:left-0 after:h-[2px] after:w-0 after:bg-[#D9DCD6] after:transition-all after:duration-300 hover:after:w-full">Sobre Nosotros</a>
-            <a href="#idContacto" class="relative text-[18px] text-black transition-all duration-300 ease-in-out hover:text-[#D9DCD6] after:absolute after:bottom-[-5px] after:left-0 after:h-[2px] after:w-0 after:bg-[#D9DCD6] after:transition-all after:duration-300 hover:after:w-full">Contacto</a>
-        </nav>
+    </section>
 
-        <div class="header-user">
-            <?php if (!empty($_SESSION['id'])): ?>
-                <a href="/logout" class="ghost-action-btn">Cerrar sesión</a>
-                <a href="/perfil" class="text-[14px] font-medium text-[#333] hover:underline"><?= htmlspecialchars($_SESSION['nombre']) ?></a>
-            <?php else: ?>
-                <a href="/login" class="ghost-action-btn">Ingresar</a>
-            <?php endif; ?>
-            <img src="<?= !empty($_SESSION['foto']) ? htmlspecialchars($_SESSION['foto']) : '/img/DefaultPFP.png' ?>"
-                 class="user-avatar" alt="Usuario">
-        </div>
-    </header>
 
 
     <?php echo $contenido ?>
 
-    <footer class="bg-[#87b4c2] py-[25px] text-center text-white">
-        <div class="flex flex-col items-center gap-[10px]">
-            <img src="/img/SISA.png" alt="Logo SISA" class="h-[45px]">
-            <p class="m-0 text-[14px] opacity-90">Sistema Integral de Siniestros Automotrices © <span id="year">2026</span></p>
+    <footer class="bg-[#031a33] px-6 md:px-10 lg:px-16 py-8">
+        <div class="max-w-[1200px] mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="flex items-center gap-10">
+                <img src="/img/logo car.png" alt="SISA" class="w-[90px] md:w-[110px] object-contain">
+
+                <nav class="flex items-center gap-6 md:gap-10 text-white text-xs md:text-sm">
+                    <a href="#idHome" class="hover:text-slate-300">Home</a>
+                    <a href="#idSobreNosotros" class="hover:text-slate-300">Nosotros</a>
+                    <a href="#idContacto" class="hover:text-slate-300">Contacto</a>
+                </nav>
+            </div>
+
+            <div class="text-center md:text-right text-white">
+                <img src="/img/audifonos car.png" alt="Soporte" class="w-12 h-12 mx-auto md:ml-auto md:mr-0 mb-2 object-contain">
+                <p class="text-sm md:text-base font-medium">81-3155-5540</p>
+                <p class="text-xs md:text-sm text-slate-300 max-w-[220px]">
+                    Te ayudamos a gestionar tu relación con la aseguradora.
+                </p>
+            </div>
         </div>
     </footer>
 </body>

@@ -1,36 +1,46 @@
-<main>
-    <div class="register-wrapper">
-        <div class="register-container">
-            <a href="/" class="back-link">Regresar</a>
+<main class="min-h-screen bg-[#e5e5e2]">
 
-            <div class="left-panel-box">
-                <img src="/img/seguro.jpg" alt="Seguro" class="left-panel-image">
+    <div class="mx-auto max-w-[1300px] px-6 py-8 lg:py-10">
+
+        <div class="grid grid-cols-1 items-start gap-10 lg:grid-cols-[620px_1fr] lg:gap-14">
+            <a href="/" class="w-fit text-[14px] font-semibold text-[#1b2b43] hover:underline lg:col-span-2">Regresar</a>
+
+             <div class="flex justify-center lg:justify-start">
+                <div class="flex min-h-[640px] w-full max-w-[560px] flex-col items-center justify-center rounded-[42px] bg-[#1c2d4a] px-10 py-12 shadow-[0_14px_30px_rgba(0,0,0,0.18)]">
+                    <h1 class="mb-10 text-center text-[82px] font-extrabold leading-none tracking-wide text-white md:text-[96px]">
+                        SISA
+                    </h1>
+
+                    <img src="/img/CAR.png" alt="Seguro" class="w-full max-w-[470px] object-contain">
+                </div>
             </div>
 
-            <div class="right-panel-box">
-                <form class="form-shell w-[80%]"
-                      action="/acceso-supervisores"
-                      method="POST"
-                      id="tokenForm">
+           <div class="flex justify-center">
+                <form
+                    class="w-full max-w-[520px] flex flex-col gap-6 pt-16"
+                    action="/acceso-supervisores"
+                    method="POST"
+                    id="tokenForm">
 
-                    <h2 class="text-[26px] font-bold text-[#16425B] text-center">Acceso restringido</h2>
-                    <div class="h-[6px] w-full rounded-[5px] bg-[linear-gradient(to_right,#3A7CA5_0%,#81C3D7_50%,#81C3D7_100%)]"></div>
+                    <h2 class="text-center text-[34px] md:text-[42px] font-bold text-[#162338]">
+                        Acceso restringido
+                    </h2>
 
-                    <p class="text-center text-[14px] text-[#555]">
+                    <p class="text-center text-[16px] leading-snug text-[#7b7b7b]">
                         Esta sección es exclusiva para el registro de supervisores.<br>
                         Ingresa el token de autorización para continuar.
                     </p>
 
-                    <div class="relative w-full">
+                    <div class="relative w-full pt-4">
                         <input type="password"
                                id="token"
                                name="token"
                                placeholder="Token de autorización"
                                required
-                               class="input-field w-full rounded-[20px] p-[14px] pr-[48px] shadow-[0_5px_10px_rgba(0,0,0,0.15)]">
+                               class="w-full rounded-[18px] bg-[#f8f8f7] px-4 py-[15px] pr-[48px] text-[15px] text-slate-700 placeholder:text-slate-400 shadow-[0_4px_10px_rgba(0,0,0,0.14)] outline-none">
                         <button type="button"
                                 onclick="togglePassword('token', 'eyeIcon')"
-                                class="absolute right-[16px] top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                                class="absolute right-[16px] top-[calc(50%+8px)] -translate-y-1/2 text-gray-400 hover:text-gray-600">
                             <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                       d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -40,7 +50,7 @@
                         </button>
                     </div>
 
-                    <button type="submit" class="primary-pill-btn flex w-[50%] self-center justify-center">
+                    <button type="submit"  class="mt-2 w-full rounded-full bg-[#031a33] py-4 text-[16px] font-bold text-white shadow-[0_6px_12px_rgba(0,0,0,0.18)] hover:opacity-90">
                         Verificar token
                     </button>
 

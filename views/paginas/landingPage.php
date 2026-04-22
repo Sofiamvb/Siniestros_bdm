@@ -1,129 +1,145 @@
-<main>
+<main class="bg-[#ececec]">
 
-    <section class="flex items-center justify-between bg-[#E8F0F7] px-[80px] py-[50px]" id="idHome">
-        <div class="w-1/2 text-center">
-            <img src="../Images/LandingImg.png" alt="Auto" class="w-[120%]">
-            <p class="mt-5 text-[30px] font-medium text-[#16425B]">Gestión eficiente y control documentado.</p>
-        </div>
+    <section id="idHome" class="relative overflow-hidden bg-[#031a33] min-h-screen px-6 md:px-10 lg:px-16 py-10">
 
-        <div class="flex w-[40%] items-center justify-start">
-            <div class="w-[560px] rounded-[35px] bg-[linear-gradient(145deg,#87b4c2,#b1b4af)] px-[30px] py-[40px] text-center text-white shadow-[0_10px_25px_rgba(0,0,0,0.25)]">
-                <h2 class="m-0 text-[22px] font-semibold text-white">Auto</h2>
-                <div class="my-[15px] mb-[30px] h-[6px] rounded-[10px] bg-[linear-gradient(to_right,#3A7CA5_0%,#81C3D7_50%,#81C3D7_100%)]"></div>
+        <div class="absolute -top-20 -left-20 w-[220px] h-[220px] rounded-full bg-[#25385d] opacity-80"></div>
+        <div class="absolute top-[110px] left-[40%] w-[50px] h-[50px] rounded-full bg-[#25385d] opacity-80"></div>
+        <div class="absolute -bottom-28 -right-24 w-[430px] h-[430px] rounded-full bg-[#25385d] opacity-70"></div>
 
-                <form class="form-shell" action="/cotizar" method="GET" id="formCotizarLanding">
-                    <select name="marca" id="landingMarca"
-                        class="input-field cursor-pointer rounded-[20px] px-[18px] py-[14px] text-[#666] shadow-[0_4px_8px_rgba(0,0,0,0.15)] focus:shadow-[0_0_0_2px_#D9DCD6]">
-                        <option value="" disabled selected>Marca</option>
-                    </select>
-
-                    <select name="modelo" id="landingModelo" disabled
-                        class="input-field cursor-pointer rounded-[20px] px-[18px] py-[14px] text-[#666] shadow-[0_4px_8px_rgba(0,0,0,0.15)] focus:shadow-[0_0_0_2px_#D9DCD6] disabled:opacity-50">
-                        <option value="" disabled selected>Modelo</option>
-                    </select>
-
-                    <select name="anio" id="landingAnio" disabled
-                        class="input-field cursor-pointer rounded-[20px] px-[18px] py-[14px] text-[#666] shadow-[0_4px_8px_rgba(0,0,0,0.15)] focus:shadow-[0_0_0_2px_#D9DCD6] disabled:opacity-50">
-                        <option value="" disabled selected>Año</option>
-                    </select>
-
-                    <select name="version" id="landingVersion" disabled
-                        class="input-field cursor-pointer rounded-[20px] px-[18px] py-[14px] text-[#666] shadow-[0_4px_8px_rgba(0,0,0,0.15)] focus:shadow-[0_0_0_2px_#D9DCD6] disabled:opacity-50">
-                        <option value="" disabled selected>Versión</option>
-                    </select>
-
-                    <button type="submit" class="mt-[10px] cursor-pointer rounded-[25px] border-none bg-[#608fa3] p-[14px] text-[16px] font-bold text-white shadow-[0_4px_8px_rgba(0,0,0,0.2)] transition duration-300 ease-in-out hover:-translate-y-[3px] hover:shadow-[0_6px_12px_rgba(0,0,0,0.25)]">
-                        Cotiza ahora
-                    </button>
-                </form>
-
-                <script>
-                (function () {
-                    const marcaEl   = document.getElementById('landingMarca');
-                    const modeloEl  = document.getElementById('landingModelo');
-                    const anioEl    = document.getElementById('landingAnio');
-                    const versionEl = document.getElementById('landingVersion');
-
-                    function resetFrom(el, placeholder) {
-                        el.innerHTML = `<option value="" disabled selected>${placeholder}</option>`;
-                        el.disabled  = true;
-                    }
-
-                    fetch('/api/marcas').then(r => r.json()).then(marcas => {
-                        marcas.forEach(m => {
-                            const o = document.createElement('option');
-                            o.value = o.textContent = m;
-                            marcaEl.appendChild(o);
-                        });
-                    });
-
-                    marcaEl.addEventListener('change', () => {
-                        resetFrom(modeloEl, 'Modelo');
-                        resetFrom(anioEl,   'Año');
-                        resetFrom(versionEl,'Versión');
-
-                        fetch('/api/modelos?marca=' + encodeURIComponent(marcaEl.value))
-                            .then(r => r.json()).then(items => {
-                                items.forEach(v => {
-                                    const o = document.createElement('option');
-                                    o.value = o.textContent = v;
-                                    modeloEl.appendChild(o);
-                                });
-                                modeloEl.disabled = false;
-                            });
-                    });
-
-                    modeloEl.addEventListener('change', () => {
-                        resetFrom(anioEl,   'Año');
-                        resetFrom(versionEl,'Versión');
-
-                        fetch('/api/anios?marca=' + encodeURIComponent(marcaEl.value) +
-                              '&modelo=' + encodeURIComponent(modeloEl.value))
-                            .then(r => r.json()).then(items => {
-                                items.forEach(v => {
-                                    const o = document.createElement('option');
-                                    o.value = o.textContent = v;
-                                    anioEl.appendChild(o);
-                                });
-                                anioEl.disabled = false;
-                            });
-                    });
-
-                    anioEl.addEventListener('change', () => {
-                        resetFrom(versionEl, 'Versión');
-
-                        fetch('/api/versiones?marca='  + encodeURIComponent(marcaEl.value) +
-                              '&modelo=' + encodeURIComponent(modeloEl.value) +
-                              '&anio='   + encodeURIComponent(anioEl.value))
-                            .then(r => r.json()).then(items => {
-                                items.forEach(v => {
-                                    const o = document.createElement('option');
-                                    o.value = o.textContent = v;
-                                    versionEl.appendChild(o);
-                                });
-                                versionEl.disabled = false;
-                            });
-                    });
-                })();
-                </script>
+        <div class="relative z-10 mt-10 lg:mt-16 flex flex-col lg:flex-row items-center justify-between gap-10">
+            <div class="w-full lg:w-1/2 flex justify-center">
+                <img src="/img/CAR.png" alt="Auto" class="w-full max-w-[650px] object-contain">
             </div>
-        </div>
+
+            <div class="w-full lg:w-1/2 flex justify-center lg:justify-end">
+                <div class="w-full max-w-[360px] bg-[#5d7697] rounded-[28px] shadow-xl px-7 py-6">
+                    <h2 class="text-center text-white text-3xl font-bold uppercase">Auto</h2>
+                    <div class="w-full h-[4px] bg-white rounded-full mt-2 mb-6"></div>
+
+                    <form action="/cotizar" method="GET" id="formCotizarLanding" class="flex flex-col gap-4">
+                        <select name="marca" id="landingMarca"
+                            class="w-full h-11 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-600 focus:outline-none">
+                            <option value="" disabled selected>Marca</option>
+                        </select>
+
+                        <select name="modelo" id="landingModelo" disabled
+                            class="w-full h-11 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-600 focus:outline-none disabled:opacity-50">
+                            <option value="" disabled selected>Modelo</option>
+                        </select>
+
+                        <select name="anio" id="landingAnio" disabled
+                            class="w-full h-11 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-600 focus:outline-none disabled:opacity-50">
+                            <option value="" disabled selected>Año</option>
+                        </select>
+
+                        <select name="version" id="landingVersion" disabled
+                            class="w-full h-11 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-600 focus:outline-none disabled:opacity-50">
+                            <option value="" disabled selected>Versión</option>
+                        </select>
+
+                        <button type="submit"
+                            class="mx-auto mt-3 bg-[#1f2f4a] hover:bg-[#17243a] text-white font-semibold rounded-full px-8 py-3 shadow-md transition">
+                            Cotiza ahora
+                        </button>
+                    </form>
+                    <script>
+                        (function() {
+                            const marcaEl = document.getElementById('landingMarca');
+                            const modeloEl = document.getElementById('landingModelo');
+                            const anioEl = document.getElementById('landingAnio');
+                            const versionEl = document.getElementById('landingVersion');
+
+                            function resetFrom(el, placeholder) {
+                                el.innerHTML = `<option value="" disabled selected>${placeholder}</option>`;
+                                el.disabled = true;
+                            }
+
+                            fetch('/api/marcas').then(r => r.json()).then(marcas => {
+                                marcas.forEach(m => {
+                                    const o = document.createElement('option');
+                                    o.value = o.textContent = m;
+                                    marcaEl.appendChild(o);
+                                });
+                            });
+
+                            marcaEl.addEventListener('change', () => {
+                                resetFrom(modeloEl, 'Modelo');
+                                resetFrom(anioEl, 'Año');
+                                resetFrom(versionEl, 'Versión');
+
+                                fetch('/api/modelos?marca=' + encodeURIComponent(marcaEl.value))
+                                    .then(r => r.json()).then(items => {
+                                        items.forEach(v => {
+                                            const o = document.createElement('option');
+                                            o.value = o.textContent = v;
+                                            modeloEl.appendChild(o);
+                                        });
+                                        modeloEl.disabled = false;
+                                    });
+                            });
+
+                            modeloEl.addEventListener('change', () => {
+                                resetFrom(anioEl, 'Año');
+                                resetFrom(versionEl, 'Versión');
+
+                                fetch('/api/anios?marca=' + encodeURIComponent(marcaEl.value) +
+                                        '&modelo=' + encodeURIComponent(modeloEl.value))
+                                    .then(r => r.json()).then(items => {
+                                        items.forEach(v => {
+                                            const o = document.createElement('option');
+                                            o.value = o.textContent = v;
+                                            anioEl.appendChild(o);
+                                        });
+                                        anioEl.disabled = false;
+                                    });
+                            });
+
+                            anioEl.addEventListener('change', () => {
+                                resetFrom(versionEl, 'Versión');
+
+                                fetch('/api/versiones?marca=' + encodeURIComponent(marcaEl.value) +
+                                        '&modelo=' + encodeURIComponent(modeloEl.value) +
+                                        '&anio=' + encodeURIComponent(anioEl.value))
+                                    .then(r => r.json()).then(items => {
+                                        items.forEach(v => {
+                                            const o = document.createElement('option');
+                                            o.value = o.textContent = v;
+                                            versionEl.appendChild(o);
+                                        });
+                                        versionEl.disabled = false;
+                                    });
+                            });
+                        })();
+                    </script>
+                </div>
+            </div>
     </section>
 
-    <div class="flex items-center justify-evenly bg-[#E8F0F7] px-[80px] py-[30px]">
-        <img src="/img/GNPSeguros.png" class="h-[40px] object-contain opacity-[0.85] transition duration-300 hover:scale-105 hover:opacity-100">
-        <img src="/img/QualitasSeguros.png" class="h-[40px] object-contain opacity-[0.85] transition duration-300 hover:scale-105 hover:opacity-100">
-        <img src="/img/AXASeguros.png" class="h-[40px] object-contain opacity-[0.85] transition duration-300 hover:scale-105 hover:opacity-100">
-        <img src="/img/BBVASeguros.png" class="h-[40px] object-contain opacity-[0.85] transition duration-300 hover:scale-105 hover:opacity-100">
-        <img src="/img/HDISeguros.png" class="h-[40px] object-contain opacity-[0.85] transition duration-300 hover:scale-105 hover:opacity-100">
-        <img src="/img/MapfreSeguros.png" class="h-[40px] object-contain opacity-[0.85] transition duration-300 hover:scale-105 hover:opacity-100">
+    <div class="bg-[#FFFFFF] px-6 md:px-10 lg:px-16 py-16">
+        <div class="flex flex-wrap justify-center items-center gap-5 md:gap-8">
+            <div class="w-[100px] md:w-[120px] h-[56px] md:h-[68px] bg-white border border-slate-400 rounded-lg shadow-sm flex items-center justify-center p-3">
+                <img src="/img/GNPSeguros.png" class="max-w-full max-h-full object-contain" alt="GNP">
+            </div>
+            <div class="w-[100px] md:w-[120px] h-[56px] md:h-[68px] bg-white border border-slate-400 rounded-lg shadow-sm flex items-center justify-center p-3">
+                <img src="/img/QualitasSeguros.png" class="max-w-full max-h-full object-contain" alt="Qualitas">
+            </div>
+            <div class="w-[100px] md:w-[120px] h-[56px] md:h-[68px] bg-white border border-slate-400 rounded-lg shadow-sm flex items-center justify-center p-3">
+                <img src="/img/BBVASeguros.png" class="max-w-full max-h-full object-contain" alt="BBVA">
+            </div>
+            <div class="w-[100px] md:w-[120px] h-[56px] md:h-[68px] bg-white border border-slate-400 rounded-lg shadow-sm flex items-center justify-center p-3">
+                <img src="/img/AXASeguros.png" class="max-w-full max-h-full object-contain" alt="AXA">
+            </div>
+            <div class="w-[100px] md:w-[120px] h-[56px] md:h-[68px] bg-white border border-slate-400 rounded-lg shadow-sm flex items-center justify-center p-3">
+                <img src="/img/HDISeguros.png" class="max-w-full max-h-full object-contain" alt="HDI">
+            </div>
+        </div>
     </div>
 
-    <section class="border-t-[2px] border-t-[#16425B] bg-[linear-gradient(135deg,#F5F7FA_0%,#E8F0F7_50%,#D4E9F5_100%)] px-[80px] py-[60px]" id="idSobreNosotros">
-        <div class="flex items-center justify-between gap-[40px]">
-            <div class="w-full text-right text-[17px] leading-[1.6] text-[#333]">
-                <h2 class="p-[20px] text-right text-[38px] text-[#16425B]">Sobre nosotros</h2>
-                <p>
+    <section id="idSobreNosotros" class="bg-[#FFFFFF] px-6 md:px-10 lg:px-16 py-6">
+        <div class="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-[1fr_1.6fr] gap-5">
+            <div class="bg-[#031a33] rounded-2xl shadow-lg p-8 md:p-10 min-h-[300px] flex flex-col justify-center">
+                <h2 class="text-white text-2xl md:text-4xl font-bold uppercase mb-6">Sobre nosotros</h2>
+                <p class="text-white text-base md:text-lg leading-relaxed">
                     En Sistema Integral de Siniestros Automotrices (SISA) brindamos una
                     plataforma digital para la gestión y seguimiento de siniestros de autos.
                     Facilitamos a los clientes el control de autorizaciones, pagos y entrega
@@ -131,30 +147,20 @@
                 </p>
             </div>
 
-            <div class="w-[35%] text-center">
-                <img src="/img/AbtUs.png" alt="Protección auto" class="w-[80%] max-w-[250px] drop-shadow-[0_15px_25px_rgba(0,0,0,0.2)]">
+            <div class="bg-[#031a33] rounded-2xl shadow-lg p-6 min-h-[300px] flex items-center justify-center">
+                <img src="/img/CAR.png" alt="Protección auto" class="w-full max-w-[520px] object-contain">
             </div>
         </div>
     </section>
 
-    <section class="border-t-[2px] border-t-[#16425B] bg-[linear-gradient(135deg,#F5F7FA_0%,#E8F0F7_50%,#D4E9F5_100%)]" id="idContacto">
-        <div class="px-5 py-[50px] text-center">
-            <img src="/img/CSupport.png" alt="Soporte" class="mb-[10px] inline-block w-[150px]">
-            <p class="mx-auto max-w-[700px] text-[18px] font-medium text-[#222]">
+    <section id="idContacto" class="bg-[#FFFFFF] px-6 md:px-10 lg:px-16 pt-4 pb-16">
+        <div class="max-w-[1200px] mx-auto bg-[#031a33] rounded-2xl shadow-lg min-h-[250px] flex flex-col items-center justify-center text-center px-8 py-12">
+            <img src="/img/CSupport.png" alt="Soporte" class="w-24 h-24 object-contain mb-8">
+            <p class="text-white text-base md:text-2xl leading-relaxed max-w-[760px]">
                 Trabajamos bajo nuestro compromiso de
                 <strong>“Gestión eficiente y control documentado”</strong>,
                 ofreciendo transparencia y confianza en cada etapa del proceso.
             </p>
-        </div>
-
-        <div class="border-t-[2px] border-t-[#16425B] bg-[#E8F0F7] px-5 py-[60px]">
-            <div class="flex items-center justify-center gap-[40px]">
-                <img src="/img/headset.png" alt="Atención" class="w-[90px] opacity-70">
-                <div>
-                    <p class="mb-[10px] text-[18px]">Te ayudamos a gestionar tu relación con la aseguradora.</p>
-                    <span class="inline-block rounded-[20px] bg-[#D9DCD6] px-5 py-2 font-bold text-[#16425B]">81-3155-5540</span>
-                </div>
-            </div>
         </div>
     </section>
 
