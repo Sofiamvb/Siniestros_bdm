@@ -2,16 +2,16 @@
 
     <section id="idHome" class="relative overflow-hidden bg-[#031a33] min-h-screen px-6 md:px-10 lg:px-16 py-10">
 
-        <div class="absolute -top-20 -left-20 w-[220px] h-[220px] rounded-full bg-[#25385d] opacity-80"></div>
+        
         <div class="absolute top-[110px] left-[40%] w-[50px] h-[50px] rounded-full bg-[#25385d] opacity-80"></div>
-        <div class="absolute -bottom-28 -right-24 w-[430px] h-[430px] rounded-full bg-[#25385d] opacity-70"></div>
+        <div class="absolute -bottom-28 -right-24 w-[430px] h-[430px] rounded-full bg-[#25385d] opacity-80"></div>
 
         <div class="relative z-10 mt-10 lg:mt-16 flex flex-col lg:flex-row items-center justify-between gap-10">
             <div class="w-full lg:w-1/2 flex justify-center">
                 <img src="/img/CAR.png" alt="Auto" class="w-full max-w-[650px] object-contain">
             </div>
 
-            <div class="w-full lg:w-1/2 flex justify-center lg:justify-end">
+            <div class="w-full lg:w-1/2 flex justify-center lg:justify-center">
                 <div class="w-full max-w-[360px] bg-[#5d7697] rounded-[28px] shadow-xl px-7 py-6">
                     <h2 class="text-center text-white text-3xl font-bold uppercase">Auto</h2>
                     <div class="w-full h-[4px] bg-white rounded-full mt-2 mb-6"></div>

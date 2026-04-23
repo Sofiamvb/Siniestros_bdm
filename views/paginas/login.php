@@ -2,7 +2,7 @@
 
     <div class="mx-auto max-w-[1300px] px-6 py-8 lg:py-10">
 
-        <div class="grid grid-cols-1 items-start gap-10 lg:grid-cols-[620px_1fr] lg:gap-14">
+        <div class="grid grid-cols-1 items-start gap-10 lg:grid-cols-[620px_1fr] lg:gap-8">
 
             <a href="/" class="w-fit text-[14px] font-semibold text-[#1b2b43] hover:underline lg:col-span-2">Regresar</a>
 

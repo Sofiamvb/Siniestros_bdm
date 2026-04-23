@@ -25,7 +25,7 @@
         <div class="siniestro-card-base">
             <div class="card-row">
                 <div class="card-left-col">
-                    <img src="../Images/siniestro.jpg" alt="Siniestro" class="mini-carousel-image shadow-[0_3px_8px_rgba(0,0,0,0.15)] mb-[15px]">
+                    <img src="/img/siniestro.jpg" alt="Siniestro" class="mini-carousel-image shadow-[0_3px_8px_rgba(0,0,0,0.15)] mb-[15px]">
                     <p class="adjuster-text">Ajustador: Miguel Ángel Ramirez</p>
                 </div>
 
@@ -42,9 +42,9 @@
                 </div>
             </div>
 
-            <button class="icon-btn-supervisor-bottom" onclick="openSupervisorModal()"><img src="../Images/adjuntar.png" alt="Supervisor" class="icon-btn-image-dim"></button>
-            <button class="icon-btn-see-bottom" onclick="openDetailsModal()"><img src="../Images/seeall.png" alt="Ver todo" class="icon-btn-image"></button>
-            <button class="icon-btn-chat-bottom" onclick="openModal('../Images/siniestro.jpg')"><img src="../Images/comments.png" alt="Chat" class="icon-btn-image"></button>
+            <button class="icon-btn-supervisor-bottom" onclick="openSupervisorModal()"><img src="/img/adjuntar.png" alt="Supervisor" class="icon-btn-image-dim"></button>
+            <button class="icon-btn-see-bottom" onclick="openDetailsModal()"><img src="/img/seeall.png" alt="Ver todo" class="icon-btn-image"></button>
+            <button class="icon-btn-chat-bottom" onclick="openModal('/img/siniestro.jpg')"><img src="/img/comments.png" alt="Chat" class="icon-btn-image"></button>
         </div>
     </main>
 
@@ -52,7 +52,7 @@
         <div class="modal-panel">
             <div class="modal-header-bar">
                 <span class="modal-title-text">Comentarios</span>
-                <img src="../Images/comments.png" alt="Comentarios" class="modal-header-icon">
+                <img src="/img/comments.png" alt="Comentarios" class="modal-header-icon">
             </div>
             <div class="modal-body-scroll">
                 <div class="mb-[20px] text-center">
@@ -61,7 +61,7 @@
 
                 <div class="comment-list">
                     <div class="comment-card">
-                        <img src="../Images/DefaultPFP.png" alt="Usuario" class="comment-avatar">
+                        <img src="/img/DefaultPFP.png" alt="Usuario" class="comment-avatar">
                         <div class="comment-body">
                             <div class="comment-author">Miguel Ángel Ramirez</div>
                             <div class="comment-text">Esperando más información</div>
@@ -70,7 +70,7 @@
                     </div>
 
                     <div class="comment-card">
-                        <img src="../Images/DefaultPFP.png" alt="Usuario" class="comment-avatar">
+                        <img src="/img/DefaultPFP.png" alt="Usuario" class="comment-avatar">
                         <div class="comment-body">
                             <div class="comment-author">Carlos Alberto Martínez</div>
                             <div class="comment-text">Ya envié los documentos solicitados</div>

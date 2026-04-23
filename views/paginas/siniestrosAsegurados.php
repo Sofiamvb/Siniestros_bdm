@@ -16,8 +16,8 @@
                 <!-- TARJETA IZQUIERDA -->
                 <div class="min-h-[300px] rounded-[18px] bg-[#f7f7f7] px-7 py-7 shadow-[0_6px_14px_rgba(0,0,0,0.16)]">
                     <div class="flex h-full flex-col justify-between">
-                        <div class="flex flex-col items-center gap-4">
-                            <h2 class="text-[18px] md:text-[19px] font-bold text-[#162338]">
+                        <div class="flex flex-col items-center gap-4 ">
+                            <h2 class="text-[18px] md:text-[19px] font-bold text-[#162338] ">
                                 ¿Tienes problemas con tu póliza?
                             </h2>
 
@@ -33,7 +33,7 @@
                             </div>
                         </div>
 
-                        <div class="mt-8 flex justify-start">
+                        <div class="mt-8 flex justify-center">
                             <a href="tel:8131555540"
                                 class="inline-flex h-[52px] min-w-[185px] items-center justify-center rounded-full bg-[#4f6d98] px-8 text-[13px] font-bold text-white shadow-[0_5px_10px_rgba(0,0,0,0.18)] transition hover:bg-[#466288]">
                                 81-3155-5540

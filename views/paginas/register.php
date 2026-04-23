@@ -1,25 +1,23 @@
-<main class="min-h-screen bg-[#e5e5e2] px-4 py-6 md:px-8 md:py-8">
+<main class="min-h-screen bg-[#e5e5e2]">
 
-    <div class="mx-auto max-w-[1180px]">
-        <a href="/" class="mb-4 inline-block text-[14px] font-semibold text-[#1d2b44] hover:underline">
-            Regresar
-        </a>
+    <div class="mx-auto max-w-[1300px] px-6 py-8 lg:py-10">
 
-        <div class="grid grid-cols-1 items-center gap-8 lg:grid-cols-[520px_1fr] lg:gap-10">
+        <div class="grid grid-cols-1 items-start gap-10 lg:grid-cols-[620px_1fr] lg:gap-8">
 
-         <div class="flex justify-center lg:justify-start">
-                <div class="flex h-[420px] w-full max-w-[430px] flex-col items-center justify-center rounded-[34px] bg-[#1c2d4a] px-8 py-10 shadow-[0_10px_24px_rgba(0,0,0,0.18)] md:h-[500px]">
-                    <h1 class="mb-8 text-center text-[64px] font-extrabold tracking-wide text-white md:text-[72px]">
+            <a href="/" class="w-fit text-[14px] font-semibold text-[#1b2b43] hover:underline lg:col-span-2">Regresar</a>
+
+           <!-- PANEL IZQUIERDO -->
+            <div class="flex justify-center lg:justify-start">
+                <div class="flex min-h-[620px] w-full max-w-[560px] flex-col items-center justify-center rounded-[42px] bg-[#1c2d4a] px-10 py-12 shadow-[0_14px_30px_rgba(0,0,0,0.18)]">
+                    <h1 class="mb-10 text-center text-[82px] font-extrabold leading-none tracking-wide text-white md:text-[96px]">
                         SISA
                     </h1>
 
-                    <div class="flex w-full justify-center">
-                        <img src="/img/CAR.png" alt="Seguro" class="w-full max-w-[320px] object-contain md:max-w-[350px]">
-                    </div>
+                    <img src="/img/CAR.png" alt="Seguro" class="w-full max-w-[470px] object-contain">
                 </div>
             </div>
 
-            <div class="flex justify-center">
+            <div class="flex justify-center md:justify-start md:pt-2">
 
                 <form class="flex w-full max-w-[520px] flex-col gap-4"
                     action="/register"
