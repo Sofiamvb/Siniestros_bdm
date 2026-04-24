@@ -70,7 +70,9 @@ class Usuario extends ActiveRecord
     {
         $this->password = password_hash($this->password, PASSWORD_BCRYPT);
 
-        $resultado = self::call_sp('sp_registrar_usuario', [
+        $resultado = self::call_sp('sp_usuario', [
+            'registro',
+            null,
             $this->nombre,
             $this->apellidos,
             $this->fecha_nacimiento,
@@ -79,7 +81,7 @@ class Usuario extends ActiveRecord
             $this->password,
             $this->alias,
             (int) $this->rol_id,
-            $this->foto
+            $this->foto,
         ]);
 
         $this->id = (int) ($resultado[0]['id'] ?? 0);
@@ -102,7 +104,12 @@ class Usuario extends ActiveRecord
 
     public static function login(string $email): ?array
     {
-        $rows = self::call_sp('sp_login_usuario', [$email]);
+        $rows = self::call_sp('sp_usuario', [
+            'login',
+            null, null, null, null, null,
+            $email,
+            null, null, null, null,
+        ]);
         return $rows[0] ?? null;
     }
 
@@ -144,13 +151,17 @@ class Usuario extends ActiveRecord
     {
         $foto = !empty($this->foto) ? $this->foto : null;
 
-        $resultado = self::call_sp('sp_actualizar_perfil', [
+        $resultado = self::call_sp('sp_usuario', [
+            'modificar',
             $this->id,
             $this->nombre,
             $this->apellidos,
             $this->fecha_nacimiento,
             $this->genero,
+            null,
+            null,
             $this->alias,
+            null,
             $foto,
         ]);
 
