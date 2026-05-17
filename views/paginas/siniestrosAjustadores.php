@@ -63,7 +63,7 @@
             <?php else: ?>
 
                 <div class="mt-12 grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3 lg:gap-20">
-                    <?php foreach ($siniestros as $s): ?>
+                    <?php foreach ($siniestros as $siniestro): ?>
                         <?php
                         $fechaHora   = $s['fecha_hora_siniestro'] ?? '';
                         $fecha       = $fechaHora ? date('d/m/Y', strtotime($fechaHora)) : '—';
