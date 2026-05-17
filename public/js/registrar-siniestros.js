@@ -117,10 +117,44 @@ function updateContinueButton() {
 
     if (currentSection === 'detalles') {
         continueBtn.textContent = 'Registrar siniestro';
-        continueBtn.onclick = () => document.getElementById('formSiniestro').submit();
+        continueBtn.onclick = submitConEvidencias;
     } else {
         continueBtn.textContent = 'Continuar →';
         continueBtn.onclick = goToNextSection;
+    }
+}
+
+async function submitConEvidencias() {
+    const form = document.getElementById('formSiniestro');
+    if (!form) return;
+
+    /*
+        El input de evidencias fue limpiado por el carousel (event.target.value = ''),
+        así que los archivos viven en el array mediaFiles como objetos File.
+        Construimos un FormData manualmente para incluirlos correctamente.
+    */
+    const formData = new FormData(form);
+
+    // Eliminar el campo vacío que dejó el input y agregar los archivos reales
+    formData.delete('evidencias[]');
+    mediaFiles.forEach((item) => {
+        formData.append('evidencias[]', item.file);
+    });
+
+    try {
+        const respuesta = await fetch('/registrarSiniestros', {
+            method: 'POST',
+            body: formData
+        });
+
+        // El servidor redirige con header Location; seguimos la URL final
+        if (respuesta.redirected) {
+            window.location.href = respuesta.url;
+        } else if (respuesta.ok) {
+            window.location.href = '/siniestrosAjustadores?siniestro_nuevo=1';
+        }
+    } catch (error) {
+        Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudo enviar el formulario.' });
     }
 }
 
