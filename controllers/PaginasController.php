@@ -139,14 +139,22 @@ class PaginasController
                     }
 
                     // Guardar evidencias (imágenes/videos)
+                    error_log('[evidencias] FILES recibidos: ' . json_encode($_FILES['evidencias'] ?? 'ninguno'));
                     if (!empty($_FILES['evidencias']['name'][0])) {
                         foreach ($_FILES['evidencias']['tmp_name'] as $i => $tmpName) {
-                            if ($_FILES['evidencias']['error'][$i] !== UPLOAD_ERR_OK) continue;
+                            if ($_FILES['evidencias']['error'][$i] !== UPLOAD_ERR_OK) {
+                                error_log('[evidencias] archivo ' . $i . ' error code: ' . $_FILES['evidencias']['error'][$i]);
+                                continue;
+                            }
                             $binario = file_get_contents($tmpName);
                             $nombre  = $_FILES['evidencias']['name'][$i];
                             $mime    = $_FILES['evidencias']['type'][$i];
+                            error_log('[evidencias] guardando: ' . $nombre . ' (' . $mime . ') tamaño: ' . strlen($binario) . ' bytes');
                             $siniestro->registrarEvidencia($siniestroId, $binario, $nombre, $mime);
+                            error_log('[evidencias] guardado correctamente: ' . $nombre);
                         }
+                    } else {
+                        error_log('[evidencias] no se recibieron archivos en el POST');
                     }
 
                     header('Location: /siniestrosAjustadores?siniestro_nuevo=1');
