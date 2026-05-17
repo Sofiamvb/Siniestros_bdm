@@ -61,7 +61,7 @@
             </div>
 
             <!-- ══ SECTION 2: Auto ══ -->
-            <div class="section-content hidden flex-1" id="auto-section">
+            <div class="section-content invisible absolute pointer-events-none flex-1" id="auto-section">
                 <div class="mx-auto mt-12 grid max-w-[620px] grid-cols-2 gap-x-7 gap-y-4">
 
                     <div>
@@ -117,7 +117,7 @@
             </div>
 
             <!-- ══ SECTION 3: Detalles ══ -->
-            <div class="section-content hidden flex-1" id="detalles-section">
+            <div class="section-content invisible absolute pointer-events-none flex-1" id="detalles-section">
                 <div class="mx-auto mt-8 grid max-w-[620px] grid-cols-2 gap-x-7 gap-y-3">
 
                     <div>

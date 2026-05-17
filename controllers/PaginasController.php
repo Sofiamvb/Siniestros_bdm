@@ -138,13 +138,19 @@ class PaginasController
                         $siniestro->registrarTercero($siniestroId, $t);
                     }
 
-                    // DEBUG TEMPORAL — quitar antes de producción
-                    echo '<pre>';
-                    echo 'siniestroId: ' . $siniestroId . PHP_EOL;
-                    echo 'FILES[evidencias]: ';
-                    var_dump($_FILES['evidencias'] ?? 'no llego nada');
-                    echo '</pre>';
-                    die();
+                    // Guardar evidencias (imágenes/videos)
+                    if (!empty($_FILES['evidencias']['name'][0])) {
+                        foreach ($_FILES['evidencias']['tmp_name'] as $i => $tmpName) {
+                            if ($_FILES['evidencias']['error'][$i] !== UPLOAD_ERR_OK) continue;
+                            $binario = file_get_contents($tmpName);
+                            $nombre  = $_FILES['evidencias']['name'][$i];
+                            $mime    = $_FILES['evidencias']['type'][$i];
+                            $siniestro->registrarEvidencia($siniestroId, $binario, $nombre, $mime);
+                        }
+                    }
+
+                    header('Location: /siniestrosAjustadores?siniestro_nuevo=1');
+                    exit;
                 }
 
                 $errores[] = 'Ocurrió un error al registrar el siniestro.';

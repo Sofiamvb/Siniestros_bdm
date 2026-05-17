@@ -7,8 +7,10 @@ function showSection(sectionName) {
     const allSections = document.querySelectorAll('.section-content');
     const allTabs = document.querySelectorAll('.tab-btn');
 
+    // Usar invisible+absolute en lugar de hidden para que los inputs sigan en el DOM al hacer submit
     allSections.forEach((section) => {
-        section.classList.add('hidden');
+        section.classList.add('invisible', 'absolute', 'pointer-events-none');
+        section.classList.remove('visible', 'relative');
     });
 
     allTabs.forEach((tab) => {
@@ -19,7 +21,8 @@ function showSection(sectionName) {
     const selectedTab = document.querySelector(`.tab-btn[data-section="${sectionName}"]`);
 
     if (selectedSection) {
-        selectedSection.classList.remove('hidden');
+        selectedSection.classList.remove('invisible', 'absolute', 'pointer-events-none');
+        selectedSection.classList.add('visible', 'relative');
     }
 
     if (selectedTab) {
