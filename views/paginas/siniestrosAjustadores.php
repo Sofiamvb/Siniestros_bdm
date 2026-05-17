@@ -65,29 +65,29 @@
                 <div class="mt-12 grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3 lg:gap-20">
                     <?php foreach ($siniestros as $siniestro): ?>
                         <?php
-                        $fechaHora   = $s['fecha_hora_siniestro'] ?? '';
+                        $fechaHora   = $siniestro['fecha_hora_siniestro'] ?? '';
                         $fecha       = $fechaHora ? date('d/m/Y', strtotime($fechaHora)) : '—';
                         $hora        = $fechaHora ? date('H:i:s', strtotime($fechaHora)) : '—';
-                        $presupuesto = $s['perdida_total'] ? 'Pérdida total' : ('$' . number_format((float)($s['presupuesto_reparacion'] ?? 0), 2));
+                        $presupuesto = $siniestro['perdida_total'] ? 'Pérdida total' : ('$' . number_format((float)($siniestro['presupuesto_reparacion'] ?? 0), 2));
                         $dataJson    = htmlspecialchars(json_encode([
-                            'numero_reporte'   => $s['numero_reporte']    ?? '',
-                            'compania'         => $s['compania']          ?? '',
-                            'numero_poliza'    => $s['numero_poliza']     ?? '',
-                            'fecha_inicio'     => $s['fecha_inicio']      ?? '',
-                            'fecha_fin'        => $s['fecha_fin']         ?? '',
-                            'ajustador_nombre' => $s['ajustador_nombre']  ?? '',
-                            'duenio_nombre'    => $s['duenio_nombre']     ?? '',
-                            'conductor'        => $s['conductor_momento'] ?? '',
-                            'marca'            => $s['marca']             ?? '',
-                            'modelo'           => $s['modelo']            ?? '',
-                            'anio'             => $s['anio']              ?? '',
-                            'placas'           => $s['placas']            ?? '',
+                            'numero_reporte'   => $siniestro['numero_reporte']    ?? '',
+                            'compania'         => $siniestro['compania']          ?? '',
+                            'numero_poliza'    => $siniestro['numero_poliza']     ?? '',
+                            'fecha_inicio'     => $siniestro['fecha_inicio']      ?? '',
+                            'fecha_fin'        => $siniestro['fecha_fin']         ?? '',
+                            'ajustador_nombre' => $siniestro['ajustador_nombre']  ?? '',
+                            'duenio_nombre'    => $siniestro['duenio_nombre']     ?? '',
+                            'conductor'        => $siniestro['conductor_momento'] ?? '',
+                            'marca'            => $siniestro['marca']             ?? '',
+                            'modelo'           => $siniestro['modelo']            ?? '',
+                            'anio'             => $siniestro['anio']              ?? '',
+                            'placas'           => $siniestro['placas']            ?? '',
                             'fecha'            => $fecha,
                             'hora'             => $hora,
-                            'latitud'          => $s['latitud']           ?? '',
-                            'longitud'         => $s['longitud']          ?? '',
-                            'descripcion'      => $s['descripcion_hechos'] ?? '',
-                            'dictamen'         => $s['dictamen_supervisor'] ?? '',
+                            'latitud'          => $siniestro['latitud']           ?? '',
+                            'longitud'         => $siniestro['longitud']          ?? '',
+                            'descripcion'      => $siniestro['descripcion_hechos'] ?? '',
+                            'dictamen'         => $siniestro['dictamen_supervisor'] ?? '',
                             'presupuesto'      => $presupuesto,
                         ]), ENT_QUOTES);
                         ?>
@@ -102,20 +102,20 @@
                             </div>
 
                             <div class="px-4 py-5 text-[11px] font-bold leading-[1.25] text-black">
-                                <p>Nombre(s) del dueño: <?= htmlspecialchars($s['duenio_nombre'] ?? '') ?></p>
-                                <p>Marca: <?= htmlspecialchars($s['marca'] ?? '') ?></p>
-                                <p>Número de placas: <?= htmlspecialchars($s['placas'] ?? '') ?></p>
-                                <p>Nombre de la aseguradora: <?= htmlspecialchars($s['compania'] ?? '') ?></p>
-                                <p>Reporte: <?= htmlspecialchars($s['numero_reporte'] ?? '') ?></p>
+                                <p>Nombre(s) del dueño: <?= htmlspecialchars($siniestro['duenio_nombre'] ?? '') ?></p>
+                                <p>Marca: <?= htmlspecialchars($siniestro['marca'] ?? '') ?></p>
+                                <p>Número de placas: <?= htmlspecialchars($siniestro['placas'] ?? '') ?></p>
+                                <p>Nombre de la aseguradora: <?= htmlspecialchars($siniestro['compania'] ?? '') ?></p>
+                                <p>Reporte: <?= htmlspecialchars($siniestro['numero_reporte'] ?? '') ?></p>
 
                                 <br>
 
-                                <p>Ajustador: <?= htmlspecialchars($s['ajustador_nombre'] ?? '') ?></p>
+                                <p>Ajustador: <?= htmlspecialchars($siniestro['ajustador_nombre'] ?? '') ?></p>
 
                                 <p>
                                     Estado:
-                                    <span style="color: <?= htmlspecialchars($s['estatus_color'] ?? '#000') ?>">
-                                        <?= htmlspecialchars($s['estatus'] ?? '') ?>
+                                    <span style="color: <?= htmlspecialchars($siniestro['estatus_color'] ?? '#000') ?>">
+                                        <?= htmlspecialchars($siniestro['estatus'] ?? '') ?>
                                     </span>
                                 </p>
 
