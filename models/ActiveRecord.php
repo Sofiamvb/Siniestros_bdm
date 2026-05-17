@@ -73,4 +73,10 @@ class ActiveRecord
         $stmt->close();
         return $rows;
     }
+
+    public static function blobToImg(?string $binary, string $mime = 'image/jpeg'): string
+    {
+        if (empty($binary)) return '';
+        return 'data:' . $mime . ';base64,' . base64_encode($binary);
+    }
 }

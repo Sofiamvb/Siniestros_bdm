@@ -96,7 +96,7 @@
                             data-siniestro="<?= $dataJson ?>">
 
                             <div class="h-[165px] w-full overflow-hidden">
-                                <img src="/img/siniestro.jpg"
+                                <img src="<?= $siniestro['primera_evidencia'] ?>"
                                     alt="Siniestro"
                                     class="h-full w-full object-cover">
                             </div>

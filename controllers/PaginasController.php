@@ -256,7 +256,17 @@ class PaginasController
             exit;
         }
 
-        $siniestros = Siniestro::obtenerPorAjustador((int) $_SESSION['id']);
+        $siniestrosRaw = Siniestro::obtenerPorAjustador((int) $_SESSION['id']);
+
+        // Convertir el BLOB de primera_evidencia a base64 para cada siniestro
+        $siniestros = [];
+        foreach ($siniestrosRaw as $siniestro) {
+            $siniestro['primera_evidencia'] = \Model\ActiveRecord::blobToImg(
+                $siniestro['primera_evidencia'] ?? null,
+                $siniestro['primera_evidencia_mime'] ?? 'image/jpeg'
+            ) ?: '/img/siniestro.jpg';
+            $siniestros[] = $siniestro;
+        }
 
         $router->render('paginas/siniestrosAjustadores', [
             'siniestros'     => $siniestros,
