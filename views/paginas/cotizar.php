@@ -3,7 +3,7 @@
     <div class="mx-auto max-w-[900px]">
 
         <h1 class="mb-[10px] text-[32px] font-bold text-[#1d2b44]">Cotizador de Seguro</h1>
-        <div class="mb-[40px] h-[4px] w-[80px] rounded-full bg-[#3A7CA5]"></div>
+        <div class="mb-[40px] h-[4px] w-[80px] rounded-full bg-[#4f6d98]"></div>
 
         <?php if (!$vehiculo): ?>
         <!-- ── Formulario de búsqueda ── -->

@@ -9,12 +9,12 @@
             </a>
 
             <div class="flex justify-center lg:justify-start">
-                <div class="w-full max-w-[560px] min-h-[620px] rounded-[42px] bg-[#1c2d4a] shadow-[0_14px_30px_rgba(0,0,0,0.18)] px-10 py-12 flex flex-col items-center justify-center">
+                <div class="w-full max-w-[560px] min-h-[620px] rounded-[42px] bg-[#031a33] shadow-[0_14px_30px_rgba(0,0,0,0.18)] px-10 py-12 flex flex-col items-center justify-center">
                     <h1 class="text-white text-[82px] md:text-[96px] font-extrabold tracking-wide leading-none mb-10">
                         SISA
                     </h1>
 
-                    <img src="/img/CAR.png" alt="Seguro" class="w-full max-w-[470px] object-contain">
+                    <img src="/img/car de lado.png" alt="Seguro" class="w-full max-w-[470px] object-contain">
                 </div>
             </div>
 
@@ -34,10 +34,10 @@
 
                     <div class="flex items-center gap-4">
                         <img
-                            src="/img/DefaultPFP.png"
-                            class="w-[56px] h-[56px] rounded-full object-cover bg-[#1c2d4a] border-[4px] border-[#1c2d4a]"
+                            src="/img/DFfoto.png" class="h-[46px] w-[46px] rounded-full bg-[#0c1e35] object-cover ring-4 ring-[#0c1e35]"
                             id="profilePreview"
                             alt="Foto de perfil">
+
 
                         <label
                             for="foto"

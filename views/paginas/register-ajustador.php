@@ -9,12 +9,12 @@
 
             <!-- PANEL IZQUIERDO -->
             <div class="flex justify-center lg:justify-start">
-                <div class="flex min-h-[660px] w-full max-w-[560px] flex-col items-center justify-center rounded-[42px] bg-[#1c2d4a] px-10 py-12 shadow-[0_14px_30px_rgba(0,0,0,0.18)]">
+                <div class="flex min-h-[660px] w-full max-w-[560px] flex-col items-center justify-center rounded-[42px] bg-[#031a33] px-10 py-12 shadow-[0_14px_30px_rgba(0,0,0,0.18)]">
                     <h1 class="mb-10 text-center text-[82px] font-extrabold leading-none tracking-wide text-white md:text-[96px]">
                         SISA
                     </h1>
 
-                    <img src="/img/CAR.png" alt="Seguro" class="w-full max-w-[470px] object-contain">
+                    <img src="/img/car de lado.png" alt="Seguro" class="w-full max-w-[470px] object-contain">
                 </div>
             </div>
 
@@ -37,10 +37,9 @@
                     <!-- Foto de perfil -->
                     <div class="flex items-center gap-4">
                         <img
-                            src="/img/DefaultPFP.png"
+                            src="/img/DFfoto.png" class="h-[46px] w-[46px] rounded-full bg-[#0c1e35] object-cover ring-4 ring-[#0c1e35]"
                             id="profilePreview"
-                            alt="Foto de perfil"
-                            class="h-[56px] w-[56px] rounded-full border-[4px] border-[#1c2d4a] bg-[#1c2d4a] object-cover">
+                            alt="Foto de perfil">
 
                         <label
                             for="foto"

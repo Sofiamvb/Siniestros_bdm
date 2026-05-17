@@ -7,8 +7,9 @@
         <div class="absolute -bottom-28 -right-24 w-[430px] h-[430px] rounded-full bg-[#25385d] opacity-80"></div>
 
         <div class="relative z-10 mt-10 lg:mt-16 flex flex-col lg:flex-row items-center justify-between gap-10">
+            
             <div class="w-full lg:w-1/2 flex justify-center">
-                <img src="/img/CAR.png" alt="Auto" class="w-full max-w-[650px] object-contain">
+                <img src="/img/car de lado.png" alt="Auto" class="w-full max-w-[650px] object-contain">
             </div>
 
             <div class="w-full lg:w-1/2 flex justify-center lg:justify-center">

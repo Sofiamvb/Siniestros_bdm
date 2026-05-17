@@ -8,12 +8,12 @@
 
            <!-- PANEL IZQUIERDO -->
             <div class="flex justify-center lg:justify-start">
-                <div class="flex min-h-[620px] w-full max-w-[560px] flex-col items-center justify-center rounded-[42px] bg-[#1c2d4a] px-10 py-12 shadow-[0_14px_30px_rgba(0,0,0,0.18)]">
+                <div class="flex min-h-[620px] w-full max-w-[560px] flex-col items-center justify-center rounded-[42px] bg-[#031a33] px-10 py-12 shadow-[0_14px_30px_rgba(0,0,0,0.18)]">
                     <h1 class="mb-10 text-center text-[82px] font-extrabold leading-none tracking-wide text-white md:text-[96px]">
                         SISA
                     </h1>
 
-                    <img src="/img/CAR.png" alt="Seguro" class="w-full max-w-[470px] object-contain">
+                    <img src="/img/car de lado.png" alt="Seguro" class="w-full max-w-[470px] object-contain">
                 </div>
             </div>
 

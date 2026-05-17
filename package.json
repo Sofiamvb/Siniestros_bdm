@@ -18,7 +18,7 @@
     "tailwindcss": "^3.4.17"
   },
   "dependencies": {
-    "mysql2": "^3.22.1",
+    "mysql2": "^3.22.2",
     "sequelize": "^6.37.8",
     "sweetalert2": "^11.26.21"
   }
