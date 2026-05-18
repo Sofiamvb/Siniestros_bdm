@@ -22,10 +22,10 @@
                 </svg>
             </span>
             <button
+                id="searchBtn"
                 type="button"
                 class="absolute right-2.5 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full bg-[#111823] text-white transition hover:bg-gray-800"
                 aria-label="Buscar"
-                onclick="document.getElementById('searchInput').focus()"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -38,7 +38,7 @@
             id="searchDropdown"
             class="hidden absolute left-0 right-0 top-[60px] bg-white rounded-[18px] shadow-[0_8px_24px_rgba(0,0,0,0.18)] overflow-hidden z-50"
         >
-            <div id="searchResults"></div>
+            <div id="searchResults" class="max-h-[380px] overflow-y-auto"></div>
         </div>
 
     </div>
@@ -57,6 +57,7 @@
     const results  = document.getElementById('searchResults');
     const hint     = document.getElementById('searchHint');
     const spinner  = document.getElementById('searchSpinner');
+    const btn      = document.getElementById('searchBtn');
 
     let debounceTimer = null;
 
@@ -68,7 +69,6 @@
 
     input.addEventListener('input', function () {
         const q = this.value.trim();
-
         clearTimeout(debounceTimer);
 
         if (q.length < 2) {
@@ -79,6 +79,17 @@
 
         hint.textContent = '';
         debounceTimer = setTimeout(() => buscar(q), 300);
+    });
+
+    // El botón lupa dispara la búsqueda directamente (sin esperar el debounce)
+    btn.addEventListener('click', function () {
+        const q = input.value.trim();
+        if (q.length >= 2) {
+            clearTimeout(debounceTimer);
+            buscar(q);
+        } else {
+            input.focus();
+        }
     });
 
     document.addEventListener('click', function (e) {
@@ -112,7 +123,6 @@
             return;
         }
 
-        // Agrupar por tipo_match
         const grupos = { siniestro: [], placa: [], poliza: [] };
         filas.forEach(f => {
             const tipo = f.tipo_match || 'siniestro';
@@ -128,7 +138,7 @@
             html += `<div class="px-4 pt-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-[#9ca3af]">${etiqueta.texto}s encontrados</div>`;
 
             items.forEach(item => {
-                const subtitulo  = `${item.marca} ${item.modelo} ${item.anio}`;
+                const subtitulo  = `${escape(item.marca)} ${escape(item.modelo)} ${escape(item.anio)}`;
                 const textoColor = item.estatus_color || '#6b7280';
                 const href       = construirHref(tipo, item);
 
@@ -136,9 +146,9 @@
                 if (tipo === 'siniestro') {
                     tituloPrincipal = `Reporte #${escape(item.numero_reporte)}`;
                 } else if (tipo === 'placa') {
-                    tituloPrincipal = `Placa: ${escape(item.placas)}`;
+                    tituloPrincipal = `Placa: ${escape(item.placas)} &nbsp;·&nbsp; Sin. #${escape(item.siniestro_id)}`;
                 } else {
-                    tituloPrincipal = `Póliza: ${escape(item.numero_poliza)}`;
+                    tituloPrincipal = `Póliza: ${escape(item.numero_poliza)} &nbsp;·&nbsp; Sin. #${escape(item.siniestro_id)}`;
                 }
 
                 html += `
@@ -149,7 +159,7 @@
                     </span>
                     <div class="min-w-0 flex-1">
                         <p class="text-[13px] font-semibold text-[#111823] truncate">${tituloPrincipal}</p>
-                        <p class="text-[12px] text-[#6b7280] truncate">${escape(subtitulo)} · ${escape(item.duenio_nombre)}</p>
+                        <p class="text-[12px] text-[#6b7280] truncate">${subtitulo} · ${escape(item.duenio_nombre)}</p>
                     </div>
                     <span class="shrink-0 text-[11px] font-bold" style="color:${textoColor}">
                         ${escape(item.estatus)}
@@ -164,10 +174,8 @@
 
     function construirHref(tipo, item) {
         if (tipo === 'siniestro') {
-            // Enlace directo al siniestro (pendiente implementar)
             return `/siniestro/${item.siniestro_id}`;
         }
-        // Placa o póliza: grid de siniestros asociados (pendiente)
         const param = tipo === 'placa' ? item.placas : item.numero_poliza;
         return `/siniestros?q=${encodeURIComponent(param)}&tipo=${tipo}`;
     }
