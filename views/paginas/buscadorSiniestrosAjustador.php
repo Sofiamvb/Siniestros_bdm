@@ -11,7 +11,7 @@
             <input
                 type="text"
                 id="searchInput"
-                placeholder="Busca por No. siniestro, placa o póliza"
+                placeholder="Busca por No. reporte, placa o póliza"
                 autocomplete="off"
                 class="w-full h-[56px] rounded-full bg-[#9ca3af] px-6 pr-14 text-[16px] text-[#111823] placeholder-[#4a5568] shadow-sm outline-none focus:ring-2 focus:ring-[#111823] transition-all"
             >
@@ -38,7 +38,7 @@
             id="searchDropdown"
             class="hidden absolute left-0 right-0 top-[60px] bg-white rounded-[18px] shadow-[0_8px_24px_rgba(0,0,0,0.18)] overflow-hidden z-50"
         >
-            <div id="searchResults" class="max-h-[380px] overflow-y-auto"></div>
+            <div id="searchResults" class="overflow-y-auto"></div>
         </div>
 
     </div>
@@ -144,11 +144,11 @@
 
                 let tituloPrincipal = '';
                 if (tipo === 'siniestro') {
-                    tituloPrincipal = `Reporte #${escape(item.numero_reporte)}`;
+                    tituloPrincipal = `Reporte: ${escape(item.numero_reporte)}`;
                 } else if (tipo === 'placa') {
-                    tituloPrincipal = `Placa: ${escape(item.placas)} &nbsp;·&nbsp; Sin. #${escape(item.siniestro_id)}`;
+                    tituloPrincipal = `Placa: ${escape(item.placas)} &nbsp;·&nbsp; ${escape(item.numero_reporte)}`;
                 } else {
-                    tituloPrincipal = `Póliza: ${escape(item.numero_poliza)} &nbsp;·&nbsp; Sin. #${escape(item.siniestro_id)}`;
+                    tituloPrincipal = `Póliza: ${escape(item.numero_poliza)} &nbsp;·&nbsp; ${escape(item.numero_reporte)}`;
                 }
 
                 html += `
@@ -180,8 +180,20 @@
         return `/siniestros?q=${encodeURIComponent(param)}&tipo=${tipo}`;
     }
 
-    function abrirDropdown()  { dropdown.classList.remove('hidden'); }
-    function cerrarDropdown() { dropdown.classList.add('hidden'); results.innerHTML = ''; }
+    function abrirDropdown() {
+        dropdown.classList.remove('hidden');
+        // Calcula el espacio real entre el dropdown y el borde inferior del viewport
+        const rect    = dropdown.getBoundingClientRect();
+        const margen  = 24; // px de respiro antes del footer
+        const maxH    = Math.max(120, window.innerHeight - rect.top - margen);
+        results.style.maxHeight = maxH + 'px';
+    }
+
+    function cerrarDropdown() {
+        dropdown.classList.add('hidden');
+        results.innerHTML = '';
+        results.style.maxHeight = '';
+    }
 
     function escape(str) {
         if (str === null || str === undefined) return '';
