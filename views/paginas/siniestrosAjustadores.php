@@ -129,9 +129,9 @@
                                         <img src="/img/adjuntar.png" alt="Supervisor" class="h-[15px] w-[15px] object-contain">
                                     </button>
 
-                                    <button class="p-0" onclick="openDetailsModal(this.closest('[data-siniestro]'))">
+                                    <a href="/siniestro?id=<?= (int)$siniestro['id'] ?>" class="p-0">
                                         <img src="/img/seeall.png" alt="Ver todo" class="h-[15px] w-[15px] object-contain">
-                                    </button>
+                                    </a>
 
                                     <button class="p-0" onclick="openModal('/img/siniestro.jpg')">
                                         <img src="/img/comments.png" alt="Chat" class="h-[15px] w-[15px] object-contain">

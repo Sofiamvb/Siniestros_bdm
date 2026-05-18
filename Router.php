@@ -29,6 +29,7 @@ class Router {
         $rutas_supervisores = [
             '/siniestrosSupervisores',
             '/register/ajustadores',
+            '/siniestro/estado',
         ];
 
         // Rutas que requieren cualquier rol autenticado

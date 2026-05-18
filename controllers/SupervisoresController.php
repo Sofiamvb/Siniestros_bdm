@@ -8,6 +8,31 @@ use MVC\Router;
 
 class SupervisoresController
 {
+    public static function actualizarEstatus(Router $router): void
+    {
+        $id          = (int)   ($_POST['siniestro_id'] ?? 0);
+        $estatusId   = (int)   ($_POST['estatus_id']   ?? 0);
+        $comentario  =          $_POST['comentario']   ?? '';
+        $fechaEvento = !empty($_POST['fecha_evento']) ? $_POST['fecha_evento'] : null;
+        $supervisorId = (int) $_SESSION['id'];
+
+        if (!$id || !$estatusId || !in_array($estatusId, [1, 2, 3, 4, 5, 6])) {
+            header('Location: /siniestrosSupervisores');
+            exit;
+        }
+
+        $siniestro = Siniestro::obtenerDetalle($id);
+        if (!$siniestro || !empty($siniestro['estatus_terminal'])) {
+            header("Location: /siniestro?id={$id}");
+            exit;
+        }
+
+        Siniestro::actualizarEstatus($id, $estatusId, $supervisorId, $comentario, $fechaEvento);
+
+        header("Location: /siniestro?id={$id}");
+        exit;
+    }
+
     public static function siniestros(Router $router): void
     {
         $supervisorId  = (int) $_SESSION['id'];

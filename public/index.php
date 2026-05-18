@@ -81,6 +81,9 @@ $router->get('/api/validar-poliza',   [PaginasController::class, 'apiValidarPoli
 $router->get('/siniestrosAjustadores',  [PaginasController::class, 'siniestrosAjustadores']);
 $router->get('/siniestrosAsegurados',   [AseguradosController::class, 'siniestros']);
 $router->get('/siniestrosSupervisores', [SupervisoresController::class, 'siniestros']);
+// Actualización de estatus por supervisor
+$router->post('/siniestro/estado', [SupervisoresController::class, 'actualizarEstatus']);
+
 // Detalle de siniestro: cada rol verifica acceso en su controller
 $router->get('/siniestro', function (Router $router) {
     $rol = $_SESSION['rol_id'] ?? 0;

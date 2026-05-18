@@ -147,4 +147,15 @@ class Siniestro extends ActiveRecord
     {
         return self::call_sp('sp_get_seguimiento_siniestro', [$id]);
     }
+
+    public static function actualizarEstatus(int $id, int $estatusId, int $supervisorId, string $comentario, ?string $fechaEvento): void
+    {
+        self::call_sp('sp_actualizar_estatus_siniestro', [
+            $id,
+            $estatusId,
+            $supervisorId,
+            $comentario,
+            $fechaEvento,
+        ]);
+    }
 }
