@@ -24,11 +24,26 @@ class AjustadoresController
             return $e;
         }, Siniestro::obtenerEvidencias($id));
 
+        $seguimiento = Siniestro::obtenerSeguimiento($id);
+
+        // Siniestros anteriores a la migración 28 no tienen seguimiento registrado.
+        // Se genera una entrada sintética con el estado actual para que el timeline
+        // nunca quede vacío.
+        if (empty($seguimiento)) {
+            $seguimiento = [[
+                'fecha_movimiento' => $siniestro['fecha_hora_siniestro'],
+                'estatus'          => $siniestro['estatus'],
+                'estatus_color'    => $siniestro['estatus_color'],
+                'comentario_publico' => 'Siniestro registrado',
+                'usuario_nombre'   => $siniestro['ajustador_nombre'],
+            ]];
+        }
+
         $router->render('paginas/detallesSiniestrosAjustador', [
             'siniestro'   => $siniestro,
             'evidencias'  => $evidencias,
             'terceros'    => Siniestro::obtenerTerceros($id),
-            'seguimiento' => Siniestro::obtenerSeguimiento($id),
+            'seguimiento' => $seguimiento,
         ]);
     }
 

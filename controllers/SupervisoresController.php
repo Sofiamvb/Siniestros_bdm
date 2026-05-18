@@ -45,11 +45,23 @@ class SupervisoresController
             return $e;
         }, Siniestro::obtenerEvidencias($id));
 
+        $seguimiento = Siniestro::obtenerSeguimiento($id);
+
+        if (empty($seguimiento)) {
+            $seguimiento = [[
+                'fecha_movimiento'   => $siniestro['fecha_hora_siniestro'],
+                'estatus'            => $siniestro['estatus'],
+                'estatus_color'      => $siniestro['estatus_color'],
+                'comentario_publico' => 'Siniestro registrado',
+                'usuario_nombre'     => $siniestro['ajustador_nombre'],
+            ]];
+        }
+
         $router->render('paginas/detallesSiniestrosSupervisor', [
             'siniestro'   => $siniestro,
             'evidencias'  => $evidencias,
             'terceros'    => Siniestro::obtenerTerceros($id),
-            'seguimiento' => Siniestro::obtenerSeguimiento($id),
+            'seguimiento' => $seguimiento,
         ]);
     }
 
