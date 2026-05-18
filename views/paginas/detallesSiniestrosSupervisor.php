@@ -184,115 +184,129 @@ $evidenciasJson = json_encode(array_values(array_map(fn($e) => [
 <!-- ═══════════════════════════════════════════════════════════ -->
 <!-- PANEL DE DICTAMEN DEL SUPERVISOR                           -->
 <!-- ═══════════════════════════════════════════════════════════ -->
-<div class="mx-auto mt-10 max-w-[1200px] px-0">
+<div class="mx-auto mt-10 max-w-[1200px] px-0 pb-8">
 
-    <?php if ($esTerminal && $estatusId === 1): ?>
-        <!-- Rechazado → no se puede hacer nada -->
+    <!-- Formulario oculto que hace el POST -->
+    <form id="dictamenForm" method="POST" action="/siniestro/estado" class="hidden">
+        <input type="hidden" name="siniestro_id" value="<?= (int)$siniestro['id'] ?>">
+        <input type="hidden" name="estatus_id"   id="input_estatus_id">
+        <input type="hidden" name="comentario"   id="input_comentario">
+        <input type="hidden" name="fecha_evento" id="input_fecha_evento">
+    </form>
+
+    <?php if ($estatusId === 1): ?>
+        <!-- ── Rechazado: sin más acciones ── -->
         <div class="rounded-[18px] border border-red-200 bg-red-50 px-8 py-6 text-center">
             <p class="text-[15px] font-bold text-red-600">Siniestro rechazado — no se pueden realizar más acciones.</p>
         </div>
 
-    <?php elseif ($esTerminal): ?>
-        <!-- Otro estado terminal (aceptado con dictamen final) -->
+    <?php elseif ($estatusId > 2): ?>
+        <!-- ── Dictamen final registrado ── -->
         <div class="rounded-[18px] border border-green-200 bg-green-50 px-8 py-6 text-center">
-            <p class="text-[15px] font-bold text-green-700">Dictamen registrado: <?= htmlspecialchars($siniestro['estatus']) ?></p>
+            <p class="text-[15px] font-bold text-green-700">
+                Dictamen registrado: <?= htmlspecialchars($siniestro['estatus']) ?>
+            </p>
         </div>
 
-    <?php else: ?>
-        <!-- Siniestro pendiente de dictamen o en estado no terminal → formulario -->
+    <?php elseif ($esPendiente): ?>
+        <!-- ── STEP 1: Aceptar o Rechazar (estado=7) ── -->
         <div class="rounded-[18px] bg-white px-8 py-8 shadow-[0_8px_24px_rgba(0,0,0,0.08)]">
-            <h2 class="mb-6 text-[18px] font-bold text-[#111823]">Dictamen del supervisor</h2>
-
-            <!-- PASO 1: Aceptar / Rechazar -->
-            <div id="paso1" class="<?= $esPendiente ? '' : 'hidden' ?>">
-                <p class="mb-5 text-[14px] text-[#4a5568]">
-                    Revisa la documentación del ajustador y determina si el siniestro es válido.
-                </p>
-                <div class="flex flex-wrap gap-4">
-                    <button type="button" onclick="rechazarSiniestro()"
-                        class="h-[46px] rounded-full bg-red-600 px-10 text-[14px] font-bold text-white transition hover:bg-red-700">
-                        Rechazar
-                    </button>
-                    <button type="button" onclick="mostrarPaso2()"
-                        class="h-[46px] rounded-full bg-[#0b2030] px-10 text-[14px] font-bold text-white transition hover:bg-[#142b3f]">
-                        Aceptar →
-                    </button>
-                </div>
-            </div>
-
-            <!-- PASO 2: Tipo de dictamen -->
-            <div id="paso2" class="<?= $esPendiente ? 'hidden' : '' ?>">
-                <?php if (!$esPendiente): ?>
-                    <p class="mb-4 text-[13px] text-[#6b7280]">
-                        Estado actual: <strong><?= htmlspecialchars($siniestro['estatus']) ?></strong>. Puedes actualizar el dictamen.
-                    </p>
-                <?php endif; ?>
-
-                <p class="mb-4 text-[14px] font-semibold text-[#111823]">Selecciona el tipo de dictamen:</p>
-
-                <div class="flex flex-col gap-3 mb-6">
-                    <?php
-                    $opciones = [
-                        2 => 'Aceptado',
-                        3 => 'Aceptado con pago de deducible',
-                        4 => 'Aceptado sin pago de deducible',
-                        5 => 'Aplica pago para reparación de la unidad',
-                        6 => 'Pérdida total, aplica pago completo de la unidad',
-                    ];
-                    foreach ($opciones as $id => $label):
-                    ?>
-                        <label class="flex cursor-pointer items-center gap-3 rounded-[12px] border border-gray-200 px-4 py-3 transition hover:bg-gray-50">
-                            <input type="radio" name="estatus_radio" value="<?= $id ?>"
-                                class="h-4 w-4 accent-[#0b2030]"
-                                onchange="onEstatusChange(this.value)"
-                                <?= $estatusId === $id ? 'checked' : '' ?>>
-                            <span class="text-[14px] font-medium text-[#111823]"><?= $label ?></span>
-                        </label>
-                    <?php endforeach; ?>
-                </div>
-
-                <!-- Fecha (solo visible para estados 5 y 6) -->
-                <div id="fechaPanel" class="mb-6 hidden">
-                    <label class="mb-2 block text-[14px] font-semibold text-[#111823]" id="fechaLabel">Fecha</label>
-                    <input type="date" id="fecha_evento"
-                        class="h-[46px] w-full max-w-[280px] rounded-full bg-[#b8bec8] px-5 text-[#111823] outline-none focus:ring-2 focus:ring-[#0b2030]">
-                </div>
-
-                <div class="flex flex-wrap gap-4 items-center">
-                    <?php if ($esPendiente): ?>
-                        <button type="button" onclick="volverPaso1()"
-                            class="h-[46px] rounded-full border-2 border-[#0b2030] px-8 text-[14px] font-bold text-[#0b2030] transition hover:bg-gray-100">
-                            ← Volver
-                        </button>
-                    <?php endif; ?>
-                    <button type="button" onclick="confirmarDictamen()"
-                        class="h-[46px] rounded-full bg-[#0b2030] px-10 text-[14px] font-bold text-white transition hover:bg-[#142b3f]">
-                        Confirmar dictamen
-                    </button>
-                </div>
+            <h2 class="mb-2 text-[18px] font-bold text-[#111823]">Dictamen del supervisor</h2>
+            <p class="mb-6 text-[14px] text-[#4a5568]">
+                Revisa la documentación del ajustador y determina si el siniestro es válido.
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <button type="button" onclick="rechazarSiniestro()"
+                    class="h-[46px] rounded-full bg-red-600 px-10 text-[14px] font-bold text-white transition hover:bg-red-700">
+                    Rechazar
+                </button>
+                <button type="button" onclick="aceptarSiniestro()"
+                    class="h-[46px] rounded-full bg-[#0b2030] px-10 text-[14px] font-bold text-white transition hover:bg-[#142b3f]">
+                    Aceptar
+                </button>
             </div>
         </div>
 
-        <!-- Formulario oculto que hace el POST -->
-        <form id="dictamenForm" method="POST" action="/siniestro/estado" class="hidden">
-            <input type="hidden" name="siniestro_id"  value="<?= (int)$siniestro['id'] ?>">
-            <input type="hidden" name="estatus_id"    id="input_estatus_id">
-            <input type="hidden" name="comentario"    id="input_comentario">
-            <input type="hidden" name="fecha_evento"  id="input_fecha_evento">
-        </form>
+    <?php elseif ($estatusId === 2): ?>
+        <!-- ── STEP 2: Sub-estado (estado=2 Aceptado) ── -->
+        <div class="rounded-[18px] bg-white px-8 py-8 shadow-[0_8px_24px_rgba(0,0,0,0.08)]">
+            <h2 class="mb-2 text-[18px] font-bold text-[#111823]">Tipo de dictamen</h2>
+            <p class="mb-6 text-[14px] text-[#4a5568]">
+                El siniestro fue aceptado. Selecciona el dictamen definitivo:
+            </p>
+
+            <div class="flex flex-col gap-3 mb-6">
+                <?php
+                $opciones = [
+                    3 => 'Aceptado con pago de deducible',
+                    4 => 'Aceptado sin pago de deducible',
+                    5 => 'Aplica pago para reparación de la unidad',
+                    6 => 'Pérdida total, aplica pago completo de la unidad',
+                ];
+                foreach ($opciones as $opId => $label):
+                ?>
+                    <label class="flex cursor-pointer items-center gap-3 rounded-[12px] border border-gray-200 px-4 py-3 transition hover:bg-gray-50">
+                        <input type="radio" name="estatus_radio" value="<?= $opId ?>"
+                            class="h-4 w-4 accent-[#0b2030]"
+                            onchange="onEstatusChange(this.value)">
+                        <span class="text-[14px] font-medium text-[#111823]"><?= $label ?></span>
+                    </label>
+                <?php endforeach; ?>
+            </div>
+
+            <!-- Fecha (solo para estados 5 y 6) -->
+            <div id="fechaPanel" class="mb-6 hidden">
+                <label class="mb-2 block text-[14px] font-semibold text-[#111823]" id="fechaLabel">Fecha</label>
+                <input type="date" id="fecha_evento"
+                    class="h-[46px] w-full max-w-[280px] rounded-full bg-[#b8bec8] px-5 text-[#111823] outline-none focus:ring-2 focus:ring-[#0b2030]">
+            </div>
+
+            <button type="button" onclick="confirmarDictamen()"
+                class="h-[46px] rounded-full bg-[#0b2030] px-10 text-[14px] font-bold text-white transition hover:bg-[#142b3f]">
+                Confirmar dictamen
+            </button>
+        </div>
     <?php endif; ?>
 
 </div>
 
 <script>
-function mostrarPaso2() {
-    document.getElementById('paso1').classList.add('hidden');
-    document.getElementById('paso2').classList.remove('hidden');
+function rechazarSiniestro() {
+    Swal.fire({
+        title: '¿Rechazar siniestro?',
+        text: 'Esta acción es definitiva y no se puede deshacer.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, rechazar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#6b7280',
+    }).then(result => {
+        if (!result.isConfirmed) return;
+        document.getElementById('input_estatus_id').value  = 1;
+        document.getElementById('input_comentario').value  = 'Siniestro rechazado por el supervisor';
+        document.getElementById('input_fecha_evento').value = '';
+        document.getElementById('dictamenForm').submit();
+    });
 }
 
-function volverPaso1() {
-    document.getElementById('paso2').classList.add('hidden');
-    document.getElementById('paso1').classList.remove('hidden');
+function aceptarSiniestro() {
+    Swal.fire({
+        title: '¿Aceptar siniestro?',
+        text: 'El siniestro quedará en estado "Aceptado" y deberás elegir el dictamen definitivo.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, aceptar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#0b2030',
+        cancelButtonColor: '#6b7280',
+    }).then(result => {
+        if (!result.isConfirmed) return;
+        document.getElementById('input_estatus_id').value  = 2;
+        document.getElementById('input_comentario').value  = 'Siniestro aceptado por el supervisor';
+        document.getElementById('input_fecha_evento').value = '';
+        document.getElementById('dictamenForm').submit();
+    });
 }
 
 function onEstatusChange(val) {
@@ -307,25 +321,6 @@ function onEstatusChange(val) {
     } else {
         panel.classList.add('hidden');
     }
-}
-
-function rechazarSiniestro() {
-    Swal.fire({
-        title: '¿Rechazar siniestro?',
-        text: 'Esta acción es definitiva y no se puede deshacer.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sí, rechazar',
-        cancelButtonText: 'Cancelar',
-        confirmButtonColor: '#dc2626',
-        cancelButtonColor:  '#6b7280',
-    }).then(result => {
-        if (!result.isConfirmed) return;
-        document.getElementById('input_estatus_id').value  = 1;
-        document.getElementById('input_comentario').value  = 'Siniestro rechazado por el supervisor';
-        document.getElementById('input_fecha_evento').value = '';
-        document.getElementById('dictamenForm').submit();
-    });
 }
 
 function confirmarDictamen() {
@@ -344,7 +339,6 @@ function confirmarDictamen() {
     }
 
     const etiquetas = {
-        '2': 'Aceptado',
         '3': 'Aceptado con pago de deducible',
         '4': 'Aceptado sin pago de deducible',
         '5': 'Aplica pago para reparación',
@@ -359,7 +353,7 @@ function confirmarDictamen() {
         confirmButtonText: 'Confirmar',
         cancelButtonText: 'Cancelar',
         confirmButtonColor: '#0b2030',
-        cancelButtonColor:  '#6b7280',
+        cancelButtonColor: '#6b7280',
     }).then(result => {
         if (!result.isConfirmed) return;
         document.getElementById('input_estatus_id').value   = estatusId;
