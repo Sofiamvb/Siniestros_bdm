@@ -54,40 +54,81 @@
             Estos son todos los siniestros registrados.
         </p>
 
+        <?php if (empty($siniestros)): ?>
+            <div class="flex w-full flex-col items-center justify-center py-[60px] text-[#888]">
+                <p class="text-[18px]">No hay siniestros registrados aún.</p>
+            </div>
+        <?php else: ?>
         <div class="mt-12 grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3 lg:gap-20">
+            <?php foreach ($siniestros as $siniestro): ?>
+                <?php
+                $fechaHora = $siniestro['fecha_hora_siniestro'] ?? '';
+                $fecha     = $fechaHora ? date('d/m/Y', strtotime($fechaHora)) : '—';
+                $hora      = $fechaHora ? date('H:i',   strtotime($fechaHora)) : '—';
+                $dataJson  = htmlspecialchars(json_encode([
+                    'numero_reporte'   => $siniestro['numero_reporte']    ?? '',
+                    'compania'         => $siniestro['compania']          ?? '',
+                    'numero_poliza'    => $siniestro['numero_poliza']     ?? '',
+                    'fecha_inicio'     => $siniestro['fecha_inicio']      ?? '',
+                    'fecha_fin'        => $siniestro['fecha_fin']         ?? '',
+                    'ajustador_nombre' => $siniestro['ajustador_nombre']  ?? '',
+                    'duenio_nombre'    => $siniestro['duenio_nombre']     ?? '',
+                    'conductor'        => $siniestro['conductor_momento'] ?? '',
+                    'marca'            => $siniestro['marca']             ?? '',
+                    'modelo'           => $siniestro['modelo']            ?? '',
+                    'anio'             => $siniestro['anio']              ?? '',
+                    'placas'           => $siniestro['placas']            ?? '',
+                    'fecha'            => $fecha,
+                    'hora'             => $hora,
+                    'latitud'          => $siniestro['latitud']           ?? '',
+                    'longitud'         => $siniestro['longitud']          ?? '',
+                    'descripcion'      => $siniestro['descripcion_hechos'] ?? '',
+                    'dictamen'         => $siniestro['dictamen_supervisor'] ?? '',
+                    'presupuesto'      => $siniestro['perdida_total'] ? 'Pérdida total' : ('$' . number_format((float)($siniestro['presupuesto_reparacion'] ?? 0), 2)),
+                ]), ENT_QUOTES);
+                ?>
+                <div class="mx-auto w-full max-w-[260px] overflow-hidden rounded-b-[18px] bg-white text-left shadow-[0_8px_14px_rgba(0,0,0,0.25)]"
+                     data-siniestro="<?= $dataJson ?>">
 
-            <div class="mx-auto w-full max-w-[260px] overflow-hidden rounded-b-[18px] bg-white text-left shadow-[0_8px_14px_rgba(0,0,0,0.25)]">
-                <img src="/img/siniestro.jpg" alt="Siniestro"
-                    class="h-[175px] w-full object-cover">
+                    <div class="relative h-[175px] w-full overflow-hidden">
+                        <img src="<?= $siniestro['primera_evidencia'] ?>" alt="Siniestro"
+                            class="h-full w-full object-cover">
+                        <?php if ($siniestro['es_mio']): ?>
+                            <span class="absolute left-2 top-2 rounded-full bg-[#0b2030] px-2 py-0.5 text-[10px] font-bold text-white shadow">
+                                Asignado a mí
+                            </span>
+                        <?php endif; ?>
+                    </div>
 
-                <div class="px-4 py-5 text-[12px] font-bold leading-[1.25] text-black">
-                    <p>Nombre(s) del dueño: Carlos Alberto Martínez López</p>
-                    <p>Marca: Nissan</p>
-                    <p>Número de placas: ABC-347-D</p>
-                    <p>Nombre de la aseguradora: GNP Seguros</p>
+                    <div class="px-4 py-5 text-[12px] font-bold leading-[1.25] text-black">
+                        <p>Dueño: <?= htmlspecialchars($siniestro['duenio_nombre'] ?? '') ?></p>
+                        <p>Marca: <?= htmlspecialchars($siniestro['marca'] ?? '') ?></p>
+                        <p>Placas: <?= htmlspecialchars($siniestro['placas'] ?? '') ?></p>
+                        <p>Aseguradora: <?= htmlspecialchars($siniestro['compania'] ?? '') ?></p>
+                        <p>Reporte: <?= htmlspecialchars($siniestro['numero_reporte'] ?? '') ?></p>
 
-                    <br>
+                        <br>
 
-                    <p>Ajustador: Juan Ángel Oropeza</p>
-                    <p>Estado: En revisión</p>
+                        <p>Ajustador: <?= htmlspecialchars($siniestro['ajustador_nombre'] ?? '') ?></p>
+                        <p>Estado:
+                            <span style="color: <?= htmlspecialchars($siniestro['estatus_color'] ?? '#000') ?>">
+                                <?= htmlspecialchars($siniestro['estatus'] ?? '') ?>
+                            </span>
+                        </p>
 
-                    <div class="mt-1 flex justify-end gap-1">
-                        <button onclick="openSupervisorModal()">
-                            <img src="/img/adjuntar.png" alt="Supervisor" class="h-[16px] w-[16px] object-contain">
-                        </button>
-
-                        <button onclick="openDetailsModal()">
-                            <img src="/img/seeall.png" alt="Ver todo" class="h-[16px] w-[16px] object-contain">
-                        </button>
-
-                        <button onclick="openModal('/img/siniestro.jpg')">
-                            <img src="/img/comments.png" alt="Chat" class="h-[16px] w-[16px] object-contain">
-                        </button>
+                        <div class="mt-2 flex justify-end gap-1">
+                            <a href="/siniestro?id=<?= (int)$siniestro['id'] ?>" class="p-0">
+                                <img src="/img/seeall.png" alt="Ver detalle" class="h-[16px] w-[16px] object-contain">
+                            </a>
+                            <button class="p-0" onclick="openModal('/img/siniestro.jpg')">
+                                <img src="/img/comments.png" alt="Chat" class="h-[16px] w-[16px] object-contain">
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-
+            <?php endforeach; ?>
         </div>
+        <?php endif; ?>
     </div>
 </section>
 

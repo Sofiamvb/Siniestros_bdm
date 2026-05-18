@@ -8,6 +8,27 @@ use MVC\Router;
 
 class SupervisoresController
 {
+    public static function siniestros(Router $router): void
+    {
+        $supervisorId  = (int) $_SESSION['id'];
+        $siniestrosRaw = Siniestro::obtenerTodos();
+
+        $siniestros = [];
+        foreach ($siniestrosRaw as $s) {
+            $s['primera_evidencia'] = \Model\ActiveRecord::blobToImg(
+                $s['primera_evidencia']      ?? null,
+                $s['primera_evidencia_mime'] ?? 'image/jpeg'
+            ) ?: '/img/siniestro.jpg';
+            $s['es_mio'] = ((int) $s['supervisor_id']) === $supervisorId;
+            $siniestros[] = $s;
+        }
+
+        $router->render('paginas/siniestrosSupervisores', [
+            'siniestros'     => $siniestros,
+            'siniestroNuevo' => !empty($_GET['siniestro_nuevo']),
+        ]);
+    }
+
     public static function detalle(Router $router): void
     {
         $id        = (int) ($_GET['id'] ?? 0);
