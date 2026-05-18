@@ -116,4 +116,9 @@ class Siniestro extends ActiveRecord
     {
         return self::call_sp('sp_get_siniestros_ajustador', [$ajustadorId]);
     }
+
+    public static function buscar(string $termino, int $rolId, int $usuarioId): array
+    {
+        return self::call_sp('sp_buscar_siniestros', [$termino, $rolId, $usuarioId]);
+    }
 }

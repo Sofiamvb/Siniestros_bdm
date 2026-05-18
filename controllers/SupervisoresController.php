@@ -3,10 +3,25 @@
 namespace Controllers;
 
 use Model\Supervisor;
+use Model\Siniestro;
 use MVC\Router;
 
 class SupervisoresController
 {
+    public static function buscador(Router $router): void
+    {
+        $router->render('paginas/buscadorSiniestrosSupervisor', []);
+    }
+
+    public static function apiBuscar(): void
+    {
+        header('Content-Type: application/json');
+        $termino = trim($_GET['q'] ?? '');
+        if (strlen($termino) < 2) { echo json_encode([]); exit; }
+        echo json_encode(Siniestro::buscar($termino, (int) $_SESSION['rol_id'], (int) $_SESSION['id']));
+        exit;
+    }
+
     public static function accesoToken(Router $router): void
     {
         $errores = [];

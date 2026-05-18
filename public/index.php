@@ -78,8 +78,25 @@ $router->post('/perfil',             [PaginasController::class, 'editarPerfil'])
 $router->get('/registrarSiniestros',  [PaginasController::class, 'registrarSiniestros']);
 $router->post('/registrarSiniestros', [PaginasController::class, 'registrarSiniestros']);
 $router->get('/api/validar-poliza',   [PaginasController::class, 'apiValidarPoliza']);
-$router->get('/siniestrosAjustadores', [PaginasController::class, 'siniestrosAjustadores']);
+$router->get('/siniestrosAjustadores',  [PaginasController::class, 'siniestrosAjustadores']);
 $router->get('/siniestrosAsegurados',   [AseguradosController::class, 'siniestros']);
 $router->get('/siniestrosSupervisores', [PaginasController::class, 'siniestrosSupervisores']);
+// Buscador: cada rol llama a su propio controller
+$router->get('/buscadorSiniestros', function (Router $router) {
+    $rol = $_SESSION['rol_id'] ?? 0;
+    if ($rol === 1) { AseguradosController::buscador($router);  return; }
+    if ($rol === 2) { AjustadoresController::buscador($router); return; }
+    if ($rol === 3) { SupervisoresController::buscador($router); return; }
+    header('Location: /login'); exit;
+});
+
+$router->get('/api/buscar-siniestros', function (Router $router) {
+    $rol = $_SESSION['rol_id'] ?? 0;
+    if ($rol === 1) { AseguradosController::apiBuscar();  return; }
+    if ($rol === 2) { AjustadoresController::apiBuscar(); return; }
+    if ($rol === 3) { SupervisoresController::apiBuscar(); return; }
+    header('Content-Type: application/json');
+    echo json_encode(['error' => 'No autorizado']); exit;
+});
 
 $router->comprobarRutas();

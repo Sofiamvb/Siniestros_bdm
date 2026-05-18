@@ -37,6 +37,11 @@
                     class="flex h-[42px] items-center justify-center rounded-full bg-[#0b2030] px-8 text-[14px] font-bold text-white no-underline shadow-[0_4px_8px_rgba(0,0,0,0.25)] hover:bg-[#142b3f]">
                     Registrar siniestro
                 </a>
+
+                <a href="/buscadorSiniestros"
+                    class="flex h-[42px] items-center justify-center rounded-full border-2 border-[#0b2030] px-8 text-[14px] font-bold text-[#0b2030] no-underline shadow-[0_4px_8px_rgba(0,0,0,0.15)] hover:bg-[#0b2030] hover:text-white transition-colors">
+                    Buscar siniestro
+                </a>
             </div>
 
         </div>

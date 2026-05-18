@@ -3,10 +3,25 @@
 namespace Controllers;
 
 use Model\Ajustador;
+use Model\Siniestro;
 use MVC\Router;
 
 class AjustadoresController
 {
+    public static function buscador(Router $router): void
+    {
+        $router->render('paginas/buscadorSiniestrosAjustador', []);
+    }
+
+    public static function apiBuscar(): void
+    {
+        header('Content-Type: application/json');
+        $termino = trim($_GET['q'] ?? '');
+        if (strlen($termino) < 2) { echo json_encode([]); exit; }
+        echo json_encode(Siniestro::buscar($termino, (int) $_SESSION['rol_id'], (int) $_SESSION['id']));
+        exit;
+    }
+
     public static function register(Router $router): void
     {
         // El Router ya protege esta ruta a rol_id=3, pero validamos en el modelo también

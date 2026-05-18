@@ -18,17 +18,23 @@ class Router {
 
         // Rutas protegidas por rol
         $rutas_asegurados   = [
-            '/siniestrosAsegurados'
+            '/siniestrosAsegurados',
         ];
 
         $rutas_ajustadores  = [
             '/siniestrosAjustadores',
-            '/registrarSiniestros'
+            '/registrarSiniestros',
         ];
 
         $rutas_supervisores = [
             '/siniestrosSupervisores',
             '/register/ajustadores',
+        ];
+
+        // Rutas que requieren cualquier rol autenticado
+        $rutas_autenticadas = [
+            '/buscadorSiniestros',
+            '/api/buscar-siniestros',
         ];
 
         $urlActual = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -44,6 +50,8 @@ class Router {
         } elseif (in_array($urlActual, $rutas_ajustadores) && $rol_id !== 2) {
             header('Location: /login'); exit;
         } elseif (in_array($urlActual, $rutas_supervisores) && $rol_id !== 3) {
+            header('Location: /login'); exit;
+        } elseif (in_array($urlActual, $rutas_autenticadas) && !in_array($rol_id, [1, 2, 3])) {
             header('Location: /login'); exit;
         }
 

@@ -11,6 +11,12 @@
             <p class="mt-4 text-[16px] md:text-[18px] text-[#4a5568]">
                 Estas son tus pólizas vigentes.
             </p>
+            <div class="mt-6 flex justify-center">
+                <a href="/buscadorSiniestros"
+                    class="inline-flex h-[46px] items-center justify-center rounded-full border-2 border-[#111823] px-8 text-[14px] font-bold text-[#111823] no-underline shadow-[0_4px_8px_rgba(0,0,0,0.12)] hover:bg-[#111823] hover:text-white transition-colors">
+                    Buscar mis siniestros
+                </a>
+            </div>
         </section>
 
         <section class="mx-auto max-w-[1000px] min-h-[560px] px-6 pb-24 pt-4">
@@ -83,9 +89,10 @@
                 </div>
                 <!-- Botón Derecha -->
                 <div>
-                    <button class="h-[42px] rounded-full bg-[#111823] px-10 text-sm font-bold text-white transition hover:bg-gray-800">
-                        Siniestros
-                    </button>
+                    <a href="/buscadorSiniestros"
+                        class="flex h-[42px] items-center justify-center rounded-full border-2 border-[#111823] px-10 text-sm font-bold text-[#111823] no-underline transition hover:bg-[#111823] hover:text-white">
+                        Buscar siniestros
+                    </a>
                 </div>
             </div>
         </div>
