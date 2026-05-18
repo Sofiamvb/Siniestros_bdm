@@ -81,6 +81,15 @@ $router->get('/api/validar-poliza',   [PaginasController::class, 'apiValidarPoli
 $router->get('/siniestrosAjustadores',  [PaginasController::class, 'siniestrosAjustadores']);
 $router->get('/siniestrosAsegurados',   [AseguradosController::class, 'siniestros']);
 $router->get('/siniestrosSupervisores', [PaginasController::class, 'siniestrosSupervisores']);
+// Detalle de siniestro: cada rol verifica acceso en su controller
+$router->get('/siniestro', function (Router $router) {
+    $rol = $_SESSION['rol_id'] ?? 0;
+    if ($rol === 1) { AseguradosController::detalle($router);  return; }
+    if ($rol === 2) { AjustadoresController::detalle($router); return; }
+    if ($rol === 3) { SupervisoresController::detalle($router); return; }
+    header('Location: /login'); exit;
+});
+
 // Buscador: cada rol llama a su propio controller
 $router->get('/buscadorSiniestros', function (Router $router) {
     $rol = $_SESSION['rol_id'] ?? 0;

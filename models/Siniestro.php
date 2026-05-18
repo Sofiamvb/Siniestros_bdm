@@ -121,4 +121,25 @@ class Siniestro extends ActiveRecord
     {
         return self::call_sp('sp_buscar_siniestros', [$termino, $rolId, $usuarioId]);
     }
+
+    public static function obtenerDetalle(int $id): ?array
+    {
+        $filas = self::call_sp('sp_get_siniestro_detalle', [$id]);
+        return $filas[0] ?? null;
+    }
+
+    public static function obtenerEvidencias(int $id): array
+    {
+        return self::call_sp('sp_get_evidencias_siniestro', [$id]);
+    }
+
+    public static function obtenerTerceros(int $id): array
+    {
+        return self::call_sp('sp_get_terceros_siniestro', [$id]);
+    }
+
+    public static function obtenerSeguimiento(int $id): array
+    {
+        return self::call_sp('sp_get_seguimiento_siniestro', [$id]);
+    }
 }

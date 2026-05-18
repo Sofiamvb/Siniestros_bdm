@@ -174,7 +174,7 @@
 
     function construirHref(tipo, item) {
         if (tipo === 'siniestro') {
-            return `/siniestro/${item.siniestro_id}`;
+            return `/siniestro?id=${item.siniestro_id}`;
         }
         const param = tipo === 'placa' ? item.placas : item.numero_poliza;
         return `/siniestros?q=${encodeURIComponent(param)}&tipo=${tipo}`;

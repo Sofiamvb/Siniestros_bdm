@@ -35,6 +35,7 @@ class Router {
         $rutas_autenticadas = [
             '/buscadorSiniestros',
             '/api/buscar-siniestros',
+            '/siniestro',
         ];
 
         $urlActual = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

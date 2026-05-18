@@ -8,6 +8,30 @@ use MVC\Router;
 
 class SupervisoresController
 {
+    public static function detalle(Router $router): void
+    {
+        $id        = (int) ($_GET['id'] ?? 0);
+        $siniestro = $id ? Siniestro::obtenerDetalle($id) : null;
+
+        if (!$siniestro) {
+            header('Location: /siniestrosSupervisores');
+            exit;
+        }
+
+        $evidencias = array_map(function (array $e) {
+            $e['src'] = \Model\ActiveRecord::blobToImg($e['archivo_multimedia'], $e['tipo_mime']) ?: '';
+            unset($e['archivo_multimedia']);
+            return $e;
+        }, Siniestro::obtenerEvidencias($id));
+
+        $router->render('paginas/detallesSiniestrosSupervisor', [
+            'siniestro'   => $siniestro,
+            'evidencias'  => $evidencias,
+            'terceros'    => Siniestro::obtenerTerceros($id),
+            'seguimiento' => Siniestro::obtenerSeguimiento($id),
+        ]);
+    }
+
     public static function buscador(Router $router): void
     {
         $router->render('paginas/buscadorSiniestrosSupervisor', []);

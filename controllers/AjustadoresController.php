@@ -8,6 +8,30 @@ use MVC\Router;
 
 class AjustadoresController
 {
+    public static function detalle(Router $router): void
+    {
+        $id        = (int) ($_GET['id'] ?? 0);
+        $siniestro = $id ? Siniestro::obtenerDetalle($id) : null;
+
+        if (!$siniestro || (int) $siniestro['ajustador_id'] !== (int) $_SESSION['id']) {
+            header('Location: /siniestrosAjustadores');
+            exit;
+        }
+
+        $evidencias = array_map(function (array $e) {
+            $e['src'] = \Model\ActiveRecord::blobToImg($e['archivo_multimedia'], $e['tipo_mime']) ?: '';
+            unset($e['archivo_multimedia']);
+            return $e;
+        }, Siniestro::obtenerEvidencias($id));
+
+        $router->render('paginas/detallesSiniestrosAjustador', [
+            'siniestro'   => $siniestro,
+            'evidencias'  => $evidencias,
+            'terceros'    => Siniestro::obtenerTerceros($id),
+            'seguimiento' => Siniestro::obtenerSeguimiento($id),
+        ]);
+    }
+
     public static function buscador(Router $router): void
     {
         $router->render('paginas/buscadorSiniestrosAjustador', []);

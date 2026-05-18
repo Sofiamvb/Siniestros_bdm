@@ -22,6 +22,30 @@ class AseguradosController
         ]);
     }
 
+    public static function detalle(Router $router): void
+    {
+        $id        = (int) ($_GET['id'] ?? 0);
+        $siniestro = $id ? Siniestro::obtenerDetalle($id) : null;
+
+        if (!$siniestro || (int) $siniestro['usuario_id'] !== (int) $_SESSION['id']) {
+            header('Location: /siniestrosAsegurados');
+            exit;
+        }
+
+        $evidencias = array_map(function (array $e) {
+            $e['src'] = \Model\ActiveRecord::blobToImg($e['archivo_multimedia'], $e['tipo_mime']) ?: '';
+            unset($e['archivo_multimedia']);
+            return $e;
+        }, Siniestro::obtenerEvidencias($id));
+
+        $router->render('paginas/detallesSiniestrosAsegurado', [
+            'siniestro'   => $siniestro,
+            'evidencias'  => $evidencias,
+            'terceros'    => Siniestro::obtenerTerceros($id),
+            'seguimiento' => Siniestro::obtenerSeguimiento($id),
+        ]);
+    }
+
     public static function buscador(Router $router): void
     {
         $router->render('paginas/buscadorSiniestrosAsegurado', []);
