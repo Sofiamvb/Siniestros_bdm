@@ -200,8 +200,8 @@ $evidenciasJson = json_encode(array_values(array_map(fn($e) => [
             <p class="text-[15px] font-bold text-red-600">Siniestro rechazado — no se pueden realizar más acciones.</p>
         </div>
 
-    <?php elseif ($estatusId > 2): ?>
-        <!-- ── Dictamen final registrado ── -->
+    <?php elseif (in_array($estatusId, [3, 4, 5, 6])): ?>
+        <!-- ── Dictamen final registrado (estados 3-6) ── -->
         <div class="rounded-[18px] border border-green-200 bg-green-50 px-8 py-6 text-center">
             <p class="text-[15px] font-bold text-green-700">
                 Dictamen registrado: <?= htmlspecialchars($siniestro['estatus']) ?>
