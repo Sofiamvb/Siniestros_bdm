@@ -120,7 +120,7 @@
                             <a href="/siniestro?id=<?= (int)$siniestro['id'] ?>" class="p-0">
                                 <img src="/img/seeall.png" alt="Ver detalle" class="h-[16px] w-[16px] object-contain">
                             </a>
-                            <button class="p-0" onclick="openModal('/img/siniestro.jpg')">
+                            <button class="p-0" onclick="openModal('', <?= (int)$siniestro['id'] ?>)">
                                 <img src="/img/comments.png" alt="Chat" class="h-[16px] w-[16px] object-contain">
                             </button>
                         </div>

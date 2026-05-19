@@ -133,7 +133,7 @@
                                         <img src="/img/seeall.png" alt="Ver todo" class="h-[15px] w-[15px] object-contain">
                                     </a>
 
-                                    <button class="p-0" onclick="openModal('/img/siniestro.jpg')">
+                                    <button class="p-0" onclick="openModal('', <?= (int)$siniestro['id'] ?>)">
                                         <img src="/img/comments.png" alt="Chat" class="h-[15px] w-[15px] object-contain">
                                     </button>
                                 </div>

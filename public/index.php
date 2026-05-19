@@ -22,6 +22,8 @@ require_once __DIR__ . '/../controllers/AjustadoresController.php';
 require_once __DIR__ . '/../controllers/CotizarController.php';
 require_once __DIR__ . '/../controllers/ContratarController.php';
 require_once __DIR__ . '/../controllers/AseguradosController.php';
+require_once __DIR__ . '/../controllers/ChatController.php';
+require_once __DIR__ . '/../models/Chat.php';
 require __DIR__ . '/../vendor/autoload.php';
 
 use MVC\Router;
@@ -32,6 +34,7 @@ use Controllers\CotizarController;
 use Controllers\ContratarController;
 use Controllers\AseguradosController;
 use Model\ActiveRecord;
+use Controllers\ChatController;
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
@@ -81,6 +84,10 @@ $router->get('/api/validar-poliza',   [PaginasController::class, 'apiValidarPoli
 $router->get('/siniestrosAjustadores',  [PaginasController::class, 'siniestrosAjustadores']);
 $router->get('/siniestrosAsegurados',   [AseguradosController::class, 'siniestros']);
 $router->get('/siniestrosSupervisores', [SupervisoresController::class, 'siniestros']);
+// Chat
+$router->get('/api/chat',          [ChatController::class, 'obtenerMensajes']);
+$router->post('/api/chat/enviar',  [ChatController::class, 'enviarMensaje']);
+
 // Actualización de estatus por supervisor
 $router->post('/siniestro/estado', [SupervisoresController::class, 'actualizarEstatus']);
 

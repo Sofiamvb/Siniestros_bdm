@@ -37,6 +37,8 @@ class Router {
             '/buscadorSiniestros',
             '/api/buscar-siniestros',
             '/siniestro',
+            '/api/chat',
+            '/api/chat/enviar',
         ];
 
         $urlActual = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

@@ -52,7 +52,8 @@ $evidenciasJson = json_encode(array_values(array_map(fn($e) => [
             <?php endif; ?>
 
             <div class="mt-8 pt-4">
-                <button class="flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-lg transition hover:scale-105">
+                <button onclick="openModal('', <?= (int)$siniestro['id'] ?>)"
+                    class="flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-lg transition hover:scale-105">
                     <svg class="h-7 w-7 text-[#111823]" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 10H6v-2h12v2zm0-3H6V7h12v2z"/>
                     </svg>
@@ -177,6 +178,23 @@ $evidenciasJson = json_encode(array_values(array_map(fn($e) => [
 
     </div>
 </main>
+
+<div id="commentsModal" class="modal-overlay hidden">
+    <div class="modal-panel">
+        <div class="modal-header-bar">
+            <span class="modal-title-text">Chat del siniestro</span>
+            <img src="/img/comments.png" alt="Chat" class="modal-header-icon">
+        </div>
+        <div class="modal-body-scroll">
+            <div class="comment-list"></div>
+            <div class="comment-entry">
+                <span class="comment-label">Mensaje</span>
+                <input type="text" class="comment-input" placeholder="Escribe un mensaje...">
+                <button type="button" class="comment-submit-btn">Enviar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
 (function () {

@@ -21,23 +21,127 @@ function closeFlexModal(modal) {
 }
 
 /* ============================= */
-/*       COMMENTS MODAL          */
+/*       COMMENTS MODAL + CHAT   */
 /* ============================= */
 
-function openModal(imageSrc) {
+let _chatSiniestroId = 0;
+let _chatUltimoId    = 0;
+let _chatPollTimer   = null;
+
+function openModal(imageSrc, siniestroId) {
     const modal = document.getElementById('commentsModal');
     const modalImage = document.getElementById('modalAccidentImage');
 
-    if (modalImage) {
+    if (modalImage && imageSrc) {
         modalImage.src = imageSrc;
     }
 
+    _chatSiniestroId = siniestroId || 0;
+    _chatUltimoId    = 0;
+
     openFlexModal(modal);
+
+    if (_chatSiniestroId) {
+        _cargarMensajes(true);
+        _chatPollTimer = setInterval(() => _cargarMensajes(false), 5000);
+        _iniciarEnvio();
+    }
 }
 
 function closeModal() {
     const modal = document.getElementById('commentsModal');
     closeFlexModal(modal);
+
+    clearInterval(_chatPollTimer);
+    _chatPollTimer   = null;
+    _chatSiniestroId = 0;
+    _chatUltimoId    = 0;
+
+    const lista = document.querySelector('#commentsModal .comment-list');
+    if (lista) lista.innerHTML = '';
+}
+
+async function _cargarMensajes(inicial) {
+    if (!_chatSiniestroId) return;
+    try {
+        const url = `/api/chat?siniestro_id=${_chatSiniestroId}&desde_id=${_chatUltimoId}`;
+        const resp = await fetch(url);
+        const data = await resp.json();
+        if (data.mensajes && data.mensajes.length > 0) {
+            _renderMensajes(data.mensajes, inicial);
+            _chatUltimoId = data.mensajes[data.mensajes.length - 1].id;
+        }
+    } catch { /* silencioso */ }
+}
+
+function _renderMensajes(mensajes, limpiar) {
+    const lista = document.querySelector('#commentsModal .comment-list');
+    if (!lista) return;
+    if (limpiar) lista.innerHTML = '';
+
+    const roles = { '1': 'Asegurado', '2': 'Ajustador', '3': 'Supervisor' };
+
+    mensajes.forEach(m => {
+        const fecha = new Date(m.created_at).toLocaleString('es-MX', {
+            day: '2-digit', month: 'long', year: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+        });
+
+        const card = document.createElement('div');
+        card.className = 'comment-card';
+        card.innerHTML = `
+            <img src="/img/DefaultPFP.png" alt="${m.nombre}" class="comment-avatar">
+            <div class="comment-body">
+                <div class="comment-author">${m.nombre} ${m.apellidos}
+                    <span style="font-weight:normal;font-size:11px;color:#6b7280">
+                        · ${roles[String(m.rol_id)] || ''}
+                    </span>
+                </div>
+                <div class="comment-text">${_escapeHtml(m.mensaje)}</div>
+                <div class="comment-date">${fecha}</div>
+            </div>`;
+        lista.appendChild(card);
+    });
+
+    lista.scrollTop = lista.scrollHeight;
+}
+
+function _iniciarEnvio() {
+    const input  = document.querySelector('#commentsModal .comment-input');
+    const btn    = document.querySelector('#commentsModal .comment-submit-btn');
+    if (!btn || btn._chatWired) return;
+    btn._chatWired = true;
+
+    async function enviar() {
+        const texto = input ? input.value.trim() : '';
+        if (!texto || !_chatSiniestroId) return;
+        input.value = '';
+
+        try {
+            const body = new URLSearchParams({
+                siniestro_id: _chatSiniestroId,
+                mensaje:      texto,
+            });
+            const resp = await fetch('/api/chat/enviar', { method: 'POST', body });
+            const data = await resp.json();
+            if (data.ok && data.mensaje) {
+                _renderMensajes([data.mensaje], false);
+                _chatUltimoId = data.mensaje.id;
+            }
+        } catch { /* silencioso */ }
+    }
+
+    btn.addEventListener('click', enviar);
+    if (input) {
+        input.addEventListener('keydown', e => { if (e.key === 'Enter') enviar(); });
+    }
+}
+
+function _escapeHtml(str) {
+    return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
 }
 
 /* ============================= */
