@@ -256,7 +256,10 @@ class PaginasController
             exit;
         }
 
-        $siniestrosRaw = Siniestro::obtenerPorAjustador((int) $_SESSION['id']);
+        $inicio = !empty($_GET['desde']) ? $_GET['desde'] : null;
+        $fin    = !empty($_GET['hasta']) ? $_GET['hasta'] : null;
+
+        $siniestrosRaw = Siniestro::obtenerPorAjustador((int) $_SESSION['id'], $inicio, $fin);
 
         // Convertir el BLOB de primera_evidencia a base64 para cada siniestro
         $siniestros = [];

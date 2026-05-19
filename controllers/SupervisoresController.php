@@ -36,7 +36,10 @@ class SupervisoresController
     public static function siniestros(Router $router): void
     {
         $supervisorId  = (int) $_SESSION['id'];
-        $siniestrosRaw = Siniestro::obtenerTodos();
+        $inicio        = !empty($_GET['desde']) ? $_GET['desde'] : null;
+        $fin           = !empty($_GET['hasta']) ? $_GET['hasta'] : null;
+
+        $siniestrosRaw = Siniestro::obtenerTodos($inicio, $fin);
 
         $siniestros = [];
         foreach ($siniestrosRaw as $s) {
@@ -101,7 +104,7 @@ class SupervisoresController
             header('Location: /siniestrosSupervisores'); exit;
         }
 
-        $chatId   = \Model\Chat::obtenerOCrear($siniestroId);
+        $chatId   = \Model\Chat::obtenerPorSiniestro($siniestroId);
         $mensajes = \Model\Chat::obtenerMensajes($chatId);
 
         $router->render('paginas/chatSiniestro', [

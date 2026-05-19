@@ -4,9 +4,9 @@ namespace Model;
 
 class Chat extends ActiveRecord
 {
-    public static function obtenerOCrear(int $siniestroId): int
+    public static function obtenerPorSiniestro(int $siniestroId): int
     {
-        $filas = self::call_sp('sp_get_or_create_chat', [$siniestroId]);
+        $filas = self::call_sp('sp_get_chat_by_siniestro', [$siniestroId]);
         return (int) ($filas[0]['chat_id'] ?? 0);
     }
 

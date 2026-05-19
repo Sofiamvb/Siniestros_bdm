@@ -129,6 +129,12 @@ $evidenciasJson = json_encode(array_values(array_map(fn($e) => [
                             Suma asegurada máx.: $<?= number_format((float)$siniestro['suma_asegurada'], 2) ?>
                         </div>
                     <?php endif; ?>
+                    <?php if (isset($siniestro['pago_calculado']) && (int)($siniestro['estatus_id'] ?? 0) > 2): ?>
+                        <div class="mt-2 inline-flex items-center gap-2 rounded-[10px] bg-[#ecfdf5] border border-green-200 px-3 py-1.5 text-[13px] font-bold text-green-700 shadow-sm">
+                            Pago estimado al asegurado:
+                            $<?= number_format((float)$siniestro['pago_calculado'], 2) ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
 
                 <!-- Carrusel de evidencias -->

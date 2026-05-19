@@ -57,7 +57,7 @@ class AjustadoresController
             header('Location: /siniestrosAjustadores'); exit;
         }
 
-        $chatId   = \Model\Chat::obtenerOCrear($siniestroId);
+        $chatId   = \Model\Chat::obtenerPorSiniestro($siniestroId);
         $mensajes = \Model\Chat::obtenerMensajes($chatId);
 
         $router->render('paginas/chatSiniestro', [

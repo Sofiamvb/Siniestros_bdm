@@ -1,24 +1,33 @@
 <section class="bg-white px-6 py-5">
     <div class="mx-auto flex max-w-[1280px] flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
 
-        <div class="flex flex-wrap items-end gap-4" aria-label="Rango de fechas para siniestros">
+        <form method="GET" action="/siniestrosSupervisores"
+              class="flex flex-wrap items-end gap-4" aria-label="Rango de fechas para siniestros">
             <div>
                 <label for="fechaInicio" class="mb-1 block text-[15px] font-bold text-[#0d1b2a]">Desde</label>
-                <input type="date" id="fechaInicio"
+                <input type="date" id="fechaInicio" name="desde"
+                    value="<?= htmlspecialchars($_GET['desde'] ?? '') ?>"
                     class="h-[46px] w-[160px] rounded-[18px] border-0 bg-[#a9b5c3] px-4 text-[14px] text-[#263241] shadow-[0_4px_8px_rgba(0,0,0,0.22)] outline-none">
             </div>
 
             <div>
                 <label for="fechaFin" class="mb-1 block text-[15px] font-bold text-[#0d1b2a]">Hasta</label>
-                <input type="date" id="fechaFin"
+                <input type="date" id="fechaFin" name="hasta"
+                    value="<?= htmlspecialchars($_GET['hasta'] ?? '') ?>"
                     class="h-[46px] w-[160px] rounded-[18px] border-0 bg-[#a9b5c3] px-4 text-[14px] text-[#263241] shadow-[0_4px_8px_rgba(0,0,0,0.22)] outline-none">
             </div>
 
-            <button type="button"
+            <button type="submit"
                 class="h-[46px] rounded-full bg-[#0b2030] px-9 text-[15px] font-bold text-white shadow-[0_4px_8px_rgba(0,0,0,0.25)] transition hover:bg-[#142b3f]">
                 Filtrar
             </button>
-        </div>
+            <?php if (!empty($_GET['desde']) || !empty($_GET['hasta'])): ?>
+                <a href="/siniestrosSupervisores"
+                    class="h-[46px] flex items-center rounded-full border border-[#0b2030] px-6 text-[14px] font-bold text-[#0b2030] no-underline transition hover:bg-gray-100">
+                    Limpiar
+                </a>
+            <?php endif; ?>
+        </form>
 
         <div class="flex flex-1 items-end justify-center gap-4 lg:justify-end">
             <div class="relative w-full max-w-[430px]">

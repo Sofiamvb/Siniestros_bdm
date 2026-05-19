@@ -26,7 +26,7 @@ class ChatController
             echo json_encode(['error' => 'Acceso no permitido']); exit;
         }
 
-        $chatId   = Chat::obtenerOCrear($siniestroId);
+        $chatId   = Chat::obtenerPorSiniestro($siniestroId);
         $mensajes = Chat::obtenerMensajes($chatId, $desdeId);
 
         echo json_encode(['chat_id' => $chatId, 'mensajes' => $mensajes]);
@@ -52,7 +52,7 @@ class ChatController
             echo json_encode(['error' => 'Acceso no permitido']); exit;
         }
 
-        $chatId  = Chat::obtenerOCrear($siniestroId);
+        $chatId  = Chat::obtenerPorSiniestro($siniestroId);
         $nuevo   = Chat::enviarMensaje($chatId, (int) $_SESSION['id'], $mensaje);
 
         echo json_encode(['ok' => true, 'mensaje' => $nuevo]);

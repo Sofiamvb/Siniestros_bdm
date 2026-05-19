@@ -112,14 +112,14 @@ class Siniestro extends ActiveRecord
         return self::call_sp('sp_get_catalogo_estatus_siniestros');
     }
 
-    public static function obtenerPorAjustador(int $ajustadorId): array
+    public static function obtenerPorAjustador(int $ajustadorId, ?string $inicio = null, ?string $fin = null): array
     {
-        return self::call_sp('sp_get_siniestros_ajustador', [$ajustadorId]);
+        return self::call_sp('sp_get_siniestros_ajustador', [$ajustadorId, $inicio, $fin]);
     }
 
-    public static function obtenerTodos(): array
+    public static function obtenerTodos(?string $inicio = null, ?string $fin = null): array
     {
-        return self::call_sp('sp_get_siniestros_supervisor');
+        return self::call_sp('sp_get_siniestros_supervisor', [$inicio, $fin]);
     }
 
     public static function buscar(string $termino, int $rolId, int $usuarioId): array
