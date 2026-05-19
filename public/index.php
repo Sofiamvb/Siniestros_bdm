@@ -84,7 +84,16 @@ $router->get('/api/validar-poliza',   [PaginasController::class, 'apiValidarPoli
 $router->get('/siniestrosAjustadores',  [PaginasController::class, 'siniestrosAjustadores']);
 $router->get('/siniestrosAsegurados',   [AseguradosController::class, 'siniestros']);
 $router->get('/siniestrosSupervisores', [SupervisoresController::class, 'siniestros']);
-// Chat
+// Chat (página dedicada)
+$router->get('/chat', function (Router $router) {
+    $rol = $_SESSION['rol_id'] ?? 0;
+    if ($rol === 1) { AseguradosController::chat($router);  return; }
+    if ($rol === 2) { AjustadoresController::chat($router); return; }
+    if ($rol === 3) { SupervisoresController::chat($router); return; }
+    header('Location: /login'); exit;
+});
+
+// Chat API
 $router->get('/api/chat',          [ChatController::class, 'obtenerMensajes']);
 $router->post('/api/chat/enviar',  [ChatController::class, 'enviarMensaje']);
 

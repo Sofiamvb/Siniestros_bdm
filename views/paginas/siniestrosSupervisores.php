@@ -120,9 +120,9 @@
                             <a href="/siniestro?id=<?= (int)$siniestro['id'] ?>" class="p-0">
                                 <img src="/img/seeall.png" alt="Ver detalle" class="h-[16px] w-[16px] object-contain">
                             </a>
-                            <button class="p-0" onclick="openModal('', <?= (int)$siniestro['id'] ?>)">
+                            <a href="/chat?siniestro_id=<?= (int)$siniestro['id'] ?>" class="p-0">
                                 <img src="/img/comments.png" alt="Chat" class="h-[16px] w-[16px] object-contain">
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -131,46 +131,6 @@
         <?php endif; ?>
     </div>
 </section>
-
-<div id="commentsModal" class="modal-overlay">
-    <div class="modal-panel">
-        <div class="modal-header-bar">
-            <span class="modal-title-text">Comentarios</span>
-            <img src="/img/comments.png" alt="Comentarios" class="modal-header-icon">
-        </div>
-        <div class="modal-body-scroll">
-            <div class="mb-[20px] text-center">
-                <img id="modalAccidentImage" src="" alt="Siniestro" class="h-auto w-full max-w-[380px] rounded-[15px] shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
-            </div>
-
-            <div class="comment-list">
-                <div class="comment-card">
-                    <img src="/img/DefaultPFP.png" alt="Usuario" class="comment-avatar">
-                    <div class="comment-body">
-                        <div class="comment-author">Miguel Ángel Ramirez</div>
-                        <div class="comment-text">Esperando más información</div>
-                        <div class="comment-date">2 de marzo de 2026, 10:30 AM</div>
-                    </div>
-                </div>
-
-                <div class="comment-card">
-                    <img src="/img/DefaultPFP.png" alt="Usuario" class="comment-avatar">
-                    <div class="comment-body">
-                        <div class="comment-author">Carlos Alberto Martínez</div>
-                        <div class="comment-text">Ya envié los documentos solicitados</div>
-                        <div class="comment-date">2 de marzo de 2026, 11:45 AM</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="comment-entry">
-                <span class="comment-label">Comenta</span>
-                <input type="text" class="comment-input" placeholder="Realiza un comentario sobre tu vehículo">
-                <button type="button" class="comment-submit-btn">Publicar</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div id="detailsModal" class="modal-overlay">
     <div class="details-modal-panel">

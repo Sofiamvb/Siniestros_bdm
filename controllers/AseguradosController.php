@@ -58,6 +58,26 @@ class AseguradosController
         ]);
     }
 
+    public static function chat(Router $router): void
+    {
+        $siniestroId = (int) ($_GET['siniestro_id'] ?? 0);
+        $usuarioId   = (int) $_SESSION['id'];
+        $siniestro   = $siniestroId ? Siniestro::obtenerDetalle($siniestroId) : null;
+
+        if (!$siniestro || !$siniestro || (int)$siniestro['usuario_id'] !== $usuarioId) {
+            header('Location: /siniestrosAsegurados'); exit;
+        }
+
+        $chatId   = \Model\Chat::obtenerOCrear($siniestroId);
+        $mensajes = \Model\Chat::obtenerMensajes($chatId);
+
+        $router->render('paginas/chatSiniestro', [
+            'siniestro' => $siniestro,
+            'mensajes'  => $mensajes,
+            'volverUrl' => "/siniestro?id={$siniestroId}",
+        ]);
+    }
+
     public static function buscador(Router $router): void
     {
         $router->render('paginas/buscadorSiniestrosAsegurado', []);

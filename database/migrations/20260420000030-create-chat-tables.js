@@ -48,6 +48,7 @@ module.exports = {
         -- Devolver el mensaje recién insertado con datos del usuario
         SELECT
           cm.id,
+          cm.usuario_id,
           cm.mensaje,
           cm.created_at,
           u.nombre,
@@ -69,6 +70,7 @@ module.exports = {
       BEGIN
         SELECT
           cm.id,
+          cm.usuario_id,
           cm.mensaje,
           cm.created_at,
           u.nombre,

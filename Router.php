@@ -37,6 +37,7 @@ class Router {
             '/buscadorSiniestros',
             '/api/buscar-siniestros',
             '/siniestro',
+            '/chat',
             '/api/chat',
             '/api/chat/enviar',
         ];
