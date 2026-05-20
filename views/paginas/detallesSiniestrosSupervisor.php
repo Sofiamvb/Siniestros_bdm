@@ -104,8 +104,19 @@ $evidenciasJson = json_encode(array_values(array_map(fn($e) => [
 
                 <div>
                     <label class="mb-1 ml-1 block text-[14px] font-bold text-[#111823]">Vehículos involucrados</label>
-                    <input type="text" value="<?= htmlspecialchars($terceroTexto) ?>"
-                        class="h-[46px] w-full rounded-full bg-[#b8bec8] px-5 text-[#111823] outline-none" readonly>
+                    <?php if (empty()): ?>
+                        <p class="rounded-full bg-[#b8bec8] px-5 py-3 text-[13px] text-[#4a5568]">Sin terceros registrados</p>
+                    <?php else: ?>
+                        <div class="flex flex-col gap-2">
+                            <?php foreach ( as $t): ?>
+                                <div class="rounded-[16px] bg-[#b8bec8] px-5 py-3 text-[13px]">
+                                    <p class="font-bold text-[#111823]"><?= htmlspecialchars($t['marca_tercero']) ?> <?= htmlspecialchars($t['modelo_tercero']) ?> — <?= htmlspecialchars($t['placas_tercero']) ?></p>
+                                    <?php if (!empty($t['aseguradora_tercero'])): ?><p class="text-[#4a5568]">Aseguradora: <?= htmlspecialchars($t['aseguradora_tercero']) ?></p><?php endif; ?>
+                                    <?php if (!empty($t['descripcion_danos'])): ?><p class="text-[#4a5568]">Daños: <?= htmlspecialchars($t['descripcion_danos']) ?></p><?php endif; ?>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
 
                 <div>
