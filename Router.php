@@ -19,6 +19,7 @@ class Router {
         // Rutas protegidas por rol
         $rutas_asegurados   = [
             '/siniestrosAsegurados',
+            '/poliza',
         ];
 
         $rutas_ajustadores  = [

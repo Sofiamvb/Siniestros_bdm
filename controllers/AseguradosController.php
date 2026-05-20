@@ -22,6 +22,20 @@ class AseguradosController
         ]);
     }
 
+    public static function detallePoliza(Router $router): void
+    {
+        $polizaId  = (int) ($_GET['id'] ?? 0);
+        $usuarioId = (int) $_SESSION['id'];
+        $poliza    = $polizaId ? Poliza::obtenerDetalle($polizaId, $usuarioId) : null;
+
+        if (!$poliza) {
+            header('Location: /siniestrosAsegurados');
+            exit;
+        }
+
+        $router->render('paginas/detallePoliza', ['poliza' => $poliza]);
+    }
+
     public static function detalle(Router $router): void
     {
         $id        = (int) ($_GET['id'] ?? 0);

@@ -80,6 +80,12 @@ class Poliza extends ActiveRecord
         }, $filas);
     }
 
+    public static function obtenerDetalle(int $polizaId, int $usuarioId): ?array
+    {
+        $filas = self::call_sp('sp_get_poliza_detalle', [$polizaId, $usuarioId]);
+        return $filas[0] ?? null;
+    }
+
     /** Llama sp_contratar_poliza y retorna el id de la nueva póliza. */
     public function contratar(): int
     {

@@ -130,9 +130,10 @@
 
                         <div class="mt-8 flex w-full justify-center">
                             <!-- Conservamos tu función onclick original de PHP -->
-                            <button onclick="openDetailsModal()" class="inline-flex h-[52px] min-w-[220px] items-center justify-center rounded-full bg-[#4f637c] px-8 text-[15px] font-bold text-white shadow-md transition hover:bg-[#3f5064]">
+                            <a href="/poliza?id=<?= $poliza->id ?>"
+                                class="inline-flex h-[52px] min-w-[220px] items-center justify-center rounded-full bg-[#4f637c] px-8 text-[15px] font-bold text-white shadow-md transition hover:bg-[#3f5064] no-underline">
                                 Ver detalles
-                            </button>
+                            </a>
                         </div>
                     </div>
                 <?php endforeach; ?>

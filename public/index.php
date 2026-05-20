@@ -83,6 +83,7 @@ $router->post('/registrarSiniestros', [PaginasController::class, 'registrarSinie
 $router->get('/api/validar-poliza',   [PaginasController::class, 'apiValidarPoliza']);
 $router->get('/siniestrosAjustadores',  [PaginasController::class, 'siniestrosAjustadores']);
 $router->get('/siniestrosAsegurados',   [AseguradosController::class, 'siniestros']);
+$router->get('/poliza',                 [AseguradosController::class, 'detallePoliza']);
 $router->get('/siniestrosSupervisores', [SupervisoresController::class, 'siniestros']);
 // Chat (página dedicada)
 $router->get('/chat', function (Router $router) {
