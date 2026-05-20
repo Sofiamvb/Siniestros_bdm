@@ -112,7 +112,7 @@
                 $logosPorNombre = [
                     'GNP Seguros'   => '/img/GNPSeguros.png',
                     'Qualitas'      => '/img/QualitasSeguros.png',
-                    'AXA'           => '/img/AXASeguros.png',
+                    'AXA Seguros'           => '/img/AXASeguros.png',
                     'BBVA Seguros'  => '/img/BBVASeguros.png',
                     'HDI Seguros'   => '/img/HDISeguros.png',
                 ];
