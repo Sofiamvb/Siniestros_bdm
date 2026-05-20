@@ -72,9 +72,15 @@
         
         <!-- ENCABEZADO DE BIENVENIDA -->
         <div class="w-full bg-white shadow-sm border-b border-gray-200">
-            <div class="mx-auto max-w-[1200px] px-8 py-5">
-                <h1 class="text-[22px] font-bold text-[#111823]">¡Bienvenido, <?= htmlspecialchars($_SESSION['nombre'] ?? '') ?>!</h1>
-                <p class="text-[14px] text-[#4a5568]">Estas son tus pólizas vigentes.</p>
+            <div class="mx-auto flex max-w-[1200px] items-center justify-between px-8 py-5">
+                <div>
+                    <h1 class="text-[22px] font-bold text-[#111823]">¡Bienvenido, <?= htmlspecialchars($_SESSION['nombre'] ?? '') ?>!</h1>
+                    <p class="text-[14px] text-[#4a5568]">Estas son tus pólizas vigentes.</p>
+                </div>
+                <a href="/buscadorSiniestros"
+                    class="flex h-[42px] items-center justify-center rounded-full border-2 border-[#111823] px-8 text-[13px] font-bold text-[#111823] no-underline transition hover:bg-[#111823] hover:text-white">
+                    Buscar siniestros
+                </a>
             </div>
         </div>
 
