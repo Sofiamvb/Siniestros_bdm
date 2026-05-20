@@ -30,8 +30,23 @@
 
                 <div class="flex items-center gap-4 shrink-0">
                     <?php if (!empty($_SESSION['id'])): ?>
+                        <?php
+                        $rolHome = match((int)($_SESSION['rol_id'] ?? 0)) {
+                            1 => '/siniestrosAsegurados',
+                            2 => '/siniestrosAjustadores',
+                            3 => '/siniestrosSupervisores',
+                            default => '/',
+                        };
+                        $rolLabel = match((int)($_SESSION['rol_id'] ?? 0)) {
+                            1 => 'Mis pólizas',
+                            2 => 'Mis siniestros',
+                            3 => 'Siniestros',
+                            default => 'Inicio',
+                        };
+                        ?>
+                        <a href="<?= $rolHome ?>" class="hidden md:block text-white text-[13px] font-medium hover:text-slate-300 transition"><?= $rolLabel ?></a>
                         <a href="/logout" class="text-white text-[13px] font-medium hover:text-slate-300 transition">Cerrar sesión</a>
-                        <a href="/perfil" class="hidden md:block text-white text-[13px] font-medium hover:underline"><?= htmlspecialchars($_SESSION['nombre']) ?></a>
+                        <a href="/perfil" class="hidden md:block text-white text-[13px] font-medium hover:underline"><?= htmlspecialchars($_SESSION['nombre'] ?? '') ?></a>
                     <?php else: ?>
                         <a href="/login" class="text-white text-[13px] font-medium hover:text-slate-300 transition">Ingresar</a>
                     <?php endif; ?>
