@@ -108,16 +108,24 @@
                 </div>
 
                 <!-- TARJETAS DERECHAS: Bucle dinámico de las pólizas que vengan de PHP -->
+                <?php
+                $logosPorNombre = [
+                    'GNP Seguros'   => '/img/GNPSeguros.png',
+                    'Qualitas'      => '/img/QualitasSeguros.png',
+                    'AXA'           => '/img/AXASeguros.png',
+                    'BBVA Seguros'  => '/img/BBVASeguros.png',
+                    'HDI Seguros'   => '/img/HDISeguros.png',
+                ];
+                ?>
                 <?php foreach ($polizas as $poliza): ?>
+                <?php $logoPoliza = $logosPorNombre[$poliza->compania] ?? '/img/logo car azul.png'; ?>
                     <div class="flex min-h-[380px] flex-col items-center justify-between rounded-[24px] bg-white px-8 py-10 text-center shadow-[0_8px_30px_rgba(0,0,0,0.06)] relative">
                         <div class="flex w-full flex-grow flex-col items-center justify-center">
                             
-                            <!-- Logo de la Aseguradora (Intenta cargar basado en el nombre, si falla carga un genérico) -->
                             <div class="mb-6 flex h-[80px] w-full items-center justify-center overflow-hidden">
-                                <img src="/img/logos/<?= strtolower(str_replace(' ', '', $poliza->compania)) ?>.png" 
-                                     alt="<?= htmlspecialchars($poliza->compania) ?>" 
-                                     class="h-full w-auto object-contain"
-                                     onerror="this.onerror=null; this.src='https://via.placeholder.com/200x80?text=<?= urlencode($poliza->compania) ?>';">
+                                <img src="<?= htmlspecialchars($logoPoliza) ?>"
+                                     alt="<?= htmlspecialchars($poliza->compania) ?>"
+                                     class="h-full w-auto object-contain">
                             </div>
 
                             <h2 class="text-[26px] font-bold text-[#111823]">

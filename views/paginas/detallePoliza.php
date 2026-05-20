@@ -1,3 +1,13 @@
+<?php
+$logoCompanias = [
+    1 => '/img/GNPSeguros.png',
+    2 => '/img/QualitasSeguros.png',
+    3 => '/img/AXASeguros.png',
+    4 => '/img/BBVASeguros.png',
+    5 => '/img/HDISeguros.png',
+];
+$logoUrl = $logoCompanias[(int)($poliza['compania_id'] ?? 0)] ?? null;
+?>
 <main class="min-h-[calc(100vh-180px)] bg-[#e6e7e2] px-6 py-10 font-sans text-[#111823]">
 
     <!-- HEADER -->
@@ -15,7 +25,15 @@
 
         <!-- COMPAÑÍA -->
         <div class="rounded-[20px] bg-white px-8 py-6 shadow-[0_6px_20px_rgba(0,0,0,0.07)]">
-            <h2 class="mb-4 text-[16px] font-bold text-[#111823]">Aseguradora</h2>
+            <div class="flex items-center gap-4 mb-5">
+                <?php if ($logoUrl): ?>
+                    <img src="<?= htmlspecialchars($logoUrl) ?>"
+                         alt="<?= htmlspecialchars($poliza['compania']) ?>"
+                         class="h-[52px] w-auto object-contain"
+                         onerror="this.style.display='none'">
+                <?php endif; ?>
+                <h2 class="text-[16px] font-bold text-[#111823]">Aseguradora</h2>
+            </div>
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
                     <p class="text-[11px] font-semibold uppercase tracking-wider text-[#9ca3af]">Compañía</p>
