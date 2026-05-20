@@ -80,7 +80,23 @@ class AseguradosController
 
     public static function buscador(Router $router): void
     {
-        $router->render('paginas/buscadorSiniestrosAsegurado', []);
+        $usuarioId = (int) $_SESSION['id'];
+        $inicio    = !empty($_GET['desde']) ? $_GET['desde'] : null;
+        $fin       = !empty($_GET['hasta']) ? $_GET['hasta'] : null;
+
+        $raw = Siniestro::obtenerPorAsegurado($usuarioId, $inicio, $fin);
+
+        $siniestros = array_map(function (array $s) {
+            $s['primera_evidencia'] = \Model\ActiveRecord::blobToImg(
+                $s['primera_evidencia']      ?? null,
+                $s['primera_evidencia_mime'] ?? 'image/jpeg'
+            ) ?: '/img/siniestro.jpg';
+            return $s;
+        }, $raw);
+
+        $router->render('paginas/buscadorSiniestrosAsegurado', [
+            'siniestros' => $siniestros,
+        ]);
     }
 
     public static function apiBuscar(): void

@@ -43,10 +43,46 @@
 
     </div>
 
-    <!-- MENSAJE DE ESTADO -->
-    <p id="searchHint" class="mt-6 text-[14px] text-[#4a5568]">
+    <!-- MENSAJE DE ESTADO (dropdown) -->
+    <p id="searchHint" class="mt-4 text-[14px] text-[#4a5568]">
         Escribe al menos 2 caracteres para buscar.
     </p>
+
+    <!-- GRID DE TODOS LOS SINIESTROS -->
+    <div class="w-full max-w-[1200px] mt-12">
+        <?php if (empty($siniestros)): ?>
+            <p class="text-center text-[15px] text-[#6b7280]">No tienes siniestros registrados aún.</p>
+        <?php else: ?>
+            <p class="text-[13px] text-[#6b7280] mb-6 text-center">
+                <?= count($siniestros) ?> siniestro<?= count($siniestros) !== 1 ? 's' : '' ?> registrado<?= count($siniestros) !== 1 ? 's' : '' ?>
+            </p>
+            <div id="siniestrosGrid" class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <?php foreach ($siniestros as $s): ?>
+                    <a href="/siniestro?id=<?= (int)$s['id'] ?>"
+                       class="no-underline group"
+                       data-reporte="<?= strtolower(htmlspecialchars($s['numero_reporte'] ?? '')) ?>"
+                       data-placa="<?= strtolower(htmlspecialchars($s['placas'] ?? '')) ?>"
+                       data-poliza="<?= strtolower(htmlspecialchars($s['numero_poliza'] ?? '')) ?>">
+                        <div class="overflow-hidden rounded-[18px] bg-white shadow-[0_6px_16px_rgba(0,0,0,0.12)] transition-transform group-hover:-translate-y-1">
+                            <div class="h-[140px] w-full overflow-hidden">
+                                <img src="<?= $s['primera_evidencia'] ?>" alt="Siniestro"
+                                     class="h-full w-full object-cover">
+                            </div>
+                            <div class="px-4 py-4 text-[12px] font-bold leading-relaxed text-[#111823]">
+                                <p class="text-[13px] font-bold truncate"><?= htmlspecialchars($s['numero_reporte'] ?? '') ?></p>
+                                <p class="text-[#4a5568] font-normal truncate"><?= htmlspecialchars(($s['marca'] ?? '') . ' ' . ($s['modelo'] ?? '') . ' ' . ($s['anio'] ?? '')) ?></p>
+                                <p class="text-[#4a5568] font-normal">Placas: <?= htmlspecialchars($s['placas'] ?? '') ?></p>
+                                <p class="text-[#4a5568] font-normal truncate"><?= htmlspecialchars($s['compania'] ?? '') ?></p>
+                                <p class="mt-1 font-bold" style="color:<?= htmlspecialchars($s['estatus_color'] ?? '#333') ?>">
+                                    <?= htmlspecialchars($s['estatus'] ?? '') ?>
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    </div>
 
 </main>
 
@@ -71,15 +107,33 @@
         const q = this.value.trim();
         clearTimeout(debounceTimer);
 
+        filtrarGrid(q);
+
         if (q.length < 2) {
             cerrarDropdown();
-            hint.textContent = 'Escribe al menos 2 caracteres para buscar.';
+            hint.textContent = q.length === 0 ? '' : 'Escribe al menos 2 caracteres para buscar.';
             return;
         }
 
         hint.textContent = '';
         debounceTimer = setTimeout(() => buscar(q), 300);
     });
+
+    function filtrarGrid(termino) {
+        const cards = document.querySelectorAll('#siniestrosGrid > a');
+        if (!cards.length) return;
+        const q = termino.toLowerCase().trim();
+        cards.forEach(card => {
+            if (!q) {
+                card.classList.remove('hidden');
+                return;
+            }
+            const coincide = card.dataset.reporte.includes(q)
+                          || card.dataset.placa.includes(q)
+                          || card.dataset.poliza.includes(q);
+            card.classList.toggle('hidden', !coincide);
+        });
+    }
 
     // El botón lupa dispara la búsqueda directamente (sin esperar el debounce)
     btn.addEventListener('click', function () {
