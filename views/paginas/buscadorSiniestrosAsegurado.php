@@ -1,4 +1,32 @@
-<main class="min-h-[calc(100vh-180px)] bg-[#e6e7e2] flex flex-col items-center pt-32 pb-24 px-6">
+<!-- HEADER CON FILTRO DE FECHAS -->
+<section class="bg-white px-6 py-4 shadow-sm border-b border-gray-200">
+    <div class="mx-auto flex max-w-[1200px] flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <form method="GET" action="/buscadorSiniestros" class="flex flex-wrap items-end gap-4">
+            <div>
+                <label class="mb-1 ml-1 block text-[13px] font-bold text-[#111823]">Desde</label>
+                <input type="date" name="desde" value="<?= htmlspecialchars($_GET['desde'] ?? '') ?>"
+                    class="h-[42px] w-[160px] rounded-full bg-[#aeb6c1] px-4 text-[13px] text-[#111823] outline-none focus:ring-2 focus:ring-[#111823]">
+            </div>
+            <div>
+                <label class="mb-1 ml-1 block text-[13px] font-bold text-[#111823]">Hasta</label>
+                <input type="date" name="hasta" value="<?= htmlspecialchars($_GET['hasta'] ?? '') ?>"
+                    class="h-[42px] w-[160px] rounded-full bg-[#aeb6c1] px-4 text-[13px] text-[#111823] outline-none focus:ring-2 focus:ring-[#111823]">
+            </div>
+            <button type="submit"
+                class="h-[42px] rounded-full bg-[#111823] px-8 text-[13px] font-bold text-white transition hover:bg-gray-800">
+                Filtrar
+            </button>
+            <?php if (!empty($_GET['desde']) || !empty($_GET['hasta'])): ?>
+                <a href="/buscadorSiniestros"
+                    class="flex h-[42px] items-center rounded-full border border-[#111823] px-6 text-[13px] font-bold text-[#111823] no-underline hover:bg-gray-100">
+                    Limpiar
+                </a>
+            <?php endif; ?>
+        </form>
+    </div>
+</section>
+
+<main class="min-h-[calc(100vh-180px)] bg-[#e6e7e2] flex flex-col items-center pt-10 pb-24 px-6">
 
     <h1 class="text-[40px] md:text-[52px] font-bold text-[#111823] mb-8">
         SINIESTROS

@@ -57,7 +57,7 @@
 <section class="bg-[#e3e4df] px-6 pb-20 pt-10">
     <div class="mx-auto max-w-[1280px] text-center">
         <h1 class="text-[34px] font-extrabold text-[#0d1b2a]">
-            ¡Bienvenido, (Usuario)!
+            ¡Bienvenido, <?= htmlspecialchars($_SESSION['nombre'] ?? '') ?>!
         </h1>
         <p class="mt-2 text-[16px] text-[#0d1b2a]">
             Estos son todos los siniestros registrados.
