@@ -23,9 +23,9 @@
                 </div>
 
                 <nav class="hidden md:flex items-center gap-10 lg:gap-14 text-white text-[13px] font-medium">
-                    <a href="#idHome" class="hover:text-slate-300 transition">Home</a>
-                    <a href="#idSobreNosotros" class="hover:text-slate-300 transition">Sobre Nosotros</a>
-                    <a href="#idContacto" class="hover:text-slate-300 transition">Contacto</a>
+                    <a href="/" class="hover:text-slate-300 transition">Home</a>
+                    <a href="/#idSobreNosotros" class="hover:text-slate-300 transition">Sobre Nosotros</a>
+                    <a href="/#idContacto" class="hover:text-slate-300 transition">Contacto</a>
                 </nav>
 
                 <div class="flex items-center gap-4 shrink-0">
@@ -53,9 +53,9 @@
                 <img src="/img/logo car.png" alt="SISA" class="w-[90px] md:w-[110px] object-contain">
 
                 <nav class="flex items-center gap-6 md:gap-10 text-white text-xs md:text-sm">
-                    <a href="#idHome" class="hover:text-slate-300">Home</a>
-                    <a href="#idSobreNosotros" class="hover:text-slate-300">Nosotros</a>
-                    <a href="#idContacto" class="hover:text-slate-300">Contacto</a>
+                    <a href="/" class="hover:text-slate-300">Home</a>
+                    <a href="/#idSobreNosotros" class="hover:text-slate-300">Nosotros</a>
+                    <a href="/#idContacto" class="hover:text-slate-300">Contacto</a>
                 </nav>
             </div>
 
