@@ -76,7 +76,7 @@ class SupervisoresController
         // Videos guardados en filesystem (no en BD)
         $numeroReporte = $siniestro['numero_reporte'] ?? '';
         if ($numeroReporte) {
-            $dirVideos = dirname(__DIR__, 2) . '/public/videos/' . $numeroReporte . '/';
+            $dirVideos = dirname(__DIR__) . '/public/videos/' . $numeroReporte . '/';
             if (is_dir($dirVideos)) {
                 foreach (glob($dirVideos . '*') as $rutaArchivo) {
                     $evidencias[] = [
