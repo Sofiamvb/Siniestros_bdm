@@ -6,10 +6,10 @@
         <div class="absolute top-[110px] left-[40%] w-[50px] h-[50px] rounded-full bg-[#25385d] opacity-80"></div>
         <div class="absolute -bottom-28 -right-24 w-[430px] h-[430px] rounded-full bg-[#25385d] opacity-80"></div>
 
-        <div class="relative z-10 mt-10 lg:mt-16 flex flex-col lg:flex-row items-center justify-between gap-10">
+        <div class="relative z-10 mt-20 lg:mt-40 lg:pl-40 flex flex-col lg:flex-row items-center justify-between gap-10">
             
             <div class="w-full lg:w-1/2 flex justify-center">
-                <img src="/img/car de lado.png" alt="Auto" class="w-full max-w-[650px] object-contain">
+                <img src="/img/car de lado.png" alt="Auto" class="w-[120%] max-w-[760px] lg:max-w-[880px] object-contain lg:ml-[40px]">
             </div>
 
             <div class="w-full lg:w-1/2 flex justify-center lg:justify-center">
@@ -39,7 +39,7 @@
                         </select>
 
                         <button type="submit"
-                            class="mx-auto mt-3 bg-[#1f2f4a] hover:bg-[#17243a] text-white font-semibold rounded-full px-8 py-3 shadow-md transition">
+                            class="mx-auto mt-3 bg-[#031a33] hover:bg-[#17243a] text-white font-semibold rounded-full px-8 py-3 shadow-md transition">
                             Cotiza ahora
                         </button>
                     </form>

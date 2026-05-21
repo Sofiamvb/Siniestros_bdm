@@ -49,6 +49,14 @@ class Usuario extends ActiveRecord
             self::$errores[] = 'El correo electrónico no es válido.';
         }
 
+        if ($this->contieneNumeros($this->nombre)) {
+            self::$errores[] = 'El nombre no puede contener números.';
+        }
+
+        if ($this->contieneNumeros($this->apellidos)) {
+            self::$errores[] = 'Los apellidos no pueden contener números.';
+        }
+
         if (strlen($this->password) < 6) {
             self::$errores[] = 'La contraseña debe tener al menos 6 caracteres.';
         }
@@ -61,6 +69,41 @@ class Usuario extends ActiveRecord
         } else {
             $edad = (int) date_diff(date_create($this->fecha_nacimiento), date_create('today'))->y;
             if ($edad < 18) self::$errores[] = 'Debes ser mayor de 18 años para registrarte.';
+        }
+
+        return self::$errores;
+    }
+
+    public function contieneNumeros(string $texto): bool
+    {
+        $numeros = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+        for ($i = 0; $i < strlen($texto); $i++) {
+
+            if (in_array($texto[$i], $numeros)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+     public function validarPerfil(): array
+    {
+        self::$errores = [];
+
+        if (empty($this->nombre))    self::$errores[] = 'El nombre es obligatorio.';
+        if (empty($this->apellidos)) self::$errores[] = 'Los apellidos son obligatorios.';
+        if (empty($this->genero))    self::$errores[] = 'El género es obligatorio.';
+        if (empty($this->alias))     self::$errores[] = 'El alias es obligatorio.';
+
+
+        if ($this->contieneNumeros($this->nombre)) {
+            self::$errores[] = 'El nombre no puede contener números.';
+        }
+
+        if ($this->contieneNumeros($this->apellidos)) {
+            self::$errores[] = 'Los apellidos no pueden contener números.';
         }
 
         return self::$errores;
@@ -106,9 +149,16 @@ class Usuario extends ActiveRecord
     {
         $rows = self::call_sp('sp_usuario', [
             'login',
-            null, null, null, null, null,
+            null,
+            null,
+            null,
+            null,
+            null,
             $email,
-            null, null, null, null,
+            null,
+            null,
+            null,
+            null,
         ]);
         return $rows[0] ?? null;
     }
@@ -170,7 +220,7 @@ class Usuario extends ActiveRecord
 
     public static function redirectPorRol(int $rol_id): string
     {
-        return match($rol_id) {
+        return match ($rol_id) {
             2       => '/siniestrosAjustadores',
             3       => '/siniestrosSupervisores',
             default => '/siniestrosAsegurados',   // rol_id = 1 y cualquier otro

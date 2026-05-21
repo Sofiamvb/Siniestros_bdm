@@ -13,7 +13,7 @@
             </p>
             <div class="mt-6 flex justify-center">
                 <a href="/buscadorSiniestros"
-                    class="inline-flex h-[46px] items-center justify-center rounded-full border-2 border-[#111823] px-8 text-[14px] font-bold text-[#111823] no-underline shadow-[0_4px_8px_rgba(0,0,0,0.12)] hover:bg-[#111823] hover:text-white transition-colors">
+                    class="inline-flex h-[46px] items-center justify-center rounded-full bg-[#031a33] px-8 text-[14px] font-bold text-[#FFFFFF] no-underline shadow-[0_4px_8px_rgba(0,0,0,0.12)] hover:bg-[#111823] hover:text-white transition-colors">
                     Buscar mis siniestros
                 </a>
             </div>
@@ -78,7 +78,7 @@
                     <p class="text-[14px] text-[#4a5568]">Estas son tus pólizas vigentes.</p>
                 </div>
                 <a href="/buscadorSiniestros"
-                    class="flex h-[42px] items-center justify-center rounded-full border-2 border-[#111823] px-8 text-[13px] font-bold text-[#111823] no-underline transition hover:bg-[#111823] hover:text-white">
+                    class="flex h-[42px] items-center justify-center rounded-full bg-[#031a33] px-8 text-[13px] font-bold text-[#FFFEFE] no-underline transition hover:bg-[#111823] hover:text-white">
                     Buscar siniestros
                 </a>
             </div>

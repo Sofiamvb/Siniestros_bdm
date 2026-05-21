@@ -74,7 +74,7 @@
             <!-- Tarjeta vehículo -->
             <div class="rounded-[30px] bg-white p-[36px] shadow-[0_8px_24px_rgba(0,0,0,0.1)]">
                 <p class="mb-[6px] text-[13px] font-semibold uppercase tracking-widest text-[#3A7CA5]">Vehículo cotizado</p>
-                <h2 class="mb-[20px] text-[26px] font-bold text-[#16425B]">
+                <h2 class="mb-[20px] text-[26px] font-bold text-[#1d2b44]">
                     <?= htmlspecialchars($vehiculo->marca) ?> <?= htmlspecialchars($vehiculo->modelo) ?>
                 </h2>
 
@@ -103,7 +103,7 @@
             </div>
 
             <!-- Tarjeta precio -->
-            <div class="flex flex-col justify-between rounded-[30px] bg-[linear-gradient(145deg,#3A7CA5,#81C3D7)] p-[36px] text-white shadow-[0_8px_24px_rgba(58,124,165,0.35)]">
+            <div class="flex flex-col justify-between rounded-[30px] bg-[linear-gradient(145deg,#415A77,#031a33)] p-[36px] text-white shadow-[0_8px_24px_rgba(58,124,165,0.35)]">
                 <div>
                     <p class="mb-[6px] text-[13px] font-semibold uppercase tracking-widest text-white/80">Precio del seguro</p>
                     <p class="mb-[8px] text-[48px] font-bold leading-none">

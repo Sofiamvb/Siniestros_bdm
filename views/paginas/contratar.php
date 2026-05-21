@@ -1,7 +1,7 @@
 <main class="min-h-screen bg-[#E8F0F7] px-[80px] py-[60px]">
     <div class="mx-auto max-w-[1000px]">
 
-        <a href="/cotizar" class="mb-[10px] inline-block text-[14px] text-[#3A7CA5] hover:underline">← Volver a cotizar</a>
+        <a href="/cotizar" class="mb-[10px] inline-block text-[14px] text-[#111823] hover:underline">← Volver a cotizar</a>
         <h1 class="mb-[4px] text-[30px] font-bold text-[#16425B]">Elige tu seguro</h1>
         <p class="mb-[8px] text-[15px] text-[#555]">
             <strong><?= htmlspecialchars($vehiculo->marca) ?> <?= htmlspecialchars($vehiculo->modelo) ?></strong>
@@ -26,7 +26,7 @@
                 $colorNivel = match($seguro->nivel) {
                     'Básico'   => 'border-[#87b4c2] bg-white',
                     'Estándar' => 'border-[#3A7CA5] bg-white',
-                    'Premium'  => 'border-[#16425B] bg-[linear-gradient(145deg,#16425B,#3A7CA5)] text-white',
+                    'Premium'  => 'border-[#16425B] bg-[linear-gradient(145deg,#16425B,#415A77)] text-white',
                     default    => 'border-[#ccc] bg-white',
                 };
                 $esPremium = $seguro->nivel === 'Premium';
@@ -48,7 +48,7 @@
                     </div>
 
                     <a href="/pago?vehiculo_id=<?= $vehiculo->id ?>&seguro_id=<?= $seguro->id ?>"
-                        class="mt-[20px] block rounded-[25px] <?= $esPremium ? 'bg-white text-[#16425B]' : 'bg-[#3A7CA5] text-white' ?> py-[12px] text-center text-[14px] font-bold shadow-[0_4px_10px_rgba(0,0,0,0.15)] transition hover:-translate-y-[2px]">
+                        class="mt-[20px] block rounded-[25px] <?= $esPremium ? 'bg-white text-[#16425B]' : 'bg-[#415A77] text-white' ?> py-[12px] text-center text-[14px] font-bold shadow-[0_4px_10px_rgba(0,0,0,0.15)] transition hover:-translate-y-[2px]">
                         Seleccionar
                     </a>
                 </div>

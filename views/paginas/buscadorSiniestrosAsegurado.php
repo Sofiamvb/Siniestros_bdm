@@ -13,7 +13,7 @@
                     class="h-[42px] w-[160px] rounded-full bg-[#aeb6c1] px-4 text-[13px] text-[#111823] outline-none focus:ring-2 focus:ring-[#111823]">
             </div>
             <button type="submit"
-                class="h-[42px] rounded-full bg-[#111823] px-8 text-[13px] font-bold text-white transition hover:bg-gray-800">
+                class="h-[42px] rounded-full bg-[#031a33] px-8 text-[13px] font-bold text-white transition hover:bg-gray-800">
                 Filtrar
             </button>
             <?php if (!empty($_GET['desde']) || !empty($_GET['hasta'])): ?>

@@ -30,23 +30,14 @@
         </form>
 
         <div class="flex flex-1 items-end justify-center gap-4 lg:justify-end">
-            <div class="relative w-full max-w-[430px]">
-                <input type="text"
-                    placeholder="Busca aquí"
-                    class="h-[46px] w-full rounded-[18px] border-0 bg-[#a9b5c3] px-5 pr-12 text-[15px] text-[#263241] shadow-[0_4px_8px_rgba(0,0,0,0.22)] outline-none placeholder:text-[#5f6c7a]">
-
-                <span class="absolute right-4 top-1/2 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full text-[11px] text-white">
-                    <img src="/img/lupa.png" alt="Lupa buscador">
-                </span>
-            </div>
 
             <a href="/register/ajustadores"
-                class="flex h-[46px] items-center justify-center rounded-full bg-[#0b2030] px-8 text-[15px] font-bold text-white no-underline shadow-[0_4px_8px_rgba(0,0,0,0.25)] transition hover:bg-[#142b3f]">
-                Registrar siniestro
+                class="flex h-[46px] items-center justify-center rounded-full bg-[#031a33] px-8 text-[15px] font-bold text-white no-underline shadow-[0_4px_8px_rgba(0,0,0,0.25)] transition hover:bg-[#142b3f]">
+                Registrar ajustador
             </a>
 
             <a href="/buscadorSiniestros"
-                class="flex h-[46px] items-center justify-center rounded-full border-2 border-[#0b2030] px-8 text-[15px] font-bold text-[#0b2030] no-underline shadow-[0_4px_8px_rgba(0,0,0,0.15)] transition hover:bg-[#0b2030] hover:text-white">
+                class="flex h-[46px] items-center justify-center rounded-full bg-[#031a33] px-8 text-[15px] font-bold text-[#FFFEFE] no-underline shadow-[0_4px_8px_rgba(0,0,0,0.15)] transition hover:bg-[#0b2030] hover:text-white">
                 Buscar siniestro
             </a>
         </div>

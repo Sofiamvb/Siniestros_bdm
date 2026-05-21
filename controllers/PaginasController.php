@@ -86,9 +86,14 @@ class PaginasController
 
         if (ini_get('session.use_cookies')) {
             $params = session_get_cookie_params();
-            setcookie(session_name(), '', time() - 42000,
-                $params['path'], $params['domain'],
-                $params['secure'], $params['httponly']
+            setcookie(
+                session_name(),
+                '',
+                time() - 42000,
+                $params['path'],
+                $params['domain'],
+                $params['secure'],
+                $params['httponly']
             );
         }
 
@@ -210,7 +215,6 @@ class PaginasController
                     $_POST['password_confirmar'] ?? ''
                 );
                 if (!$errores) $exitoPassword = 'Contraseña actualizada correctamente.';
-
             } else {
                 $u     = new Usuario($_POST);
                 $u->id = (int) $_SESSION['id'];
@@ -225,6 +229,9 @@ class PaginasController
                 if (empty($u->genero))           $errores[] = 'El género es obligatorio.';
                 if (empty($u->alias))            $errores[] = 'El alias es obligatorio.';
                 if (empty($u->fecha_nacimiento)) $errores[] = 'La fecha de nacimiento es obligatoria.';
+
+                $errores = $u->validarPerfil();
+                error_log('[editarPerfil] errores de validación: ' . json_encode($errores));
 
                 if (!$errores) {
                     if ($u->actualizarPerfil()) {
@@ -248,6 +255,8 @@ class PaginasController
             'exitoPassword' => $exitoPassword,
         ]);
     }
+
+
 
     public static function siniestrosAjustadores(Router $router): void
     {
@@ -287,10 +296,9 @@ class PaginasController
         $router->render('paginas/siniestrosSupervisores', []);
     }
 
-    public static function accessRegisterSupervisores(Router $router) : void
+    public static function accessRegisterSupervisores(Router $router): void
     {
-         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            
-         }
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        }
     }
 }

@@ -44,7 +44,7 @@
                         <label
                             for="foto"
                             class="inline-flex cursor-pointer items-center justify-center rounded-full bg-[#031a33] px-8 py-3 text-[15px] font-bold text-white shadow-[0_6px_12px_rgba(0,0,0,0.18)] hover:opacity-90">
-                            Regístrate
+                            Foto de perfil
                         </label>
 
                         <input type="file" id="foto" name="foto" accept="image/*" hidden>
