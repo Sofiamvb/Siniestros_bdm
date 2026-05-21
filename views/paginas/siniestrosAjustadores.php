@@ -126,9 +126,7 @@
                                 </p>
 
                                 <div class="mt-1 flex justify-end gap-1">
-                                    <button class="p-0" onclick="openSupervisorModal()">
-                                        <img src="/img/adjuntar.png" alt="Supervisor" class="h-[15px] w-[15px] object-contain">
-                                    </button>
+                                    
 
                                     <a href="/siniestro?id=<?= (int)$siniestro['id'] ?>" class="p-0">
                                         <img src="/img/seeall.png" alt="Ver todo" class="h-[15px] w-[15px] object-contain">
