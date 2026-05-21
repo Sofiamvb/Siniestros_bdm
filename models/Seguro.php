@@ -12,7 +12,8 @@ class Seguro extends ActiveRecord
     public string $deducible_porcentaje  = '';
     public float  $factor_prima          = 0.05; // Viene de la BD
     public string $descripcion_cobertura = '';
-    public string $compania              = ''; // JOIN con companias_seguros
+    public string $compania              = '';
+    public float  $prima                 = 0.0;
 
     /**
      * Retorna todos los seguros disponibles con datos de la compañía.
