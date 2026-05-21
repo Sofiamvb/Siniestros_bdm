@@ -82,7 +82,7 @@ class SupervisoresController
                     $evidencias[] = [
                         'src'             => '/videos/' . $numeroReporte . '/' . basename($rutaArchivo),
                         'tipo'            => 'video',
-                        'nombre'          => basename($rutaArchivo),
+                        'nombre_archivo'  => basename($rutaArchivo),
                         'tipo_evidencia'  => 'video',
                         'tipo_mime'       => 'video/mp4',
                     ];
