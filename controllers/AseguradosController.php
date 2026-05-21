@@ -52,6 +52,23 @@ class AseguradosController
             return $e;
         }, Siniestro::obtenerEvidencias($id));
 
+        // Videos guardados en filesystem (no en BD)
+        $numeroReporte = $siniestro['numero_reporte'] ?? '';
+        if ($numeroReporte) {
+            $dirVideos = dirname(__DIR__, 2) . '/public/videos/' . $numeroReporte . '/';
+            if (is_dir($dirVideos)) {
+                foreach (glob($dirVideos . '*') as $rutaArchivo) {
+                    $evidencias[] = [
+                        'src'             => '/videos/' . $numeroReporte . '/' . basename($rutaArchivo),
+                        'tipo'            => 'video',
+                        'nombre'          => basename($rutaArchivo),
+                        'tipo_evidencia'  => 'video',
+                        'tipo_mime'       => 'video/mp4',
+                    ];
+                }
+            }
+        }
+
         $seguimiento = Siniestro::obtenerSeguimiento($id);
 
         if (empty($seguimiento)) {

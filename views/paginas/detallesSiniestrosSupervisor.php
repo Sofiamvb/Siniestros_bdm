@@ -150,7 +150,9 @@ $evidenciasJson = json_encode(array_values(array_map(fn($e) => [
 
                 <!-- Carrusel de evidencias -->
                 <div class="mt-4 flex flex-col items-center">
-                    <h3 class="mb-2 text-[15px] font-bold text-[#111823]">Evidencias</h3>
+                    <h3 class="mb-2 text-[15px] font-bold text-[#111823]">Evidencias
+                        <span class="ml-2 text-[12px] font-normal text-[#6b7280]">(click para ampliar)</span>
+                    </h3>
                     <div class="flex w-full items-center justify-center gap-4">
                         <button type="button" id="prevBtn" onclick="cambiarEvidencia(-1)"
                             class="flex h-8 w-8 items-center justify-center rounded-full bg-[#111823] text-white transition hover:bg-gray-800">
@@ -158,7 +160,8 @@ $evidenciasJson = json_encode(array_values(array_map(fn($e) => [
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
                             </svg>
                         </button>
-                        <div id="carouselBox" class="flex h-[200px] w-full max-w-[400px] items-center justify-center rounded-[20px] bg-[#b8bec8] overflow-hidden">
+                        <div id="carouselBox" onclick="abrirLightbox()"
+                            class="flex h-[240px] w-full max-w-[480px] cursor-pointer items-center justify-center rounded-[20px] bg-[#b8bec8] overflow-hidden transition hover:opacity-90">
                             <span id="carouselEmpty" class="text-[14px] text-gray-600">No hay archivos cargados</span>
                             <img id="carouselImg" src="" alt="" class="hidden h-full w-full object-cover">
                             <video id="carouselVideo" src="" class="hidden h-full w-full object-cover" controls></video>
@@ -197,6 +200,13 @@ $evidenciasJson = json_encode(array_values(array_map(fn($e) => [
         </div>
 
     </div>
+<div id="lightbox" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/85"
+     onclick="cerrarLightbox()">
+    <button class="absolute top-4 right-5 text-white text-[32px] font-bold leading-none hover:opacity-70"
+        onclick="cerrarLightbox()">×</button>
+    <img   id="lightboxImg"   src="" alt="" class="hidden max-h-[90vh] max-w-[90vw] object-contain rounded-[12px]">
+    <video id="lightboxVideo" src=""        class="hidden max-h-[90vh] max-w-[90vw] rounded-[12px]" controls autoplay></video>
+</div>
 </main>
 
 <!-- ═══════════════════════════════════════════════════════════ -->
@@ -413,6 +423,38 @@ function confirmarDictamen() {
     }
 
     window.cambiarEvidencia = function (dir) { mostrar(idx + dir); };
+
+    window.abrirLightbox = function () {
+        if (evidencias.length === 0) return;
+        const ev      = evidencias[idx];
+        const lb      = document.getElementById('lightbox');
+        const lbImg   = document.getElementById('lightboxImg');
+        const lbVideo = document.getElementById('lightboxVideo');
+        lbImg.classList.add('hidden');
+        lbVideo.classList.add('hidden');
+        if (ev.tipo === 'video') {
+            lbVideo.src = ev.src;
+            lbVideo.classList.remove('hidden');
+        } else {
+            lbImg.src = ev.src;
+            lbImg.alt = ev.nombre;
+            lbImg.classList.remove('hidden');
+        }
+        lb.classList.remove('hidden');
+    };
+
+    window.cerrarLightbox = function () {
+        const lb      = document.getElementById('lightbox');
+        const lbVideo = document.getElementById('lightboxVideo');
+        lbVideo.pause();
+        lbVideo.src = '';
+        lb.classList.add('hidden');
+    };
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') window.cerrarLightbox();
+    });
+
 
     if (evidencias.length > 0) {
         mostrar(0);

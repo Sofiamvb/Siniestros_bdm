@@ -8,6 +8,7 @@ class Siniestro extends ActiveRecord
     protected static array $errores = [];
 
     public $id;
+    public string $numero_reporte = '';
     public int $poliza_id       = 0;
     public int $ajustador_id    = 0;
     public string $fecha_hora   = '';
@@ -72,7 +73,8 @@ class Siniestro extends ActiveRecord
             (int) $this->perdida_total,
         ]);
 
-        $this->id = (int) ($resultado[0]['id'] ?? 0);
+        $this->id             = (int) ($resultado[0]['id']             ?? 0);
+        $this->numero_reporte =       ($resultado[0]['numero_reporte'] ?? '');
         return $this->id;
     }
 

@@ -143,14 +143,23 @@ class PaginasController
                         $siniestro->registrarTercero($siniestroId, $t);
                     }
 
-                    // Guardar evidencias (imágenes/videos)
+                    // Guardar evidencias: imágenes como BLOB, videos en filesystem
                     if (!empty($_FILES['evidencias']['name'][0])) {
                         foreach ($_FILES['evidencias']['tmp_name'] as $i => $tmpName) {
                             if ($_FILES['evidencias']['error'][$i] !== UPLOAD_ERR_OK) continue;
-                            $binario = file_get_contents($tmpName);
-                            $nombre  = $_FILES['evidencias']['name'][$i];
-                            $mime    = $_FILES['evidencias']['type'][$i];
-                            $siniestro->registrarEvidencia($siniestroId, $binario, $nombre, $mime);
+                            $mime   = $_FILES['evidencias']['type'][$i];
+                            $nombre = $_FILES['evidencias']['name'][$i];
+
+                            if (str_starts_with($mime, 'video/')) {
+                                $ext           = strtolower(pathinfo($nombre, PATHINFO_EXTENSION) ?: 'mp4');
+                                $nombreArchivo = $siniestro->numero_reporte . '_' . date('Y-m-d_H-i-s') . '_' . $i . '.' . $ext;
+                                $dir           = dirname(__DIR__) . '/public/videos/' . $siniestro->numero_reporte . '/';
+                                if (!is_dir($dir)) mkdir($dir, 0755, true);
+                                move_uploaded_file($tmpName, $dir . $nombreArchivo);
+                            } else {
+                                $binario = file_get_contents($tmpName);
+                                $siniestro->registrarEvidencia($siniestroId, $binario, $nombre, $mime);
+                            }
                         }
                     }
 
