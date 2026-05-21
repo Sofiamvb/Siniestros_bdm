@@ -1,13 +1,24 @@
 <?php
 $roles = [1 => 'Asegurado', 2 => 'Ajustador', 3 => 'Supervisor'];
-$mensajesIniciales = json_encode(array_map(fn($m) => [
-    'id'        => $m['id'],
-    'mensaje'   => $m['mensaje'],
-    'created_at'=> $m['created_at'],
-    'nombre'    => $m['nombre'],
-    'apellidos' => $m['apellidos'],
-    'rol_id'    => $m['rol_id'],
-], $mensajes));
+
+// Convertir imágenes BLOB a data URI para los mensajes iniciales
+$mensajesIniciales = json_encode(array_map(function ($m) {
+    if (!empty($m['imagen'])) {
+        $m['imagen_src'] = \Model\ActiveRecord::blobToImg($m['imagen'], $m['imagen_mime'] ?? 'image/jpeg');
+    }
+    unset($m['imagen']);
+    return [
+        'id'         => $m['id'],
+        'usuario_id' => $m['usuario_id'],
+        'mensaje'    => $m['mensaje'],
+        'imagen_src' => $m['imagen_src'] ?? null,
+        'video_ruta' => $m['video_ruta'] ?? null,
+        'created_at' => $m['created_at'],
+        'nombre'     => $m['nombre'],
+        'apellidos'  => $m['apellidos'],
+        'rol_id'     => $m['rol_id'],
+    ];
+}, $mensajes));
 ?>
 <main class="min-h-[calc(100vh-180px)] bg-[#e6e7e2] flex flex-col">
 
@@ -56,16 +67,38 @@ $mensajesIniciales = json_encode(array_map(fn($m) => [
         </p>
     </div>
 
+    <!-- LIGHTBOX para imágenes del chat -->
+    <div id="chatLightbox" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/85"
+         onclick="document.getElementById('chatLightbox').classList.add('hidden')">
+        <img id="chatLightboxImg" src="" class="max-h-[90vh] max-w-[90vw] object-contain rounded-[12px]">
+    </div>
+
     <!-- INPUT -->
     <div class="bg-white border-t border-gray-200 px-6 py-4">
-        <div class="mx-auto flex max-w-[860px] items-center gap-3">
-            <input id="chatInput" type="text"
-                placeholder="Escribe un mensaje..."
-                class="flex-1 h-[46px] rounded-full bg-[#f3f4f6] px-5 text-[14px] text-[#111823] outline-none focus:ring-2 focus:ring-[#0b2030]">
-            <button id="chatEnviar"
-                class="h-[46px] rounded-full bg-[#0b2030] px-8 text-[14px] font-bold text-white transition hover:bg-[#142b3f]">
-                Enviar
-            </button>
+        <div class="mx-auto flex max-w-[860px] flex-col gap-2">
+            <!-- Preview del adjunto seleccionado -->
+            <div id="adjuntoPreview" class="hidden flex items-center gap-2 text-[12px] text-[#6b7280] px-2">
+                <span id="adjuntoNombre" class="truncate max-w-[300px]"></span>
+                <button onclick="limpiarAdjunto()" class="text-[#ef4444] font-bold hover:opacity-70">✕</button>
+            </div>
+            <div class="flex items-center gap-3">
+                <!-- Input archivo oculto -->
+                <input type="file" id="adjuntoInput" accept="image/*,video/*" class="hidden">
+                <!-- Botón clip -->
+                <button type="button" id="adjuntoBtn"
+                    onclick="document.getElementById('adjuntoInput').click()"
+                    class="h-[46px] w-[46px] shrink-0 rounded-full bg-[#f3f4f6] flex items-center justify-center text-[20px] transition hover:bg-gray-200"
+                    title="Adjuntar imagen o video">
+                    📎
+                </button>
+                <input id="chatInput" type="text"
+                    placeholder="Escribe un mensaje..."
+                    class="flex-1 h-[46px] rounded-full bg-[#f3f4f6] px-5 text-[14px] text-[#111823] outline-none focus:ring-2 focus:ring-[#0b2030]">
+                <button id="chatEnviar"
+                    class="h-[46px] rounded-full bg-[#0b2030] px-8 text-[14px] font-bold text-white transition hover:bg-[#142b3f]">
+                    Enviar
+                </button>
+            </div>
         </div>
     </div>
 
@@ -73,18 +106,21 @@ $mensajesIniciales = json_encode(array_map(fn($m) => [
 
 <script>
 (function () {
-    const MI_ID       = <?= (int) $_SESSION['id'] ?>;
+    const MI_ID        = <?= (int) $_SESSION['id'] ?>;
     const SINIESTRO_ID = <?= (int) $siniestro['id'] ?>;
-    const ROLES       = { 1: 'Asegurado', 2: 'Ajustador', 3: 'Supervisor' };
+    const ROLES        = { 1: 'Asegurado', 2: 'Ajustador', 3: 'Supervisor' };
 
-    const lista   = document.getElementById('mensajesLista');
-    const vacio   = document.getElementById('mensajesVacio');
-    const input   = document.getElementById('chatInput');
-    const btnEnviar = document.getElementById('chatEnviar');
+    const lista      = document.getElementById('mensajesLista');
+    const vacio      = document.getElementById('mensajesVacio');
+    const input      = document.getElementById('chatInput');
+    const btnEnviar  = document.getElementById('chatEnviar');
+    const adjuntoInput   = document.getElementById('adjuntoInput');
+    const adjuntoPreview = document.getElementById('adjuntoPreview');
+    const adjuntoNombre  = document.getElementById('adjuntoNombre');
 
     let ultimoId = 0;
 
-    // Cargar mensajes iniciales desde PHP (sin fetch extra al abrir)
+    // Mensajes iniciales desde PHP
     const iniciales = <?= $mensajesIniciales ?>;
     if (iniciales.length > 0) {
         renderMensajes(iniciales);
@@ -92,6 +128,23 @@ $mensajesIniciales = json_encode(array_map(fn($m) => [
     } else {
         vacio.classList.remove('hidden');
     }
+
+    // Preview del adjunto seleccionado
+    adjuntoInput.addEventListener('change', function () {
+        const f = this.files[0];
+        if (f) {
+            adjuntoNombre.textContent = f.name;
+            adjuntoPreview.classList.remove('hidden');
+        } else {
+            limpiarAdjunto();
+        }
+    });
+
+    window.limpiarAdjunto = function () {
+        adjuntoInput.value = '';
+        adjuntoPreview.classList.add('hidden');
+        adjuntoNombre.textContent = '';
+    };
 
     // Polling cada 5 segundos
     setInterval(async () => {
@@ -108,13 +161,20 @@ $mensajesIniciales = json_encode(array_map(fn($m) => [
 
     // Enviar mensaje
     async function enviar() {
-        const texto = input.value.trim();
-        if (!texto) return;
+        const texto   = input.value.trim();
+        const archivo = adjuntoInput.files[0];
+        if (!texto && !archivo) return;
+
+        const body = new FormData();
+        body.append('siniestro_id', SINIESTRO_ID);
+        body.append('mensaje', texto);
+        if (archivo) body.append('adjunto', archivo);
+
         input.value = '';
+        limpiarAdjunto();
         btnEnviar.disabled = true;
 
         try {
-            const body = new URLSearchParams({ siniestro_id: SINIESTRO_ID, mensaje: texto });
             const r = await fetch('/api/chat/enviar', { method: 'POST', body });
             const d = await r.json();
             if (d.ok && d.mensaje) {
@@ -141,6 +201,12 @@ $mensajesIniciales = json_encode(array_map(fn($m) => [
                 hour: '2-digit', minute: '2-digit'
             });
 
+            const multimedia = m.imagen_src
+                ? `<img src="${m.imagen_src}" class="mt-2 max-w-[220px] rounded-[12px] cursor-pointer block" onclick="abrirImgChat('${m.imagen_src}')" alt="imagen">`
+                : m.video_ruta
+                    ? `<video src="${m.video_ruta}" class="mt-2 max-w-[220px] rounded-[12px] block" controls></video>`
+                    : '';
+
             const fila = document.createElement('div');
             fila.className = `flex ${esMio ? 'justify-end' : 'justify-start'}`;
             fila.setAttribute('data-msg-id', m.id);
@@ -151,7 +217,8 @@ $mensajesIniciales = json_encode(array_map(fn($m) => [
                         ${esMio ? 'Tú' : esc(nombre)} · ${esc(rol)}
                     </p>
                     <div class="rounded-[18px] px-4 py-3 shadow-sm ${esMio ? 'bg-[#0b2030] text-white' : 'bg-white text-[#111823]'}">
-                        <p class="text-[14px] leading-relaxed">${esc(m.mensaje)}</p>
+                        ${m.mensaje ? `<p class="text-[14px] leading-relaxed">${esc(m.mensaje)}</p>` : ''}
+                        ${multimedia}
                         <p class="text-[11px] mt-1 text-right ${esMio ? 'text-[#93c5fd]' : 'text-[#9ca3af]'}">${fecha}</p>
                     </div>
                 </div>`;
@@ -161,6 +228,15 @@ $mensajesIniciales = json_encode(array_map(fn($m) => [
 
         lista.scrollTop = lista.scrollHeight;
     }
+
+    window.abrirImgChat = function (src) {
+        document.getElementById('chatLightboxImg').src = src;
+        document.getElementById('chatLightbox').classList.remove('hidden');
+    };
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') document.getElementById('chatLightbox').classList.add('hidden');
+    });
 
     function esc(str) {
         return String(str ?? '')

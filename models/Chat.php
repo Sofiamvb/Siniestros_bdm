@@ -10,9 +10,13 @@ class Chat extends ActiveRecord
         return (int) ($filas[0]['chat_id'] ?? 0);
     }
 
-    public static function enviarMensaje(int $chatId, int $usuarioId, string $mensaje): ?array
-    {
-        $filas = self::call_sp('sp_enviar_mensaje', [$chatId, $usuarioId, $mensaje]);
+    public static function enviarMensaje(
+        int $chatId, int $usuarioId, string $mensaje,
+        ?string $imagen = null, ?string $imagenMime = null, ?string $videoRuta = null
+    ): ?array {
+        $filas = self::call_sp('sp_enviar_mensaje', [
+            $chatId, $usuarioId, $mensaje, $imagen, $imagenMime, $videoRuta,
+        ]);
         return $filas[0] ?? null;
     }
 
