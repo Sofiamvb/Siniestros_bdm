@@ -52,8 +52,11 @@ class ChatController
             echo json_encode(['error' => 'Acceso no permitido']); exit;
         }
 
-        $chatId  = Chat::obtenerPorSiniestro($siniestroId);
-        $nuevo   = Chat::enviarMensaje($chatId, (int) $_SESSION['id'], $mensaje);
+        $chatId = Chat::obtenerPorSiniestro($siniestroId);
+        if (!$chatId) {
+            echo json_encode(['error' => 'Chat no encontrado para este siniestro']); exit;
+        }
+        $nuevo = Chat::enviarMensaje($chatId, (int) $_SESSION['id'], $mensaje);
 
         echo json_encode(['ok' => true, 'mensaje' => $nuevo]);
         exit;
